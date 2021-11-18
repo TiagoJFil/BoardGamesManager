@@ -1,17 +1,17 @@
 'use strict';
-
+const errors= require('./borga-errors.js')
 const fetch = require('node-fetch');
 
 const CLIENT_ID = process.env['ATLAS_CLIENT_ID'];
 
-const BOARD_ATLAS_BASE_URI = https://api.boardgameatlas.com/api/;
-/*
+const BOARD_ATLAS_BASE_URI = 'https://api.boardgameatlas.com/api/search?';
+
 const HTTP_SERVER_ERROR = 5;
 
 function getStatusClass(statusCode) {
 	return ~~(statusCode / 100); //como nao ha tipos em js , utilizamos o not bit a bit duas vezes para converter em inteiro
 }
-*/
+
 
 function do_fetch(uri) {
 	return fetch(uri)
@@ -31,21 +31,8 @@ function do_fetch(uri) {
 		});
 }
 
-
-function getGameByName(name) {
-	const search_uri =BOARD_ATLAS_BASE_URII + '&name=' + name + '&client_id=' + CLIENT_ID;
-
-	return do_fetch(search_uri)
-		.then(answer => {
-			if(answer.length != 0){
-				return makeGameObj(answer[0]);
-			} else {
-				throw errors.NOT_FOUND({ query });
-			}
-		});
-}
-
 function makeGameObj(gameInfo) {
+
 	return {
 		id: gameInfo.id,
 		name: gameInfo.name,
@@ -53,7 +40,26 @@ function makeGameObj(gameInfo) {
 		price: gameInfo.price,
 		publisher: gameInfo.publisher,
 		min_age: gameInfo.min_age,
-		min_players: gameInfo.min_player,
+		min_players: gameInfo.min_players,
 		rank: gameInfo.rank,
-	};	
+	};
+	
 }
+
+function getGameByName(name) {
+	const search_uri =BOARD_ATLAS_BASE_URI + '&name=' + name + '&client_id=' + CLIENT_ID;
+
+	return do_fetch(search_uri)
+		.then(answer => {
+			if(answer.length != 0){
+				return makeGameObj(answer.games[0]);
+			} else {
+				throw errors.NOT_FOUND({ query });
+			}
+		});
+}
+
+module.exports = {
+	getGameByName
+}
+
