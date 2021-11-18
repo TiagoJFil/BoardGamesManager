@@ -2,15 +2,11 @@
 const errors= require('./borga-errors.js')
 const fetch = require('node-fetch');
 
-const RANKED = '&order_by=rank'
 
-const LIMIT = '&limit=10'
 
 const CLIENT_ID = process.env['ATLAS_CLIENT_ID'];
 
-const BOARD_ATLAS_BASE_URI = 'https://api.boardgameatlas.com/api/';
-
- 
+const BOARD_ATLAS_BASE_URI = 'https://api.boardgameatlas.com/api/search?';
 
 const HTTP_SERVER_ERROR = 5;
 
@@ -39,12 +35,13 @@ function do_fetch(uri) {
 
 function makeGameObj(gameInfo) {
 
+
 	return {
 		id: gameInfo.id,
 		name: gameInfo.name,
 		url: gameInfo.url,
 		price: gameInfo.price,
-		publisher: gameInfo.publisher,
+		publisher: gameInfo.primary_publisher.name,
 		min_age: gameInfo.min_age,
 		min_players: gameInfo.min_players,
 		rank: gameInfo.rank,
@@ -73,18 +70,18 @@ module.exports = {
 
 function makeListObj(answer){
 	const gamesList = {}
-	let k = 0
-	for(games in answer.games){
-		gamesList[k] = (games)
-		k++
+	let it = 0
+	const size = answer.length
+	while(it < size){
+		gamesList[it] = makeGameObj(answer[it])
+		it++
 	}
-	return games 
+	return gamesList
 }
 
 
-function getListPopularGames(limit) { 
-	const search_uri =
-		BOARD_ATLAS_BASE_URI + RANKED + '&limit=' + limit + '&client_id=' + CLIENT_ID;
+function getListPopularGames() { 
+	const search_uri =BOARD_ATLAS_BASE_URI + '&order_by=rank&limit=10&client_id=' + CLIENT_ID;
  
 	return do_fetch(search_uri)
 		.then(answer => {
@@ -98,6 +95,8 @@ function getListPopularGames(limit) {
 }
 
 
-
-console.log(getListPopularGames(10))
+module.exports = {
+getGameByName,
+getListPopularGames
+}
 
