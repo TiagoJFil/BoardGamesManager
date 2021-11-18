@@ -21,3 +21,16 @@ test('getBookByName works', () => {
 	
 	
 });
+
+test('getListPopularGames test', () => {
+    const lenght =  10 
+    const obj = fun.getListPopularGames()
+  .then(it => 
+    expect(it.length.toEqual(lenght)))
+
+})
+
+
+
+
+
