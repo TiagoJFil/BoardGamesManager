@@ -2,16 +2,22 @@
 
 const fetch = require('node-fetch');
 
+const RANKED = '&order_by=rank'
+
+const LIMIT = '&limit=10'
+
 const CLIENT_ID = process.env['ATLAS_CLIENT_ID'];
 
-const BOARD_ATLAS_BASE_URI = https://api.boardgameatlas.com/api/;
-/*
+const BOARD_ATLAS_BASE_URI = 'https://api.boardgameatlas.com/api/';
+
+ 
+
 const HTTP_SERVER_ERROR = 5;
 
 function getStatusClass(statusCode) {
 	return ~~(statusCode / 100); //como nao ha tipos em js , utilizamos o not bit a bit duas vezes para converter em inteiro
 }
-*/
+
 
 function do_fetch(uri) {
 	return fetch(uri)
@@ -33,12 +39,12 @@ function do_fetch(uri) {
 
 
 function getGameByName(name) {
-	const search_uri =BOARD_ATLAS_BASE_URII + '&name=' + name + '&client_id=' + CLIENT_ID;
+	const search_uri =BOARD_ATLAS_BASE_URI + '&name=' + name + '&client_id=' + CLIENT_ID;
 
 	return do_fetch(search_uri)
 		.then(answer => {
 			if(answer.length != 0){
-				return makeGameObj(answer[0]);
+				return makeGameObj(answer.games[0]);
 			} else {
 				throw errors.NOT_FOUND({ query });
 			}
@@ -57,3 +63,36 @@ function makeGameObj(gameInfo) {
 		rank: gameInfo.rank,
 	};	
 }
+
+
+
+function makeListObj(answer){
+	const gamesList = {}
+	let k = 0
+	for(games in answer.games){
+		gamesList[k] = (games)
+		k++
+	}
+	return games 
+}
+
+
+function getListPopularGames(limit) { 
+	const search_uri =
+		BOARD_ATLAS_BASE_URI + RANKED + '&limit=' + limit + '&client_id=' + CLIENT_ID;
+ 
+	return do_fetch(search_uri)
+		.then(answer => {
+			if (answer.length != 0) {
+				return makeListObj(answer.games);
+				//return getBookById(answer.items[0].id);
+			} else {
+				throw errors.NOT_FOUND({ query });
+			}
+		});
+}
+
+
+
+console.log(getListPopularGames(10))
+
