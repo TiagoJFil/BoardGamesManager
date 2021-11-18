@@ -1,5 +1,5 @@
 'use strict';
-
+const errors= require('./borga-errors.js')
 const fetch = require('node-fetch');
 
 const RANKED = '&order_by=rank'
@@ -37,6 +37,20 @@ function do_fetch(uri) {
 		});
 }
 
+function makeGameObj(gameInfo) {
+
+	return {
+		id: gameInfo.id,
+		name: gameInfo.name,
+		url: gameInfo.url,
+		price: gameInfo.price,
+		publisher: gameInfo.publisher,
+		min_age: gameInfo.min_age,
+		min_players: gameInfo.min_players,
+		rank: gameInfo.rank,
+	};
+	
+}
 
 function getGameByName(name) {
 	const search_uri =BOARD_ATLAS_BASE_URI + '&name=' + name + '&client_id=' + CLIENT_ID;
@@ -51,17 +65,8 @@ function getGameByName(name) {
 		});
 }
 
-function makeGameObj(gameInfo) {
-	return {
-		id: gameInfo.id,
-		name: gameInfo.name,
-		url: gameInfo.url,
-		price: gameInfo.price,
-		publisher: gameInfo.publisher,
-		min_age: gameInfo.min_age,
-		min_players: gameInfo.min_player,
-		rank: gameInfo.rank,
-	};	
+module.exports = {
+	getGameByName
 }
 
 
