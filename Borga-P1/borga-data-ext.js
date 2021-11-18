@@ -2,6 +2,8 @@
 
 const fetch = require('node-fetch');
 
+const CLIENT_ID = process.env['ATLAS_CLIENT_ID'];
+
 const BOARD_ATLAS_BASE_URI = https://api.boardgameatlas.com/api/;
 /*
 const HTTP_SERVER_ERROR = 5;
@@ -27,4 +29,31 @@ function do_fetch(uri) {
 				}
 			}
 		});
+}
+
+
+function getGameByName(name) {
+	const search_uri =BOARD_ATLAS_BASE_URII + '&name=' + name + '&client_id=' + CLIENT_ID;
+
+	return do_fetch(search_uri)
+		.then(answer => {
+			if(answer.length != 0){
+				return makeGameObj(answer[0]);
+			} else {
+				throw errors.NOT_FOUND({ query });
+			}
+		});
+}
+
+function makeGameObj(gameInfo) {
+	return {
+		id: gameInfo.id,
+		name: gameInfo.name,
+		url: gameInfo.url,
+		price: gameInfo.price,
+		publisher: gameInfo.publisher,
+		min_age: gameInfo.min_age,
+		min_players: gameInfo.min_player,
+		rank: gameInfo.rank,
+	};	
 }
