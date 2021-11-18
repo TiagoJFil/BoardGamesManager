@@ -1,11 +1,14 @@
 'use strict';
+const crypto = require('crypto')
 
 const games = {};
+
+const users = {};
 
 const hasGame = async (gameId) => !!games[gameId];
 
 
-
+/*
 async function saveGame(gamesObj) {
 	const gameId = gameObj.id;
 	game[gameId] = gameObj;
@@ -33,3 +36,18 @@ async function deletegame(gameId) {
 async function listGames() {
 	return Object.values(games);
 }
+*/
+
+async function createUser(Username){
+	const id = crypto.randomUUID()
+	const user = {
+		name : Username,
+		uuid : id
+	}
+
+	users[id] = user
+	return user
+}
+createUser("tiago")
+console.log(users)
+
