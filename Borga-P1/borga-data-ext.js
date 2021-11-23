@@ -62,12 +62,6 @@ function getGameByName(name) {
 		});
 }
 
-module.exports = {
-	getGameByName
-}
-
-
-
 function makeListObj(answer){
 	const gamesList = {}
 	let it = 0
@@ -93,6 +87,11 @@ function getListPopularGames() {
 			}
 		});
 }
+
+
+//test
+getListPopularGames().then(cosole.log)
+
 
 
 module.exports = {

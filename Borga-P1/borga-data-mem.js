@@ -3,7 +3,17 @@ const crypto = require('crypto')
 
 const games = {};
 
-const users = {};
+const tokens = {
+	'8b85d489-bcd3-477b-9563-5155af9f08ca': 'tiago',
+	'fc6dbc68-adad-4770-ae6a-2d0e4eb1d0ea': 'joao'
+};
+
+const userGamesIds = {
+	"id" : ["1234","etc"]
+}
+const users = {
+	'tiago' : userGamesIds
+};
 
 const hasGame = async (gameId) => !!games[gameId];
 
@@ -38,16 +48,33 @@ async function listGames() {
 }
 */
 
-async function createUser(Username){
+async function createUser(Username){ //ads user
 	const id = crypto.randomUUID()
-	const user = {
-		name : Username,
-		uuid : id
-	}
-
-	users[id] = user
-	return user
+	tokens[id] = Username
+	return 
 }
-createUser("tiago")
+
+//test
+createUser("Mario")
+console.log(tokens)
+createUser("Manel")
+console.log(tokens)
+console.log(Object.keys(tokens))
+
+
+async function addGameToUser(token,id){ //not right ?
+	const t = Object.keys(tokens) 
+	if(token in t) users[token] = id
+	return users
+}
+
+
+//test
+addGameToUser('8b85d489-bcd3-477b-9563-5155af9f08ca','123465')
 console.log(users)
+
+
+
+
+
 
