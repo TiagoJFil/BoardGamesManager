@@ -51,6 +51,7 @@ async function loadGame(username,gameId) {
 	}
 	return games[gameId].value;
 }
+
 /* TEM UM ERRO */
 async function deletegame(username,gameId) {
 	const gameId = users[username].games[gameId].key;

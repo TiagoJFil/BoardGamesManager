@@ -2,7 +2,6 @@
 
 const errors = require('./borga-errors.js');
 
-
 module.exports = function (data_borga, data_int) {
 	
 	async function getPopularGames(){
