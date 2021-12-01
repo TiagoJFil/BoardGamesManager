@@ -75,7 +75,7 @@ function getListPopularGames() {
 	const search_uri =BOARD_ATLAS_BASE_URI + '&order_by=rank&limit=10&client_id=' + CLIENT_ID;
 	return do_fetch(search_uri)
 		.then(answer => {
-			if (answer.length != 0) {
+			if (answer.length != 0 && answer.count != 0) {
 				return makeListObj(answer.games);
 			} else {
 				throw errors.NOT_FOUND({ query });
