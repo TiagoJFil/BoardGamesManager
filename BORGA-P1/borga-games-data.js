@@ -34,8 +34,6 @@ function do_fetch(uri) {
 }
 
 function makeGameObj(gameInfo) {
-
-
 	return {
 		id: gameInfo.id,
 		name: gameInfo.name,
@@ -55,10 +53,10 @@ function getGameByName(name) {
 
 	return do_fetch(search_uri)
 		.then(answer => {
-			if(answer.length != 0){
+			if(answer.length != 0 && answer.count != 0){
 				return makeGameObj(answer.games[0]);
 			} else {
-				throw errors.NOT_FOUND({ query });
+				throw errors.NOT_FOUND({ name });
 			}
 		});
 }
@@ -80,7 +78,6 @@ function makeListObj(answer){
 
 function getListPopularGames() { 
 	const search_uri =BOARD_ATLAS_BASE_URI + '&order_by=rank&limit=10&client_id=' + CLIENT_ID;
-	console.log("a")
 	return do_fetch(search_uri)
 		.then(answer => {
 			if (answer.length != 0) {
