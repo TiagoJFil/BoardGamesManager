@@ -1,8 +1,8 @@
 'use strict'
 
-const fun = require('../borga-data-ext.js')
+const fun = require('../borga-games-data.js')
 
-test('getBookByName works', () => {
+test('getGameByName works', () => {
 	const name = "monopoly"
 	const expectedRes = {
   id: 'fG5Ax8PA7n',

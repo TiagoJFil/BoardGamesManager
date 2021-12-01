@@ -2,8 +2,6 @@
 const errors= require('./borga-errors.js')
 const fetch = require('node-fetch');
 
-
-
 const CLIENT_ID = process.env['ATLAS_CLIENT_ID'];
 
 const BOARD_ATLAS_BASE_URI = 'https://api.boardgameatlas.com/api/search?';
@@ -13,7 +11,6 @@ const HTTP_SERVER_ERROR = 5;
 function getStatusClass(statusCode) {
 	return ~~(statusCode / 100); //como nao ha tipos em js , utilizamos o not bit a bit duas vezes para converter em inteiro
 }
-
 
 function do_fetch(uri) {
 	return fetch(uri)
@@ -62,8 +59,6 @@ function getGameByName(name) {
 }
 
 
-
-
 function makeListObj(answer){
 	const gamesList = {}
 	let it = 0
@@ -88,9 +83,7 @@ function getListPopularGames() {
 		});
 }
 
-
 module.exports = {
 	getGameByName,
 	getListPopularGames
 }
-
