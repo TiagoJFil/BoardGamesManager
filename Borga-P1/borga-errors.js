@@ -14,7 +14,8 @@ function buildErrorList() {
 	addError(1002, 'EXT_SVC_FAIL', 'External service failure');
 	addError(1003, 'MISSING_PARAMETER', 'A required parameter is missing');
 	addError(1004, 'USER_ALREADY_EXISTS', 'The user you wanted to add already exists');
-	addError(1005, 'UNAUTHENTICATED', 'Invalid or missing token');
+	addError(1005, 'GROUP_ALREADY_EXISTS', 'The group you wanted to add already exists');
+	addError(1006, 'UNAUTHENTICATED', 'Invalid or missing token');
 	
 	return errors;
 }
