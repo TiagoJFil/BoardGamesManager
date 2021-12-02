@@ -1,7 +1,7 @@
 const express = require('express');
 
-//const openApiUi = require('swagger-ui-express');
-//const openApiSpec = require('./docs/borga-spec.json');
+const openApiUi = require('swagger-ui-express');
+const openApiSpec = require('./docs/borga-docs.json');
 
 module.exports = function (services) {
 	
@@ -74,7 +74,6 @@ module.exports = function (services) {
 		}catch(err){
 			onError(req,res,err);
 		}
-
 	}
 
 	
@@ -89,7 +88,6 @@ module.exports = function (services) {
 		}catch(err){
 			onError(req,res,err);
 		}
-
 	}
 
 	async function listGroups(req,res){
@@ -123,8 +121,8 @@ module.exports = function (services) {
 
 	const router = express.Router();
 	
-	//router.use('/docs', openApiUi.serve);
-	//router.get('/docs', openApiUi.setup(openApiSpec));
+	router.use('/docs', openApiUi.serve);
+	router.get('/docs', openApiUi.setup(openApiSpec));
 	
 	
 	router.use(express.json());

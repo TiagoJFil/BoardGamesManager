@@ -67,7 +67,7 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.GROUP_ALREADY_EXISTS(`the group you were trying to add already exists`))
 		}
 		
-		return data_mem.createGroup(token,name,desc)
+		return data_mem.createGroup(username,name,desc)
 		
 
 	}
@@ -90,7 +90,7 @@ module.exports = function (data_borga, data_mem) {
 		}
 
 
-		return data_mem.editGroup(token,oldName,newName,desc)
+		return data_mem.editGroup(username,oldName,newName,desc)
 	}
 
 	async function listGroups(token){

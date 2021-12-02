@@ -1,0 +1,531 @@
+openapi: 3.0.1
+info:
+  title: BORGA
+  description: Manage your games collection.
+  termsOfService: http://swagger.io/terms/
+  version: 1.0.0
+tags:
+  - name: Games
+    description: All the games available in Board Game Atlas.
+    externalDocs:
+      description: Based on
+      url: https://api.boardgameatlas.com
+  - name: User
+    description: Users to create
+  - name: MyGroups
+    description: Your personal games collection
+paths:
+  /api/all/games/search:
+    get:
+      tags:
+        - Games
+      summary: Find a book by query
+      description: Uses boardgameatlas API to find a game corresponding to the query Id.
+      parameters:
+        - name: name
+          in: query
+          description: Name of game to return
+          required: true
+          schema:
+            type: string
+          example: Monopoly
+      responses:
+        '200':
+          description: A game has been found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameResponse'
+        '400':
+          description: No query indicated in the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: No game found for the query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '502':
+          description: Boardgameatlas API is not responding
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /api/all/games/rank:
+    get:
+      tags:
+        - Games
+      summary: Return the list of 10 most popular games.
+      description: Uses boardgameatlas API to find the top 10 ranked games.
+      responses:
+        '200':
+          description: List has been retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameListResponse'
+        '502':
+          description: Boardgameatlas API is not responding
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /api/user/create:
+    post:
+      tags:
+        - User
+      summary: Find book by ID in the personal collection
+      description: Returns a single book
+      parameters:
+        - name: name
+          in: query
+          description: Create a new user
+          required: true
+          schema:
+            type: string
+          example: Coates
+      responses:
+        '200':
+          description: User added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAddedResponse'
+        '401':
+          description: Missing name query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '502':
+          description: API is not responding
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /api/my/group/details:
+    get:
+      tags:
+        - MyGroups
+      summary: Get group detail
+      description: Get the details of a group, with its name, description and names of the included games
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: name
+          in: query
+          description: Name of the group
+          required: true
+          schema:
+            type: string
+          example: Favoritos
+      responses:
+        '200':
+          description: Group found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '401':
+          description: Missing API token. The user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '502':
+          description: API is not responding,
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /api/my/group/list:
+    get:
+      tags:
+        - MyGroups
+      summary: List all groups
+      description: Returns a list of groups
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListGroup'
+        '401':
+          description: Missing API token. The user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: List not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '502':
+          description: API is not responding,
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /api/my/group/create:
+    post:
+      tags:
+        - MyGroups
+      summary: Add a group to the personal collection
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: name
+          in: query
+          description: Name of the group to create
+          required: true
+          schema:
+            type: string
+          example: Favoritos
+        - name: desc
+          in: query
+          description: Description of the book to create
+          required: true
+          schema:
+            type: string
+          example: Os meus jogos favoritos
+      responses:
+        '200':
+          description: Group has been created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '401':
+          description: Missing API token. The user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '502':
+          description: API is not responding,
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /api/my/group/delete:
+    delete:
+      tags:
+        - MyGroups
+      summary: Delete group
+      description: Deletes a group from the personal collection
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: name
+          in: query
+          description: Name of the group to delete
+          required: true
+          schema:
+            type: string
+          example: Favoritos
+      responses:
+        '200':
+          description: Group deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameId'
+        '401':
+          description: Missing API token. The user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '502':
+          description: API is not responding,
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /api/my/group/edit:
+    post:
+      tags:
+        - MyGroups
+      summary: Edit group name and description
+      description: Edit group by changing its name and description
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: name
+          in: query
+          description: Name of the group to edit
+          required: true
+          schema:
+            type: string
+          example: Favorito
+        - name: newname
+          in: query
+          description: New name of the group
+          required: true
+          schema:
+            type: string
+          example: Favorito
+        - name: desc
+          in: query
+          description: Description of the book to create
+          required: true
+          schema:
+            type: string
+          example: Os meus jogos favoritos
+      responses:
+        '200':
+          description: Group edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '401':
+          description: Missing API token. The user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '404':
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '502':
+          description: API is not responding,
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /api/my/group/games/add:
+    post:
+      tags:
+        - MyGroups
+      summary: Add a game to the group
+      description: Adds a game to the group at your choice
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: name
+          in: query
+          description: Name of the group
+          required: true
+          schema:
+            type: string
+          example: Favoritos
+        - name: gameid
+          in: query
+          description: Game's ID to add
+          required: true
+          schema:
+            type: string
+          example: GETI3ETTER
+      responses:
+        '200':
+          description: Game id added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '401':
+          description: Missiing authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '502':
+          description: API is not responding
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /api/my/group/games/delete:
+    delete:
+      tags:
+        - MyGroups
+      summary: Delete a game from the group
+      description: Returns a group
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: gameid
+          in: query
+          description: Game id to remove
+          required: true
+          schema:
+            type: string
+          example: TDBWC34HVY
+      responses:
+        '200':
+          description: Game removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '401':
+          description: Missing authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '502':
+          description: API is not responding
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    AppErrorInfo:
+      description: Additional information about the error
+      nullable: true
+      anyOf:
+        - type: object
+        - type: string
+        - type: integer
+        - type: number
+      example: ...
+    AppError:
+      type: object
+      description: Application error
+      required:
+        - code
+        - name
+        - message
+      properties:
+        code:
+          type: number
+          format: int32
+          description: Internal error code
+          example: 1000
+        name:
+          type: string
+          description: Internal error name
+          example: FAIL
+        message:
+          type: string
+          description: Error description message
+          example: An error occurred
+        info:
+          $ref: '#/components/schemas/AppErrorInfo'
+    GameResponse:
+      type: object
+      description: Response with a game
+      properties:
+        game:
+          $ref: '#/components/schemas/Game'
+    GameListResponse:
+      type: object
+      description: Response with a list of games
+      properties:
+        books:
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'
+    GameId:
+      type: object
+      description: Game id
+      required:
+        - gameId
+      properties:
+        gameId:
+          type: string
+          description: Internal game id
+          example: TAAifFP590
+    Game:
+      type: object
+      description: Book data
+      required:
+        - id
+        - name
+        - publisher
+      properties:
+        id:
+          type: string
+          description: Internal book id
+          example: Ho3JtwEACAAJ
+        name:
+          type: string
+          description: The game title
+          example: Root
+        publisher:
+          type: string
+          description: The game publisher
+          example: Leder Games
+        rules_url:
+          type: string
+          description: Game's rule url
+          example: https://drive.google.com/drive/folders/1i9-iCUDzfGMs7HjFHhahwMS6efvvfX5w
+        price:
+          type: integer
+          description: Game's price
+          example: 15
+        min_age:
+          type: integer
+          example: 4
+        min_player:
+          type: integer
+          example: 2
+        rank:
+          type: integer
+          description: Game's popularity in the site
+          example: 1
+    UserAddedResponse:
+      type: object
+      description: Response
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+    User:
+      type: object
+      description: User data
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    Group:
+      type: object
+      description: Group data
+      required:
+        - nome
+        - description
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        games:
+          type: array
+          items:
+            type: string
+    ListGroup:
+      type: object
+      description: List of groups
+      properties:
+        name:
+          $ref: '#/components/schemas/Group'
