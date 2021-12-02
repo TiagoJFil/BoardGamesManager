@@ -32,7 +32,13 @@ const users = {
 			Name : 'nome',
 			Description:'',
 			gamesList:['EL3YmDLY6W0','TAAifFP590']
-		}}
+		}},
+	'manel' : {
+		'nome' : {
+			Name : 'nome',
+			Description:'',
+			gamesList:['EL3YmDLY6W0','TAAifFP590']
+		}},
 };
 
 const hasGroup = async (user,groupName) => users[user].hasOwnProperty(groupName);
@@ -87,17 +93,19 @@ async function createUser(Username){ //adds user
 		AuthToken: id,
 		UserName: Username
 	}
-	
 }
-
-async function addGameToUser(token,game){ 
-	const tokenList = Object.keys(tokens) 
-	if(token in tokenList) userGamesIds[token].push(game.id);
-}
-
-
 
 module.exports = {
+	hasGame,
+	hasGroup,
 	createUser,
-	addGameToUser
+	tokenToUsername,
+	createGroup,
+	editGroup,
+	listGroups,
+	deleteGroup,
+	getDetailsFromGroup,
+	addGameToGroup,
+	removeGameFromGroup,
+	listGames
 }
