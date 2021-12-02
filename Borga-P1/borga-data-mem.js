@@ -22,7 +22,6 @@ const games = {
 		"max_players": 6,
 		"rank": 317
 	}
-
 }
 
 //users with an array of ids of the games on the UsersList
@@ -89,7 +88,8 @@ async function addGameToGroup(user,groupName,gameId){
 }
 
 async function removeGameFromGroup(user,groupName,gameId){
-	users[user][groupName].gamesList.filter(it == gameId);
+	users[user][groupName].gamesList.filter(it != gameId);
+	return gameId;
 }
 
 async function listGames(username) {
@@ -108,6 +108,7 @@ async function createUser(Username){ //adds user
 }
 
 module.exports = {
+	users,
 	hasGame,
 	hasGroup,
 	createUser,
