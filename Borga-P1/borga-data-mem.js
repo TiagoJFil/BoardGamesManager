@@ -67,7 +67,7 @@ async function editGroup(user,oldName,newName,description){
 }
 
 async function listGroups(user){
-	return Object.value(users[user]);
+	return Object.values(users[user]);
 }
 
 async function deleteGroup(user, groupName){

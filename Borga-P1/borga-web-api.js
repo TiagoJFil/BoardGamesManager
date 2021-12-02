@@ -80,15 +80,26 @@ module.exports = function (services) {
 	
 	async function editAGroup(req,res){
 		try{
-		const groupName = req.query.name;
+		const groupOldName = req.query.name;
+		const groupNewName = req.query.newname;
 		const groupDesc = req.query.desc;
-		const newGroup = await services.createGroup(getBearerToken(req),groupName,groupDesc)
+		const newGroup = await services.editGroup(getBearerToken(req),groupOldName,groupNewName,groupDesc)
 		res.json(newGroup);
 
 		}catch(err){
 			onError(req,res,err);
 		}
 
+	}
+
+	async function listGroups(req,res){
+		try{
+			const groups = await services.listGroups(getBearerToken(req))
+			res.json(groups);
+	
+			}catch(err){
+				onError(req,res,err);
+			}
 	}
 	
 	
@@ -126,10 +137,11 @@ module.exports = function (services) {
 	
 	// Resource: /my/group/create
 	router.post('/my/group/create/', createAGroup);
-
 	// Resource: /my/group/edit
 	router.post('/my/group/edit/', editAGroup);
-	
+	// Resource: /my/group/list
+	router.post('/my/group/list/', listGroups);
+
 	// Resource: /users/create/
 	router.post('/users/create/', addUser);
 	
