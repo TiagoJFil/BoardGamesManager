@@ -67,7 +67,7 @@ module.exports = function (services) {
 	
 	async function addUser(req,res){
 		try {
-			const username = req.params.user;
+			const username = req.query.name;
 			const user = await services.addUser(username)
 			res.json(user)
 		} catch (err) {
