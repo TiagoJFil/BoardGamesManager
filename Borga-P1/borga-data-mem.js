@@ -27,70 +27,52 @@ const games = {
 
 //users with an array of ids of the games on the UsersList
 const users = {
-	'tiago' : {games:{'EL3YmDLY6W':'Risk'}}
+	'tiago' : {
+		'nome' : {
+			Name : 'nome',
+			Description:'',
+			gamesList:['EL3YmDLY6W0','TAAifFP590']
+		}}
 };
 
-const hasGame = async (gameId) => !!games[gameId];
+const hasGroup = async (user,groupName) => users[user].hasOwnProperty(groupName);
+
+const hasGame = async (user,groupName,gameId) => users[user][groupName].gamesList.includes(gameId);
 
 async function tokenToUsername(token) {
 	return tokens[token];
 }
-/*
-async function saveGame(username,gameObj) {
-	const gameId = gameObj.id;
-	users[username].games[gameId] = gameObj.name
-	game[gameId] = gameObj;
-	return gameId;
-}
 
-async function loadGame(username,gameId) {
-	const gameId = users[username].games[gameId].key;
-	if (!gameId) {
-		const err = errors.NOT_FOUND({ id: gameId })
-		throw err;
-	}
-	return games[gameId].value;
-}
-
- TEM UM ERRO 
-async function deletegame(username,gameId) {
-	const gameId = users[username].games[gameId].key;
-	if (!gameId) {
-		throw errors.NOT_FOUND({ id: gameId });
-	}
-	delete users[username].games[gameId];
-	return gameId;
-}
-*/
 async function createGroup(user,name,description){
-
+	const groupObj = {name : {Name : name, Description : description, gamesList : []}};
+	users[user] = groupObj;
 }
 
-async function editGroup(user,name,description){
-
+async function editGroup(user,oldName,newName,description){
+	const oldGamesList = users[user][oldName].gamesList;
+	const groupObj = {name : {Name : newName, Description : description, oldGamesList}};
+	users[user] = groupObj;
 }
 
 async function listGroups(user){
-
+	return Object.value(users[user]);
 }
 
-async function deleteGroup(user){
-
+async function deleteGroup(user, groupName){
+	delete users[user][groupName];
 }
 
-async function getDetailsFromGroup(user,group){
-
+async function getDetailsFromGroup(user,groupName){
+	return Object.value(users[user][groupName]);
 }
 
-async function addGameToGroup(user,group,name){
-
+async function addGameToGroup(user,groupName,gameId){
+	users[user][groupName].gamesList.push(gameId);
 }
 
-async function removeGameFromGroup(user,name,game){
-
+async function removeGameFromGroup(user,groupName,gameId){
+	users[user][groupName].gamesList.filter(it == gameId);
 }
-
-
 
 async function listGames(username) {
 	return Object.values(users[username]);
