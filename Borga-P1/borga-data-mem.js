@@ -110,7 +110,8 @@ async function addGameToGroup(user,groupName,game){
 }
 
 async function removeGameFromGroup(user,groupName,gameId){
-	users[user][groupName].games.filter(it == gameId);
+	users[user][groupName].gamesList.filter(it != gameId);
+	return gameId;
 }
 
 async function listGames(username) {
@@ -132,6 +133,7 @@ async function createUser(Username){ //adds user
 
 
 module.exports = {
+	users,
 	hasGame,
 	hasGroup,
 	createUser,
