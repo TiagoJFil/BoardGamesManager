@@ -64,22 +64,39 @@ module.exports = function (data_borga, data_mem) {
 		}
 		
 		if( await data_mem.hasGroup(username, name) ){
-			throw(errors.GROUP_ALREADY_EXISTS(`$name is already a group`))
+			throw(errors.GROUP_ALREADY_EXISTS(`the group you were trying to add already exists`))
 		}
 		
-		return data_mem.createGroup(token,name,desc)
+		return data_mem.createGroup(username,name,desc)
 		
 
 	}
 
-	async function editGroup(token,name,desc){
-		if(!name){
-			throw(errors.MISSING_PARAMETER('group name'));
+	async function editGroup(token,oldName,newName,desc){
+		const username = await getUsername(token)
+
+		if(!oldName){
+			throw(errors.MISSING_PARAMETER('group name to edit'));
+		}
+		if(!newName){
+			throw(errors.MISSING_PARAMETER('group name to rename to'));
 		}
 		if(!desc){
 			throw(errors.MISSING_PARAMETER('group description'));	
 		}
-		return data_mem.editGroup(token,name,desc)
+		
+		if( !await data_mem.hasGroup(username, oldName) ){
+			throw(errors.GROUP_DOES_NOT_EXIST(`the group you were trying to edit does not exist`))
+		}
+
+
+		return data_mem.editGroup(username,oldName,newName,desc)
+	}
+
+	async function listGroups(token){
+		const username = await getUsername(token)
+
+		return data_mem.listGroups(username)
 	}
 
 	
@@ -90,6 +107,7 @@ module.exports = function (data_borga, data_mem) {
 		searchGame,
 		addUser,
 		createGroup,
-		editGroup
+		editGroup,
+		listGroups
 	};
 }

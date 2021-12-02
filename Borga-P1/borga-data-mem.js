@@ -50,24 +50,30 @@ async function tokenToUsername(token) {
 }
 
 async function createGroup(user,name,description){
-	var newGroup = new Object()
-	newGroup[name] = {
+	var newGroup =  {
 		Name : name,
 		Description : description,
 		gamesList : []	
 	};
-	users[user] = newGroup;
+	users[user][name] = newGroup
+
 	return users[user][name];
 }
 
 async function editGroup(user,oldName,newName,description){
 	const oldGamesList = users[user][oldName].gamesList;
-	const groupObj = {name : {Name : newName, Description : description, oldGamesList}};
-	users[user] = groupObj;
+	const updatedGroup =  {
+		Name : newName,
+		Description : description,
+		gamesList : oldGamesList	
+	};
+	delete users[user][oldName];
+	users[user][newName] = updatedGroup;
+	return updatedGroup
 }
 
 async function listGroups(user){
-	return Object.value(users[user]);
+	return Object.values(users[user]);
 }
 
 async function deleteGroup(user, groupName){
@@ -75,7 +81,7 @@ async function deleteGroup(user, groupName){
 }
 
 async function getDetailsFromGroup(user,groupName){
-	return Object.value(users[user][groupName]);
+	return Object.values(users[user][groupName]);
 }
 
 async function addGameToGroup(user,groupName,gameId){
