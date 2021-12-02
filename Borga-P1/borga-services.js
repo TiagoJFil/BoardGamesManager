@@ -2,13 +2,13 @@
 
 const errors = require('./borga-errors.js');
 
-module.exports = function (data_borga, data_int) {
+module.exports = function (data_borga, data_mem) {
 
 	async function getUsername(token) {
 		if (!token) {
 			throw errors.UNAUTHENTICATED('no token');
 		}
-		const username = await data_int.tokenToUsername(token);
+		const username = await data_mem.tokenToUsername(token);
 		if(!username) {
 			throw errors.UNAUTHENTICATED('bad token');
 		}
@@ -49,11 +49,13 @@ module.exports = function (data_borga, data_int) {
 			throw(errors.MISSING_PARAMETER('user name'));
 		}
 		
-		return data_int.createUser(name);
+		return data_mem.createUser(name);
 		
 	}
 	
 	async function createGroup(token,name,desc){
+		const username = await getUsername(token)
+
 		if(!name){
 			throw(errors.MISSING_PARAMETER('group name'));
 		}
@@ -61,13 +63,16 @@ module.exports = function (data_borga, data_int) {
 			throw(errors.MISSING_PARAMETER('group description'));	
 		}
 		
-		const username = getUsername(token)
 		
-		if( await data_int.haGroup(username, name) ){
+		
+		
+		if( await data_mem.haGroup(username, name) ){
 			throw(errors.GROUP_ALREADY_EXISTS(`$name is already a group`))
 		}
 		
-		return data_int.createGroup(token,name,desc)
+		return data_mem.createGroup(token,name,desc)
+		
+
 	}
 
 	async function editGroup(token,name,desc){
@@ -77,7 +82,7 @@ module.exports = function (data_borga, data_int) {
 		if(!desc){
 			throw(errors.MISSING_PARAMETER('group description'));	
 		}
-		return data_int.editGroup(token,name,desc)
+		return data_mem.editGroup(token,name,desc)
 	}
 
 	

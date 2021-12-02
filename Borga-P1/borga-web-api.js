@@ -71,7 +71,7 @@ module.exports = function (services) {
 		const newGroup = await services.createGroup(getBearerToken(req),groupName,groupDesc)
 		res.json(newGroup);
 
-		}catch{
+		}catch(err){
 			onError(req,res,err);
 		}
 
@@ -111,7 +111,7 @@ module.exports = function (services) {
 
 	
 	// Resource: /my/group
-	router.post('/my/group/search/', searchAnyGame);
+	router.post('/my/group/search/', createAGroup);
 	
 	// Resource: /users/create/
 	router.post('/users/create/', addUser);
