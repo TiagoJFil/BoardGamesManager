@@ -10,35 +10,29 @@ const tokens = {
 
 //id : GameObject
 const games = {
-	
-	"EL3YmDLY6W" : {
-		"id": "EL3YmDLY6W",
-		"name": "Risk",
-		"url": "https://www.boardgameatlas.com/game/EL3YmDLY6W/risk",
-		"price": "24.26",
-		"publisher": "Hasbro",
-		"min_age": 10,
-		"min_players": 2,
-		"max_players": 6,
-		"rank": 317
-	}
-
+	cyscZjjlse: {
+		id: 'cyscZjjlse',
+		name: 'Telestrations',
+		url: 'https://www.boardgameatlas.com/game/cyscZjjlse/telestrations',
+		price: '22.99',
+		publisher: 'USAopoly',
+		min_age: 12,
+		min_players: 4,
+		max_players: 8,
+		rank: 252
+	  }  
+	  
 }
 
 //users with an array of ids of the games on the UsersList
 const users = {
 	'tiago' : {
-		'nome' : {
-			Name : 'nome',
-			Description:'',
-			gamesList:['EL3YmDLY6W0','TAAifFP590']
+		'test' : {
+			Name : 'test',
+			Description:'Grupo de Teste',
+			games:['cyscZjjlse']
 		}},
-	'manel' : {
-		'nome' : {
-			Name : 'nome',
-			Description:'',
-			gamesList:['EL3YmDLY6W0','TAAifFP590']
-		}},
+	
 };
 
 const hasGroup = async (user,groupName) => users[user].hasOwnProperty(groupName);
@@ -53,11 +47,16 @@ async function createGroup(user,name,description){
 	var newGroup =  {
 		Name : name,
 		Description : description,
-		gamesList : []	
+		games : []	
 	};
 	users[user][name] = newGroup
 
-	return users[user][name];
+	const displayableGroup =  {
+		Name : name,
+		Description : description,
+		games : {}	
+	};
+	return displayableGroup;
 }
 
 async function editGroup(user,oldName,newName,description){
@@ -65,31 +64,53 @@ async function editGroup(user,oldName,newName,description){
 	const updatedGroup =  {
 		Name : newName,
 		Description : description,
-		gamesList : oldGamesList	
+		games : oldGamesList	
 	};
 	delete users[user][oldName];
 	users[user][newName] = updatedGroup;
-	return updatedGroup
+	return updatedGroup;
 }
 
 async function listGroups(user){
-	return Object.values(users[user]);
+	const userGroups = Object.values(users[user]);
+
+	for (let i = 0; i < userGroups.length; i++){
+		userGroups[i] = {
+			Name : userGroups[i].Name,
+			Description : userGroups[i].Description
+		}
+	  }
+
+	return Object.values(userGroups);
 }
 
 async function deleteGroup(user, groupName){
 	delete users[user][groupName];
 }
 
-async function getDetailsFromGroup(user,groupName){
-	return Object.values(users[user][groupName]);
+async function getDisplayableGroupWithGameObjs(user,groupName){
+	let GamesObjFromIds = new Object()
+	users[user][groupName].games.forEach( it => GamesObjFromIds[it] = games[it])
+	
+	const groupToDisplayWithGameObjs = {
+		Name : users[user][groupName].Name,
+		Description : users[user][groupName].Description,
+		games : GamesObjFromIds
+	};
+	return groupToDisplayWithGameObjs
 }
 
-async function addGameToGroup(user,groupName,gameId){
-	users[user][groupName].gamesList.push(gameId);
+async function addGameToGroup(user,groupName,game){
+	const gameId = game.id
+	games[gameId] = game
+	
+	users[user][groupName].games.push(gameId);
+
+	return await getDisplayableGroupWithGameObjs(user,groupName);
 }
 
 async function removeGameFromGroup(user,groupName,gameId){
-	users[user][groupName].gamesList.filter(it == gameId);
+	users[user][groupName].games.filter(it == gameId);
 }
 
 async function listGames(username) {
@@ -107,6 +128,9 @@ async function createUser(Username){ //adds user
 	}
 }
 
+
+
+
 module.exports = {
 	hasGame,
 	hasGroup,
@@ -116,7 +140,7 @@ module.exports = {
 	editGroup,
 	listGroups,
 	deleteGroup,
-	getDetailsFromGroup,
+	getDisplayableGroupWithGameObjs,
 	addGameToGroup,
 	removeGameFromGroup,
 	listGames

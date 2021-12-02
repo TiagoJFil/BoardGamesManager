@@ -172,13 +172,13 @@
         }
       }
     },
-    "/api/my/group/details": {
+    "/api/my/group/details/{name}": {
       "get": {
         "tags": [
           "MyGroups"
         ],
         "summary": "Get group detail",
-        "description": "Get the details of a group, with its name, description and names of the included games",
+        "description": "Get the details of a group, with its name, description and names of the included games.",
         "security": [
           {
             "bearerAuth": []
@@ -187,7 +187,7 @@
         "parameters": [
           {
             "name": "name",
-            "in": "query",
+            "in": "path",
             "description": "Name of the group",
             "required": true,
             "schema": {

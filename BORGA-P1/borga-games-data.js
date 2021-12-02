@@ -58,6 +58,19 @@ function getGameByName(name) {
 		});
 }
 
+function getGameById(id) {
+	const search_uri =BOARD_ATLAS_BASE_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;
+
+	return do_fetch(search_uri)
+		.then(answer => {
+			if(answer.length != 0 && answer.count != 0){
+				return makeGameObj(answer.games[0]);
+			} else {
+				throw errors.NOT_FOUND({ id });
+			}
+		});
+}
+
 
 function makeListObj(answer){
 	const gamesList = {}
@@ -76,14 +89,15 @@ function getListPopularGames() {
 	return do_fetch(search_uri)
 		.then(answer => {
 			if (answer.length != 0 && answer.count != 0) {
-				return makeListObj(answer.games);
+				return makeListObj(answer.games[0]);
 			} else {
-				throw errors.NOT_FOUND({ query });
+				throw errors.NOT_FOUND({  });
 			}
 		});
 }
 
 module.exports = {
 	getGameByName,
-	getListPopularGames
+	getListPopularGames,
+	getGameById
 }

@@ -95,12 +95,22 @@ module.exports = function (services) {
 			const groups = await services.listGroups(getBearerToken(req))
 			res.json(groups);
 	
-			}catch(err){
-				onError(req,res,err);
-			}
+		}catch(err){
+			onError(req,res,err);
+		}
 	}
 	
-	
+	async function getGroupDetails(req,res){
+		try{
+			const groupName = req.params.name
+			const group = await services.getGroupInfo(getBearerToken(req),groupName)
+			res.json(group);
+		}catch(err){
+			onError(req,res,err);
+		}
+	}
+
+
 	
 	async function addUser(req,res){
 		try {
@@ -112,7 +122,16 @@ module.exports = function (services) {
 		}
 	}
 	
-	
+	async function addGameToGroup(req,res){
+		try{
+			const groupName = req.query.name
+			const gameId = req.query.gameid
+			const info = await services.addGameToGroup(getBearerToken(req),groupName,gameId)
+			res.json(info)
+		}catch(err){
+			onError(req,res,err)
+		}
+	}
 
 
 
@@ -138,12 +157,15 @@ module.exports = function (services) {
 	// Resource: /my/group/edit
 	router.post('/my/group/edit/', editAGroup);
 	// Resource: /my/group/list
-	router.post('/my/group/list/', listGroups);
+	router.get('/my/group/list/', listGroups);
+	// Resource: /my/group/games/add
+	router.get('/my/group/games/add', addGameToGroup);
 
 	// Resource: /users/create/
 	router.post('/users/create/', addUser);
 	
-	
+	// Resource: /my/group/details/<name>
+	router.get('/my/group/details/:name',getGroupDetails)
 	
 	
 	return router;
