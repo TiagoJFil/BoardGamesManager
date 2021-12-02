@@ -50,8 +50,14 @@ async function tokenToUsername(token) {
 }
 
 async function createGroup(user,name,description){
-	const groupObj = {name : {Name : name, Description : description, gamesList : []}};
-	users[user] = groupObj;
+	var newGroup = new Object()
+	newGroup[name] = {
+		Name : name,
+		Description : description,
+		gamesList : []	
+	};
+	users[user] = newGroup;
+	return users[user][name];
 }
 
 async function editGroup(user,oldName,newName,description){

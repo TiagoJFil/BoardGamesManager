@@ -76,6 +76,20 @@ module.exports = function (services) {
 		}
 
 	}
+
+	
+	async function editAGroup(req,res){
+		try{
+		const groupName = req.query.name;
+		const groupDesc = req.query.desc;
+		const newGroup = await services.createGroup(getBearerToken(req),groupName,groupDesc)
+		res.json(newGroup);
+
+		}catch(err){
+			onError(req,res,err);
+		}
+
+	}
 	
 	
 	
@@ -105,13 +119,16 @@ module.exports = function (services) {
 	router.use(express.json());
 	
 	// Resource: /all/games/ranks
-	router.get('/all/games/ranks', listPopularGames);
+	router.get('/all/games/ranks/', listPopularGames);
 	// Resource: /all/games/search
 	router.get('/all/games/search/', searchAnyGame);
 
 	
-	// Resource: /my/group
-	router.post('/my/group/search/', createAGroup);
+	// Resource: /my/group/create
+	router.post('/my/group/create/', createAGroup);
+
+	// Resource: /my/group/edit
+	router.post('/my/group/edit/', editAGroup);
 	
 	// Resource: /users/create/
 	router.post('/users/create/', addUser);

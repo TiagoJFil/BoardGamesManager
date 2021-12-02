@@ -63,10 +63,7 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.MISSING_PARAMETER('group description'));	
 		}
 		
-		
-		
-		
-		if( await data_mem.haGroup(username, name) ){
+		if( await data_mem.hasGroup(username, name) ){
 			throw(errors.GROUP_ALREADY_EXISTS(`$name is already a group`))
 		}
 		
