@@ -54,13 +54,27 @@ module.exports = function (services) {
 	
 	async function searchAnyGame(req,res){
 		try {
-			const gameName = req.query.name
+			const gameName = req.query.name;
 			const game = await services.searchGame(gameName);
 			res.json(game);
 		} catch (err) {
 			onError(req, res, err);
 		}
 		
+	}
+
+
+	async function createAGroup(req,res){
+		try{
+		const groupName = req.query.name;
+		const groupDesc = req.query.desc;
+		const newGroup = await services.createGroup(getBearerToken(req),groupName,groupDesc)
+		res.json(newGroup);
+
+		}catch{
+			onError(req,res,err);
+		}
+
 	}
 	
 	
@@ -76,6 +90,12 @@ module.exports = function (services) {
 	}
 	
 	
+
+
+
+
+
+
 	const router = express.Router();
 	
 	//router.use('/docs', openApiUi.serve);
@@ -88,9 +108,13 @@ module.exports = function (services) {
 	router.get('/all/games/ranks', listPopularGames);
 	// Resource: /all/games/search
 	router.get('/all/games/search/', searchAnyGame);
+
 	
-	// Resource: /users/add/
-	router.post('/users/add/', addUser);
+	// Resource: /my/group
+	router.post('/my/group/search/', searchAnyGame);
+	
+	// Resource: /users/create/
+	router.post('/users/create/', addUser);
 	
 	
 	

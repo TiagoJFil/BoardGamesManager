@@ -27,7 +27,12 @@ const games = {
 
 //users with an array of ids of the games on the UsersList
 const users = {
-	'tiago' : {games:{'EL3YmDLY6W':'Risk'}}
+    'tiago' : {
+        'nome' : {
+            Name : 'nome',
+            Description:'',
+            gamesList:['EL3YmDLY6W0','TAAifFP590']
+        }}
 };
 
 const hasGame = async (gameId) => !!games[gameId];
