@@ -62,6 +62,35 @@ async function deletegame(username,gameId) {
 	return gameId;
 }
 */
+async function createGroup(user,name,description){
+
+}
+
+async function editGroup(user,name,description){
+
+}
+
+async function listGroups(user){
+
+}
+
+async function deleteGroup(user){
+
+}
+
+async function getDetailsFromGroup(user,group){
+
+}
+
+async function addGameToGroup(user,group,name){
+
+}
+
+async function removeGameFromGroup(user,name,game){
+
+}
+
+
 
 async function listGames(username) {
 	return Object.values(users[username]);
