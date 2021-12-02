@@ -17,9 +17,28 @@ module.exports = function (services) {
 	}
 	
 	
-	//not done yet
+
 	function onError(req, res, err) {
 		console.log('[ERROR]', err);
+		switch (err.name) {
+			case 'NOT_FOUND': 
+				res.status(404);
+				break;
+			case 'EXT_SVC_FAIL':
+				res.status(502);
+				break;
+			case 'MISSING_PARAMETER': 
+				res.status(400);
+				break;
+			case 'UNAUTHENTICATED': 
+				res.status(401);
+				break;
+			case 'USER_ALREADY_EXISTS':
+				res.status(409);
+			default:
+				res.status(500);				
+		}
+		res.json({ cause: err });
 	}
 	
 	
@@ -35,7 +54,7 @@ module.exports = function (services) {
 	
 	async function searchAnyGame(req,res){
 		try {
-			const gameName = req.params.name
+			const gameName = req.query.name
 			const game = await services.searchGame(gameName);
 			res.json(game);
 		} catch (err) {
@@ -65,13 +84,13 @@ module.exports = function (services) {
 	
 	router.use(express.json());
 	
-	// Resource: /global/games/ranks
-	router.get('/global/games/ranks', listPopularGames);
-	// Resource: /global/games/search/<name>
-	router.get('/global/games/search/:name', searchAnyGame);
+	// Resource: /all/games/ranks
+	router.get('/all/games/ranks', listPopularGames);
+	// Resource: /all/games/search
+	router.get('/all/games/search/', searchAnyGame);
 	
-	// Resource: /users/add/<user>
-	router.post('/users/add/:user', addUser);
+	// Resource: /users/add/
+	router.post('/users/add/', addUser);
 	
 	
 	

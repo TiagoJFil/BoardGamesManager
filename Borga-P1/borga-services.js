@@ -12,7 +12,7 @@ module.exports = function (data_borga, data_int) {
 
 	async function searchGame(name){
 		if(!name){
-			throw(errors.MISSING_PARAMETER('name of the game to search'));
+			throw(errors.MISSING_PARAMETER('Name of the game to search'));
 		}
 		
 		const game = data_borga.getGameByName(name);

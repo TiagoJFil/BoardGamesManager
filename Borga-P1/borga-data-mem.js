@@ -35,7 +35,7 @@ const hasGame = async (gameId) => !!games[gameId];
 async function tokenToUsername(token) {
 	return tokens[token];
 }
-
+/*
 async function saveGame(username,gameObj) {
 	const gameId = gameObj.id;
 	users[username].games[gameId] = gameObj.name
@@ -52,7 +52,7 @@ async function loadGame(username,gameId) {
 	return games[gameId].value;
 }
 
-/* TEM UM ERRO */
+ TEM UM ERRO 
 async function deletegame(username,gameId) {
 	const gameId = users[username].games[gameId].key;
 	if (!gameId) {
@@ -61,6 +61,7 @@ async function deletegame(username,gameId) {
 	delete users[username].games[gameId];
 	return gameId;
 }
+*/
 
 async function listGames(username) {
 	return Object.values(users[username]);
