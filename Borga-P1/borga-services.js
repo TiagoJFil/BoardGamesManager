@@ -142,6 +142,10 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.MISSING_PARAMETER('group name'));
 		}
 
+		if( !await data_mem.hasGroup(username, groupName) ){
+			throw(errors.GROUP_DOES_NOT_EXIST(`the group you were trying to delete does not exist`))
+		}
+
 		const groups = await data_mem.deleteGroup(username,groupName)
 		return groups
 	}
