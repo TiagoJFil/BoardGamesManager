@@ -45,8 +45,9 @@ module.exports = function (services) {
 	async function listPopularGames(req,res){
 		try{
 			
-		const list = await services.getPopularGames()
-		res.json(list);
+			const list = await services.getPopularGames()
+			res.json(list);
+
 		}catch(err){
 			onError(req, res, err);
 		}
@@ -102,7 +103,7 @@ module.exports = function (services) {
 	
 	async function getGroupDetails(req,res){
 		try{
-			const groupName = req.params.name
+			const groupName = req.params.name;
 			const group = await services.getGroupInfo(getBearerToken(req),groupName)
 			res.json(group);
 		}catch(err){
@@ -124,8 +125,8 @@ module.exports = function (services) {
 	
 	async function addGameToGroup(req,res){
 		try{
-			const groupName = req.query.name
-			const gameId = req.query.gameid
+			const groupName = req.query.name;
+			const gameId = req.query.gameid;
 			const info = await services.addGameToGroup(getBearerToken(req),groupName,gameId)
 			res.json(info)
 		}catch(err){
@@ -133,7 +134,26 @@ module.exports = function (services) {
 		}
 	}
 
+	async function deleteGroup(req,res){
+		try{
+			const groupName = req.params.name;
+			const groups = await services.deleteAGroup(getBearerToken(req),groupName)
+			res.json(groups)
+		}catch(err){
+			onError(req,res,err)
+		}
+	}
 
+	async function removeGameFromGroup(req,res){
+		try{
+			const groupName = req.query.group;
+			const gameID = req.query.gameid;
+			const groups = await services.removeGameFromGroup(getBearerToken(req),groupName,gameID)
+			res.json(groups)
+		}catch(err){
+			onError(req,res,err)
+		}
+	}
 
 
 
@@ -160,6 +180,10 @@ module.exports = function (services) {
 	router.get('/my/group/list/', listGroups);
 	// Resource: /my/group/games/add
 	router.get('/my/group/games/add', addGameToGroup);
+	// Resource: /my/group/games/delete/
+	router.get('/my/group/games/delete/', removeGameFromGroup);
+	// Resource: /my/group/delete/<name>
+	router.get('/my/group/delete/:name', deleteGroup)
 
 	// Resource: /users/create/
 	router.post('/users/create/', addUser);

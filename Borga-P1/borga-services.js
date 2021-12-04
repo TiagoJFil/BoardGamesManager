@@ -130,11 +130,36 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.GROUP_DOES_NOT_EXIST(`the group you were trying to get the info does not exist`))
 		}
 		
-		const game =await data_borga.getGameById(gameId)
+		const game = await data_borga.getGameById(gameId)
 		return await data_mem.addGameToGroup(username,groupName,game)
 
 	}
 
+	async function deleteAGroup(token,groupName){
+		const username = await getUsername(token);
+
+		if(!groupName){
+			throw(errors.MISSING_PARAMETER('group name'));
+		}
+
+		const groups = await data_mem.deleteGroup(username,groupName)
+		return groups
+	}
+
+	async function removeGameFromGroup(token,groupName,gameID){
+		const username = await getUsername(token);
+
+		if(!groupName){
+			throw(errors.MISSING_PARAMETER('group name'));
+		}
+
+		if(!gameID){
+			throw(errors.MISSING_PARAMETER('game Id is missing'));
+		}
+
+		const group = await data_mem.removeGameFromGroup(username,groupName,gameID)
+		return group
+	}
 
 
 	return {
@@ -145,6 +170,8 @@ module.exports = function (data_borga, data_mem) {
 		editGroup,
 		listGroups,
 		getGroupInfo,
-		addGameToGroup
+		addGameToGroup,
+		deleteAGroup,
+		removeGameFromGroup
 	};
 }

@@ -89,7 +89,7 @@ function getListPopularGames() {
 	return do_fetch(search_uri)
 		.then(answer => {
 			if (answer.length != 0 && answer.count != 0) {
-				return makeListObj(answer.games[0]);
+				return makeListObj(answer.games);
 			} else {
 				throw errors.NOT_FOUND({  });
 			}

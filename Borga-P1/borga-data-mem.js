@@ -85,7 +85,10 @@ async function listGroups(user){
 }
 
 async function deleteGroup(user, groupName){
+
 	delete users[user][groupName];
+	return listGroups(user);
+
 }
 
 async function getDisplayableGroupWithGameObjs(user,groupName){
@@ -111,7 +114,8 @@ async function addGameToGroup(user,groupName,game){
 
 async function removeGameFromGroup(user,groupName,gameId){
 	users[user][groupName].gamesList.filter(it != gameId);
-	return gameId;
+
+	return getDisplayableGroupWithGameObjs(user,groupName);
 }
 
 async function listGames(username) {
@@ -133,7 +137,6 @@ async function createUser(Username){ //adds user
 
 
 module.exports = {
-	users,
 	hasGame,
 	hasGroup,
 	createUser,
