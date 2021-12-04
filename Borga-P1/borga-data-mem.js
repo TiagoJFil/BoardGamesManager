@@ -113,9 +113,9 @@ async function addGameToGroup(user,groupName,game){
 }
 
 async function removeGameFromGroup(user,groupName,gameId){
-	users[user][groupName].gamesList.filter(it != gameId);
+	users[user][groupName].games = users[user][groupName].games.filter(it => it != gameId);
 
-	return getDisplayableGroupWithGameObjs(user,groupName);
+	return await getDisplayableGroupWithGameObjs(user,groupName);
 }
 
 async function listGames(username) {

@@ -36,3 +36,10 @@ describe('editGroup function tests', () => {
         expect(oldName).toBe(test_data_int.users['manel']['jogatana'].Description);
     })
 })
+
+describe('RemoveGameFromGroup function tests', () => {
+    test('remove game from user', async () => {
+        const a = await test_data_int.removeGameFromGroup('tiago', 'test', 'cyscZjjlse');
+        expect(a.games).toStrictEqual({});
+    })
+})
