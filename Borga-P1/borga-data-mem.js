@@ -8,6 +8,7 @@ const tokens = {
 	'fc6dbc68-adad-4770-ae6a-2d0e4eb1d0ea': 'joao'
 };
 
+
 //id : GameObject
 const games = {
 	cyscZjjlse: {
@@ -37,7 +38,7 @@ const users = {
 
 const hasGroup = async (user,groupName) => users[user].hasOwnProperty(groupName);
 
-const hasGame = async (user,groupName,gameId) => users[user][groupName].gamesList.includes(gameId);
+const hasGame = async (user,groupName,gameId) => users[user][groupName].games.includes(gameId);
 
 async function tokenToUsername(token) {
 	return tokens[token];
@@ -118,9 +119,8 @@ async function removeGameFromGroup(user,groupName,gameId){
 	return await getDisplayableGroupWithGameObjs(user,groupName);
 }
 
-async function listGames(username) {
-	return Object.values(users[username]);
-}
+
+
 
 async function createUser(Username){ //adds user
 	if(users[Username]) throw errors.USER_ALREADY_EXISTS('Username')
@@ -133,7 +133,9 @@ async function createUser(Username){ //adds user
 	}
 }
 
-
+async function listGames(username) {
+	return Object.values(users[username]);
+}
 
 
 module.exports = {

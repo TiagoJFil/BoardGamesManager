@@ -86,7 +86,7 @@ module.exports = function (data_borga, data_mem) {
 		}
 		
 		if( !await data_mem.hasGroup(username, oldName) ){
-			throw(errors.GROUP_DOES_NOT_EXIST(`the group you were trying to edit does not exist`))
+			throw(errors.NOT_FOUND(`the group you were trying to edit does not exist`))
 		}
 
 
@@ -106,7 +106,7 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.MISSING_PARAMETER('group name'));
 		}
 		if( !await data_mem.hasGroup(username, groupName) ){
-			throw(errors.GROUP_DOES_NOT_EXIST(`the group you were trying to get the info does not exist`))
+			throw(errors.NOT_FOUND(`the group you were trying to get the info does not exist`))
 		}
 
 		
@@ -127,7 +127,7 @@ module.exports = function (data_borga, data_mem) {
 		}
 
 		if( !await data_mem.hasGroup(username, groupName) ){
-			throw(errors.GROUP_DOES_NOT_EXIST(`the group you were trying to get the info does not exist`))
+			throw(errors.NOT_FOUND(`the group you were trying to get the info does not exist`))
 		}
 		
 		const game = await data_borga.getGameById(gameId)
@@ -143,7 +143,7 @@ module.exports = function (data_borga, data_mem) {
 		}
 
 		if( !await data_mem.hasGroup(username, groupName) ){
-			throw(errors.GROUP_DOES_NOT_EXIST(`the group you were trying to delete does not exist`))
+			throw(errors.NOT_FOUND(`the group you were trying to delete does not exist`))
 		}
 
 		const groups = await data_mem.deleteGroup(username,groupName)
@@ -159,6 +159,10 @@ module.exports = function (data_borga, data_mem) {
 
 		if(!gameID){
 			throw(errors.MISSING_PARAMETER('game Id is missing'));
+		}
+
+		if( !await data_mem.hasGame(username, groupName, gameID) ){
+			throw(errors.NOT_FOUND(`the Game you are trying to remove was not found`))
 		}
 
 		const group = await data_mem.removeGameFromGroup(username,groupName,gameID)
