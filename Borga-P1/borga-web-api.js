@@ -115,7 +115,7 @@ module.exports = function (services) {
 	
 	async function addUser(req,res){
 		try {
-			const username = req.query.name;
+			const username = req.params.name;
 			const user = await services.addUser(username)
 			res.json(user)
 		} catch (err) {
@@ -171,25 +171,24 @@ module.exports = function (services) {
 	// Resource: /all/games/search
 	router.get('/all/games/search/', searchAnyGame);
 
-	
-	// Resource: /my/group/create
-	router.post('/my/group/create/', createAGroup);
-	// Resource: /my/group/edit
-	router.post('/my/group/edit/', editAGroup);
-	// Resource: /my/group/list
-	router.get('/my/group/list/', listGroups);
-	// Resource: /my/group/games/add
-	router.get('/my/group/games/add', addGameToGroup);
-	// Resource: /my/group/games/delete/
-	router.get('/my/group/games/delete/', removeGameFromGroup);
-	// Resource: /my/group/delete/<name>
-	router.get('/my/group/delete/:name', deleteGroup)
+	// Resource: /users/create/<name>
+	router.post('/users/create/:name', addUser);	
 
-	// Resource: /users/create/
-	router.post('/users/create/', addUser);
-	
 	// Resource: /my/group/details/<name>
 	router.get('/my/group/details/:name',getGroupDetails)
+	// Resource: /my/group/list
+	router.get('/my/group/list/', listGroups);
+	// Resource: /my/group/create
+	router.post('/my/group/create/', createAGroup);
+	// Resource: /my/group/delete/<name>
+	router.delete('/my/group/delete/:name', deleteGroup)
+	// Resource: /my/group/edit
+	router.post('/my/group/edit/', editAGroup);
+	// Resource: /my/group/games/add
+	router.post('/my/group/games/add', addGameToGroup);
+	// Resource: /my/group/games/delete/
+	router.delete('/my/group/games/delete/', removeGameFromGroup);
+	
 	
 	
 	return router;
