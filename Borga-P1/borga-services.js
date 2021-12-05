@@ -48,7 +48,10 @@ module.exports = function (data_borga, data_mem) {
 		if(!name){
 			throw(errors.MISSING_PARAMETER('user name'));
 		}
-		
+
+		if(await data_mem.hasUser(name))
+			throw errors.USER_ALREADY_EXISTS(name)
+
 		return data_mem.createUser(name);
 	}
 	

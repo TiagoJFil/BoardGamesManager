@@ -38,6 +38,8 @@ const hasGroup = async (user,groupName) => users[user].hasOwnProperty(groupName)
 
 const hasGame = async (user,groupName,gameId) => users[user][groupName].games.includes(gameId);
 
+const hasUser = async(Username) => users.hasOwnProperty(Username);
+
 async function tokenToUsername(token) {
 	return tokens[token];
 }
@@ -75,14 +77,18 @@ async function editGroup(user,oldName,newName,description){
 async function listGroups(user){
 	const userGroups = Object.values(users[user]);
 
+	let displayableObject = {}
 	for (let i = 0; i < userGroups.length; i++){
+		
 		userGroups[i] = {
 			Name : userGroups[i].Name,
 			Description : userGroups[i].Description
 		}
-	};
-
-	return Object.values(userGroups);
+		
+		displayableObject[userGroups[i].Name] = userGroups[i]
+	  }
+	
+	return displayableObject;
 }
 
 async function deleteGroup(user, groupName){
@@ -121,10 +127,9 @@ async function removeGameFromGroup(user,groupName,gameId){
 }
 
 async function createUser(Username){ //adds user
-	if(users[Username]) throw errors.USER_ALREADY_EXISTS('Username');
-	const id = crypto.randomUUID();
-	tokens[id] = Username;
-	users[Username] = new Array();
+	const id = crypto.randomUUID()
+	tokens[id] = Username
+	users[Username] = new Array()
 	return {
 		AuthToken: id,
 		UserName: Username
@@ -138,6 +143,7 @@ async function listGames(username) {
 module.exports = {
 	hasGame,
 	hasGroup,
+	hasUser,
 	createUser,
 	tokenToUsername,
 	createGroup,
