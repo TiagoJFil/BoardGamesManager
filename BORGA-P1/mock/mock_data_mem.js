@@ -1,16 +1,16 @@
 'use strict';
 
-const crypto = require('crypto')
-const errors = require('./borga-errors.js')
+const crypto = require('crypto');
 
-const tokens = {
+const mock_errors = require('../borga-errors.js');
+
+const mock_tokens = {
 	'8b85d489-bcd3-477b-9563-5155af9f08ca': 'tiago',
 	'fc6dbc68-adad-4770-ae6a-2d0e4eb1d0ea': 'joao'
 };
 
-
 //id : GameObject
-const games = {
+const mock_games = {
 	cyscZjjlse: {
 		id: 'cyscZjjlse',
 		name: 'Telestrations',
@@ -25,8 +25,20 @@ const games = {
 }
 
 //users with an array of ids of the games on the UsersList
-const users = {
+const mock_users = {
 	'tiago' : {
+		'test' : {
+			Name : 'test',
+			Description:'Grupo de Teste',
+			games:['cyscZjjlse']
+	}},
+    'manel' : {
+		'test' : {
+			Name : 'test',
+			Description:'Grupo de Teste',
+			games:['cyscZjjlse']
+	}},
+    'toni' : {
 		'test' : {
 			Name : 'test',
 			Description:'Grupo de Teste',
@@ -34,12 +46,12 @@ const users = {
 	}},
 };
 
-const hasGroup = async (user,groupName) => users[user].hasOwnProperty(groupName);
+const hasGroup = async (user,groupName) => mock_users[user].hasOwnProperty(groupName);
 
-const hasGame = async (user,groupName,gameId) => users[user][groupName].games.includes(gameId);
+const hasGame = async (user,groupName,gameId) => mock_users[user][groupName].games.includes(gameId);
 
 async function tokenToUsername(token) {
-	return tokens[token];
+	return mock_tokens[token];
 }
 
 async function createGroup(user,name,description){
@@ -49,7 +61,7 @@ async function createGroup(user,name,description){
 		games : []	
 	};
 
-	users[user][name] = newGroup;
+	mock_users[user][name] = newGroup;
 
 	const displayableGroup =  {
 		Name : name,
@@ -61,19 +73,20 @@ async function createGroup(user,name,description){
 }
 
 async function editGroup(user,oldName,newName,description){
-	const oldGamesList = users[user][oldName].games;
+	const oldGamesList = mock_users[user][oldName].games;
 	const updatedGroup =  {
 		Name : newName,
 		Description : description,
 		games : oldGamesList	
 	};
-	delete users[user][oldName];
-	users[user][newName] = updatedGroup;
+	delete mock_users[user][oldName];
+	mock_users[user][newName] = updatedGroup;
+
 	return updatedGroup;
 }
 
 async function listGroups(user){
-	const userGroups = Object.values(users[user]);
+	const userGroups = Object.values(mock_users[user]);
 
 	for (let i = 0; i < userGroups.length; i++){
 		userGroups[i] = {
@@ -87,18 +100,18 @@ async function listGroups(user){
 
 async function deleteGroup(user, groupName){
 
-	delete users[user][groupName];
+	delete mock_users[user][groupName];
 	return listGroups(user);
 
 }
 
 async function getDisplayableGroupWithGameObjs(user,groupName){
 	let GamesObjFromIds = new Object();
-	users[user][groupName].games.forEach( it => GamesObjFromIds[it] = games[it]);
-	
+	mock_users[user][groupName].games.forEach( it => GamesObjFromIds[it] = mock_games[it]);
+    
 	const groupToDisplayWithGameObjs = {
-		Name : users[user][groupName].Name,
-		Description : users[user][groupName].Description,
+		Name : mock_users[user][groupName].Name,
+		Description : mock_users[user][groupName].Description,
 		games : GamesObjFromIds
 	};
 
@@ -107,32 +120,28 @@ async function getDisplayableGroupWithGameObjs(user,groupName){
 
 async function addGameToGroup(user,groupName,game){
 	const gameId = game.id;
-	games[gameId] = game;
+	mock_games[gameId] = game;
 	
-	users[user][groupName].games.push(gameId);
+	mock_users[user][groupName].games.push(gameId);
 
 	return await getDisplayableGroupWithGameObjs(user,groupName);
 }
 
 async function removeGameFromGroup(user,groupName,gameId){
-	users[user][groupName].games = users[user][groupName].games.filter(it => it != gameId);
+	mock_users[user][groupName].games = mock_users[user][groupName].games.filter(it => it != gameId);
 
 	return await getDisplayableGroupWithGameObjs(user,groupName);
 }
 
 async function createUser(Username){ //adds user
-	if(users[Username]) throw errors.USER_ALREADY_EXISTS('Username');
+	if(mock_users[Username]) throw mock_errors.USER_ALREADY_EXISTS('Username');
 	const id = crypto.randomUUID();
-	tokens[id] = Username;
-	users[Username] = new Array();
+	mock_tokens[id] = Username;
+	mock_users[Username] = new Array();
 	return {
 		AuthToken: id,
 		UserName: Username
 	};
-}
-
-async function listGames(username) {
-	return Object.values(users[username]);
 }
 
 module.exports = {
@@ -147,4 +156,7 @@ module.exports = {
 	getDisplayableGroupWithGameObjs,
 	addGameToGroup,
 	removeGameFromGroup,
+    mock_users,
+    mock_games,
+    mock_tokens,
 }

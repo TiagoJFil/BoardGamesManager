@@ -12,8 +12,14 @@ const default_services = services_builder(mock_data_ext,test_data_int);
 const test_user = "Manel";
 const test_token = "fc6dbc68-adad-4770-ae6a-2d0e4eb1d0ea"
 
+describe('getUsername function tests', () => {
+    test('provided token with no username returns ERROR', () => {
+        
+    });
+})
+
 describe('Search tests', () => {
-    test('search for non existing game', async () => {
+    test('search for non existing game returns ERROR', async () => {
         const services =
             services_builder({
                 searchGame: async () => {
@@ -31,9 +37,6 @@ describe('Search tests', () => {
     });
     
     test('search existing game', async () => {
-        const game = await default_services.searchGame('monopoly');
-        console.log(game);
-        expect(game).toBeDefined();
-        expect(game.id).toEqual(test_data_int.games['fG5Ax8PA7n']);
+        
     });     
 });

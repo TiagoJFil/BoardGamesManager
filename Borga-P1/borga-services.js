@@ -50,7 +50,6 @@ module.exports = function (data_borga, data_mem) {
 		}
 		
 		return data_mem.createUser(name);
-		
 	}
 	
 	async function createGroup(token,name,desc){
