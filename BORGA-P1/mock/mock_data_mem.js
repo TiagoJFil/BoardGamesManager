@@ -2,8 +2,6 @@
 
 const crypto = require('crypto');
 
-const mock_errors = require('../borga-errors.js');
-
 const mock_tokens = {
 	'8b85d489-bcd3-477b-9563-5155af9f08ca': 'tiago',
 	'fc6dbc68-adad-4770-ae6a-2d0e4eb1d0ea': 'joao'
@@ -49,6 +47,8 @@ const mock_users = {
 const hasGroup = async (user,groupName) => mock_users[user].hasOwnProperty(groupName);
 
 const hasGame = async (user,groupName,gameId) => mock_users[user][groupName].games.includes(gameId);
+
+const hasUser = async(Username) => mock_users.hasOwnProperty(Username);
 
 async function tokenToUsername(token) {
 	return mock_tokens[token];
@@ -134,10 +134,9 @@ async function removeGameFromGroup(user,groupName,gameId){
 }
 
 async function createUser(Username){ //adds user
-	if(mock_users[Username]) throw mock_errors.USER_ALREADY_EXISTS('Username');
-	const id = crypto.randomUUID();
-	mock_tokens[id] = Username;
-	mock_users[Username] = new Array();
+	const id = crypto.randomUUID()
+	tokens[id] = Username
+	users[Username] = new Array()
 	return {
 		AuthToken: id,
 		UserName: Username
@@ -145,6 +144,7 @@ async function createUser(Username){ //adds user
 }
 
 module.exports = {
+	hasUser,
 	hasGame,
 	hasGroup,
 	createUser,

@@ -1,7 +1,6 @@
 'use strict';
 
 const crypto = require('crypto')
-const errors = require('./borga-errors.js')
 
 const tokens = {
 	'8b85d489-bcd3-477b-9563-5155af9f08ca': 'tiago',
@@ -134,10 +133,6 @@ async function createUser(Username){ //adds user
 		AuthToken: id,
 		UserName: Username
 	};
-}
-
-async function listGames(username) {
-	return Object.values(users[username]);
 }
 
 module.exports = {
