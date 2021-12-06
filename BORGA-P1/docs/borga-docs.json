@@ -50,7 +50,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GameResponse"
+                  "$ref": "#/components/schemas/Game"
                 }
               }
             }
@@ -713,15 +713,6 @@
           }
         }
       },
-      "GameResponse": {
-        "type": "object",
-        "description": "Response with a game",
-        "properties": {
-          "game": {
-            "$ref": "#/components/schemas/Game"
-          }
-        }
-      },
       "GameListResponse": {
         "type": "object",
         "description": "Response with a list of games",
@@ -731,20 +722,6 @@
             "items": {
               "$ref": "#/components/schemas/Game"
             }
-          }
-        }
-      },
-      "GameId": {
-        "type": "object",
-        "description": "Game id",
-        "required": [
-          "gameId"
-        ],
-        "properties": {
-          "gameId": {
-            "type": "string",
-            "description": "Internal game id",
-            "example": "TAAifFP590"
           }
         }
       },
