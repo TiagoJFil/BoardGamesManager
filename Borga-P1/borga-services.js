@@ -30,7 +30,7 @@ module.exports = function (data_borga, data_mem) {
 	
 	async function getPopularGames(){
 		const list =  data_borga.getListPopularGames()
-		
+		  
 		return list
 	}
 

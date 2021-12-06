@@ -717,11 +717,8 @@
         "type": "object",
         "description": "Response with a list of games",
         "properties": {
-          "games": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Game"
-            }
+          "number": {
+            "$ref": "#/components/schemas/Game"
           }
         }
       },

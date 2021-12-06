@@ -166,8 +166,8 @@ module.exports = function (services) {
 	
 	router.use(express.json());
 	
-	// Resource: /all/games/ranks
-	router.get('/all/games/ranks/', listPopularGames);
+	// Resource: /all/games/rank
+	router.get('/all/games/rank/', listPopularGames);
 	// Resource: /all/games/search
 	router.get('/all/games/search/', searchAnyGame);
 
