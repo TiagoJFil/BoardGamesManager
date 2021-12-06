@@ -73,7 +73,7 @@ module.exports = function (data_borga, data_mem) {
 	}
 
 	async function editGroup(token,oldName,newName,desc){
-		const username = await getUsername(token)
+		const username = await getUsername(token);
 
 		if(!oldName){
 			throw(errors.MISSING_PARAMETER('Group name to edit'));
@@ -85,22 +85,21 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.MISSING_PARAMETER('Group description missing'));	
 		}
 		
-		if( !await data_mem.hasGroup(username, oldName) ){
+		if(!await data_mem.hasGroup(username, oldName) ){
 			throw(errors.NOT_FOUND(`The group you were trying to edit does not exist`))
 		}
-
 
 		return data_mem.editGroup(username,oldName,newName,desc)
 	}
 
 	async function listGroups(token){
-		const username = await getUsername(token)
+		const username = await getUsername(token);
 
 		return data_mem.listGroups(username)
 	}
 
 	async function getGroupInfo(token,groupName){
-		const username = await getUsername(token)
+		const username = await getUsername(token);
 
 		if(!groupName){
 			throw(errors.MISSING_PARAMETER('Group name missing'));
@@ -114,7 +113,7 @@ module.exports = function (data_borga, data_mem) {
 	}
 
 	async function addGameToGroup(token,groupName,gameId){
-		const username = await getUsername(token)
+		const username = await getUsername(token);
 
 		if(!groupName){
 			throw(errors.MISSING_PARAMETER('Group name missing'));
