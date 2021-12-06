@@ -125,20 +125,6 @@ describe('editGroup function tests', () => {
 
 });
 
-/* describe('listGroup function tests', () => {
-
-    test('trying to access groups of a non existing token throws ERROR', async () => {
-        const services =
-        services_builder();
-        try{
-            await services.listGroup(test_token);
-        } catch(err){
-            expect(err.name).toEqual('UNAUTHENTICATED');
-        }
-    });
-
-}); */
-
 describe('getGroupInfo function tests', () => {
 
     test('trying to access group info without giving a group name throws ERROR', async () => {
