@@ -35,7 +35,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GameResponse'
+                $ref: '#/components/schemas/Game'
         '400':
           description: No query indicated in the request
           content:
@@ -439,30 +439,13 @@ components:
           example: An error occurred
         info:
           $ref: '#/components/schemas/AppErrorInfo'
-    GameResponse:
-      type: object
-      description: Response with a game
-      properties:
-        game:
-          $ref: '#/components/schemas/Game'
+
     GameListResponse:
       type: object
       description: Response with a list of games
       properties:
-        games:
-          type: array
-          items:
-            $ref: '#/components/schemas/Game'
-    GameId:
-      type: object
-      description: Game id
-      required:
-        - gameId
-      properties:
-        gameId:
-          type: string
-          description: Internal game id
-          example: TAAifFP590
+        number: 
+          $ref: '#/components/schemas/Game'
     Game:
       type: object
       description: Game data
