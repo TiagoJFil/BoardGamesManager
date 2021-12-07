@@ -95,7 +95,8 @@ describe('editGroup function tests', () => {
 
         expect(mock_data_int.mock_users['manel'].test).toBe(undefined);
 
-        expect(mock_data_int.mock_users['manel']['jogatana']).toBe(newDesc);
+        expect(mock_data_int.mock_users['manel']['jogatana'].Description).toBe("descrição banal");
+        expect(mock_data_int.mock_users['manel']['jogatana'].Name).toBe("jogatana");
     });
 
     test('editing multiple groups of an user works', async () => {
@@ -105,10 +106,10 @@ describe('editGroup function tests', () => {
         const desc2 = await mock_data_int.editGroup('manel','jogatana','novo','nova desc');
 
         expect(mock_data_int.mock_users['manel']['testenome']).toBe(undefined);
-        expect(mock_data_int.mock_users['manel']['nometeste']).toBe(desc1);
+        expect(mock_data_int.mock_users['manel']['nometeste'].Description).toBe("nova descrição");
 
         expect(mock_data_int.mock_users['manel']['jogatana']).toBe(undefined);
-        expect(mock_data_int.mock_users['manel']['novo']).toBe(desc2);
+        expect(mock_data_int.mock_users['manel']['novo'].Description).toBe("nova desc");
     });
 });
 
@@ -201,5 +202,15 @@ describe('RemoveGameFromGroup function tests', () => {
         expect(mock_data_int.mock_users['toni']['test'].games).toStrictEqual([]);
 
     });
+
+    test('remove game from user that has no games', async () => {
+        
+        await mock_data_int.removeGameFromGroup('toni', 'test', 'cyscZjjlse');
+        await mock_data_int.removeGameFromGroup('toni', 'test', 'cyscZjjlse');
+        expect(mock_data_int.mock_users['toni']['test'].games).toStrictEqual([]);
+
+    });
+
+    
     
 });

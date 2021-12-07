@@ -60,7 +60,7 @@ function getGameByName(name) {
 
 function getGameById(id) {
 	const search_uri =BOARD_ATLAS_BASE_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;
-
+	
 	return do_fetch(search_uri)
 		.then(answer => {
 			if(answer.length != 0 && answer.count != 0){
@@ -73,14 +73,14 @@ function getGameById(id) {
 
 
 function makeListObj(answer){
-	const gamesList = {}
-	let it = 0
-	const size = answer.length
+	const gamesList = {};
+	let it = 0;
+	const size = answer.length;
 	while(it < size){
-		gamesList[it + 1] = makeGameObj(answer[it])
-		it++
+		gamesList[it + 1] = makeGameObj(answer[it]);
+		it++;
 	}
-	return gamesList
+	return gamesList;
 }
 
 
@@ -91,7 +91,7 @@ function getListPopularGames() {
 			if (answer.length != 0 && answer.count != 0) {
 				return makeListObj(answer.games);
 			} else {
-				throw errors.NOT_FOUND({  });
+				throw errors.FAIL();
 			}
 		});
 }

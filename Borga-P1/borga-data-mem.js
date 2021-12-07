@@ -70,7 +70,8 @@ async function editGroup(user,oldName,newName,description){
 	};
 	delete users[user][oldName];
 	users[user][newName] = updatedGroup;
-	return updatedGroup;
+	
+	return getDisplayableGroupWithGameObjs(user,newName);
 }
 
 async function listGroups(user){
