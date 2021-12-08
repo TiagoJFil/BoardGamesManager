@@ -5,6 +5,11 @@ const openApiSpec = require('./docs/borga-docs.json');
 
 module.exports = function (services) {
 	
+	/**
+	 * Get bearer token from autorization header
+	 * @param {Promise} req 
+	 * @returns {String}
+	 */
 	function getBearerToken(req) {
 		const auth = req.header('Authorization');
 		if (auth) {
@@ -17,7 +22,12 @@ module.exports = function (services) {
 	}
 	
 	
-
+	/**
+	 * Stops the operation when theres an error 
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 * @param {Promise} err 
+	 */
 	function onError(req, res, err) {
 		console.log('[ERROR]', err);
 		switch (err.name) {
@@ -41,7 +51,11 @@ module.exports = function (services) {
 		res.json({ cause: err });
 	}
 	
-	
+	/**
+	 * Lists top 10 popular games
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function listPopularGames(req,res){
 		try{
 			
@@ -53,6 +67,11 @@ module.exports = function (services) {
 		}
 	}
 	
+	/**
+	 * Searches a game
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function searchAnyGame(req,res){
 		try {
 			const gameName = req.query.name;
@@ -64,7 +83,11 @@ module.exports = function (services) {
 		
 	}
 
-
+	/**
+	 * Creates a group
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function createAGroup(req,res){
 		try{
 		const groupName = req.body.name;
@@ -77,7 +100,11 @@ module.exports = function (services) {
 		}
 	}
 
-	
+	/**
+	 * Edits a group
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function editAGroup(req,res){
 		try{
 		const groupOldName = req.body.name;
@@ -91,6 +118,11 @@ module.exports = function (services) {
 		}
 	}
 
+	/**
+	 * Lists all groups
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function listGroups(req,res){
 		try{
 			const groups = await services.listGroups(getBearerToken(req))
@@ -101,6 +133,12 @@ module.exports = function (services) {
 		}
 	}
 	
+
+	/**
+	 * Gets a group detail
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function getGroupDetails(req,res){
 		try{
 			const groupName = req.params.name;
@@ -112,7 +150,11 @@ module.exports = function (services) {
 	}
 
 
-	
+	/**
+	 * Adds a user
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function addUser(req,res){
 		try {
 			const username = req.params.name;
@@ -123,6 +165,11 @@ module.exports = function (services) {
 		}
 	}
 	
+	/**
+	 * Adds a game to a group
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function addGameToGroup(req,res){
 		try{
 			const groupName = req.body.name;
@@ -134,6 +181,11 @@ module.exports = function (services) {
 		}
 	}
 
+	/**
+	 * Deletes a group
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function deleteGroup(req,res){
 		try{
 			const groupName = req.params.name;
@@ -144,6 +196,11 @@ module.exports = function (services) {
 		}
 	}
 
+	/**
+	 * Removes a game from a group
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function removeGameFromGroup(req,res){
 		try{
 			const groupName = req.body.group;

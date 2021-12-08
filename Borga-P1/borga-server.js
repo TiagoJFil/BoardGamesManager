@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * default port used when initiating the server
+ * default port of the server
  */
 const default_port = 8888;
 

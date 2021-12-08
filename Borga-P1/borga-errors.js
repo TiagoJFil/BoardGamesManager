@@ -1,8 +1,8 @@
 'use strict';
 
 /**
- * 
- * @returns an object with all errors that can happen in this project
+ * creates a object using an auxiliar function to add errors 
+ * @returns {Object} with all errors that can happen in this project
  */
 function buildErrorList() {
 	const errors = {};

@@ -22,7 +22,7 @@ const HTTP_SERVER_ERROR = 5;
 /**
  * convert status code to int
  * @param statusCode 
- * @returns {int}
+ * @returns {Number}
  */
 function getStatusClass(statusCode) {
 	return ~~(statusCode / 100); //como nao ha tipos em js , utilizamos o not bit a bit duas vezes para converter em inteiro
@@ -30,8 +30,8 @@ function getStatusClass(statusCode) {
 
 /**
  * fetches uri's
- * @param {string} uri 
- * @returns {object} response or error
+ * @param {String} uri 
+ * @returns {Object} response or error
  */
 function do_fetch(uri) {
 	return fetch(uri)
@@ -55,8 +55,8 @@ function do_fetch(uri) {
 
 /**
  * transforms game object response to a more simplified object
- * @param {object} gameInfo 
- * @returns {object}
+ * @param {Object} gameInfo 
+ * @returns {Object}
  */
 function makeGameObj(gameInfo) {
 	return {
@@ -75,8 +75,8 @@ function makeGameObj(gameInfo) {
 
 /**
  * returns a game from the api searching by name
- * @param {string} name 
- * @returns 
+ * @param {String} name 
+ * @returns {Object} game or error
  */
 function getGameByName(name) {
 	const search_uri =BOARD_ATLAS_BASE_URI + '&name=' + name + '&client_id=' + CLIENT_ID;
@@ -94,8 +94,8 @@ function getGameByName(name) {
 
 /**
  * searches a game by its id in the api
- * @param {string} id 
- * @returns {object} game or error
+ * @param {String} id 
+ * @returns {Object} game or error
  */
 function getGameById(id) {
 	const search_uri =BOARD_ATLAS_BASE_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;
@@ -112,7 +112,7 @@ function getGameById(id) {
 
 /**
  * transforms a rank query from the api in a object 
- * @returns {object} with the top 10 games
+ * @returns {Object} top 10 games
  */
 function getListPopularGames() { 
 	const search_uri =BOARD_ATLAS_BASE_URI + '&order_by=rank&limit=10&client_id=' + CLIENT_ID;
@@ -128,9 +128,9 @@ function getListPopularGames() {
 
 
 /**
- * adds all games to an object
- * @param {object} answer 
- * @returns {object} gamesList
+ * Adds all games to an object
+ * @param {Object} answer 
+ * @returns {Object} gamesList
  */
  function makeListObj(answer){
 	const gamesList = {}

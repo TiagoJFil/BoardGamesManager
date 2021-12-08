@@ -4,6 +4,11 @@ const errors = require('./borga-errors.js');
 
 module.exports = function (data_borga, data_mem) {
 
+	/**
+	 * Get's username using a token
+	 * @param {String} token 
+	 * @returns {Object} user or error
+	 */
 	async function getUsername(token) {
 		if (!token) {
 			throw errors.UNAUTHENTICATED('no token');
@@ -15,21 +20,34 @@ module.exports = function (data_borga, data_mem) {
 		return username;
 	}
 	
+	/**
+ 	* Gets the popular games
+ 	* @returns {Object} top 10 games
+ 	*/
 	async function getPopularGames(){
 		const list =  data_borga.getListPopularGames();
-		  
 		return list;
 	}
 
+	/**
+ 	* Searches a game 
+ 	* @param {String} name 
+ 	* @returns {Object} game or error
+ 	*/
 	async function searchGame(name){
 		if(!name){
 			throw(errors.MISSING_PARAMETER('Name of the game to search'));
 		}
 		
 		const game = data_borga.getGameByName(name);
-		return game ;
+		return game;
 	}
 	
+	/**
+	 * Adds a user to the local db
+	 * @param {String} name 
+	 * @returns {Object} new user
+	 */
 	async function addUser(name){
 		if(!name){
 			throw(errors.MISSING_PARAMETER('Name of user missing'));
@@ -41,6 +59,13 @@ module.exports = function (data_borga, data_mem) {
 		return data_mem.createUser(name);
 	}
 	
+	/**
+	 * Creates a new user's group
+	 * @param {String} token 
+	 * @param {String} name name of the group 
+	 * @param {String} desc description of the group
+	 * @returns {Object} new group
+	 */
 	async function createGroup(token,name,desc){
 		const username = await getUsername(token);
 
@@ -59,6 +84,15 @@ module.exports = function (data_borga, data_mem) {
 	
 	}
 
+
+	/**
+	 * Edits a user's group 
+	 * @param {String} token 
+	 * @param {String} oldName 
+	 * @param {String} newName 
+	 * @param {String} desc 
+	 * @returns {Object} edited group
+	 */
 	async function editGroup(token,oldName,newName,desc){
 		const username = await getUsername(token);
 
@@ -79,12 +113,25 @@ module.exports = function (data_borga, data_mem) {
 		return data_mem.editGroup(username,oldName,newName,desc);
 	}
 
+
+	/**
+	 * Lists all user's groups in a object 
+	 * @param {String} token user's token 
+	 * @returns {Object} all group
+	 */
 	async function listGroups(token){
 		const username = await getUsername(token);
 
 		return data_mem.listGroups(username);
 	}
 
+
+	/**
+	 * Gets a group information
+	 * @param {String} token 
+	 * @param {String} groupName 
+	 * @returns {Object} group information
+	 */
 	async function getGroupInfo(token,groupName){
 		const username = await getUsername(token);
 
@@ -98,6 +145,13 @@ module.exports = function (data_borga, data_mem) {
 		return data_mem.getDisplayableGroupWithGameObjs(username,groupName);
 	}
 
+	/**
+	 * Adds a gameId to a group
+	 * @param {String} token 
+	 * @param {String} groupName 
+	 * @param {Number} gameId 
+	 * @returns {Object} updated group
+	 */
 	async function addGameToGroup(token,groupName,gameId){
 		const username = await getUsername(token);
 
@@ -119,6 +173,13 @@ module.exports = function (data_borga, data_mem) {
 
 	}
 
+
+	/**
+	 * Deletes a user's group
+	 * @param {String} token 
+	 * @param {String} groupName 
+	 * @returns {Object} list of updated groups
+	 */
 	async function deleteAGroup(token,groupName){
 		const username = await getUsername(token);
 
@@ -134,6 +195,13 @@ module.exports = function (data_borga, data_mem) {
 		return groups;
 	}
 
+	/**
+	 * Removes a game from a user's group
+	 * @param {String} token 
+	 * @param {String} groupName 
+	 * @param {String} gameID 
+	 * @returns {Object} updated group
+	 */
 	async function removeGameFromGroup(token,groupName,gameID){
 		const username = await getUsername(token);
 
