@@ -307,28 +307,17 @@
             "bearerAuth": []
           }
         ],
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the group to create",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "Favoritos"
-          },
-          {
-            "name": "desc",
-            "in": "query",
-            "description": "Description of the group to create",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "Os meus jogos favoritos"
+        "requestBody": {
+          "description": "New groups name and decription",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditedGroupHeader"
+              }
+            }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Group has been created",
@@ -443,38 +432,17 @@
             "bearerAuth": []
           }
         ],
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the group to edit",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "Favorito"
-          },
-          {
-            "name": "newname",
-            "in": "query",
-            "description": "New name of the group",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "Favorito"
-          },
-          {
-            "name": "desc",
-            "in": "query",
-            "description": "New description of the group",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "Os meus jogos favoritos"
+        "requestBody": {
+          "description": "Group's name, newname and new description",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewGroup"
+              }
+            }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Group edited",
@@ -531,28 +499,17 @@
             "bearerAuth": []
           }
         ],
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Name of the group",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "Favoritos"
-          },
-          {
-            "name": "gameid",
-            "in": "query",
-            "description": "Game's ID to add",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "GETI3ETTER"
+        "requestBody": {
+          "description": "Group's name and new gameid",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddGame"
+              }
+            }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Game id added",
@@ -835,12 +792,63 @@
           }
         }
       },
+      "EditedGroupHeader": {
+        "type": "object",
+        "description": "Group data",
+        "required": [
+          "Name",
+          "Description"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "desc": {
+            "type": "string"
+          }
+        }
+      },
+      "NewGroup": {
+        "type": "object",
+        "description": "Group data",
+        "required": [
+          "Name",
+          "Description"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "newname": {
+            "type": "string"
+          },
+          "desc": {
+            "type": "string"
+          }
+        }
+      },
       "ListGroup": {
         "type": "object",
         "description": "List of groups",
         "properties": {
           "name": {
             "$ref": "#/components/schemas/EditedGroup"
+          }
+        }
+      },
+      "AddGame": {
+        "type": "object",
+        "description": "Group data",
+        "required": [
+          "Name",
+          "Description"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "gameid": {
+            "type": "string"
           }
         }
       }

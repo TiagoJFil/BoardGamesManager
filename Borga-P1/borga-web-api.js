@@ -91,7 +91,7 @@ module.exports = function (services) {
 	async function createAGroup(req,res){
 		try{
 		const groupName = req.body.name;
-		const groupDesc = req.body.description;
+		const groupDesc = req.body.des;
 		const newGroup = await services.createGroup(getBearerToken(req),groupName,groupDesc)
 		res.json(newGroup);
 
@@ -109,7 +109,7 @@ module.exports = function (services) {
 		try{
 		const groupOldName = req.body.name;
 		const groupNewName = req.body.newname;
-		const groupDesc = req.body.description;
+		const groupDesc = req.body.des;
 		const newGroup = await services.editGroup(getBearerToken(req),groupOldName,groupNewName,groupDesc)
 		res.json(newGroup);
 
