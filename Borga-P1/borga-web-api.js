@@ -109,7 +109,7 @@ module.exports = function (services) {
 		try{
 		const groupOldName = req.body.name;
 		const groupNewName = req.body.newname;
-		const groupDesc = req.body.des;
+		const groupDesc = req.body.desc;
 		const newGroup = await services.editGroup(getBearerToken(req),groupOldName,groupNewName,groupDesc)
 		res.json(newGroup);
 

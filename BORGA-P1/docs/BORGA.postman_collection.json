@@ -169,7 +169,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"abc\",\r\n  \"description\": \"isto é um exemplo de descrição\"\r\n}",
+					"raw": "{\r\n  \"name\": \"abc\",\r\n  \"desc\": \"isto é um exemplo de descrição\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -212,7 +212,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"test\",\r\n  \"newname\": \"renomeado\",\r\n  \"description\": \"novadescriçao\"\r\n}",
+					"raw": "{\r\n  \"name\": \"test\",\r\n  \"newname\": \"renomeado\",\r\n  \"desc\": \"novadescriçao\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -344,7 +344,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"abc\",\r\n  \"gameid\": \"dFC1lnGINr\"\r\n}",
+					"raw": "{\r\n  \"name\": \"test\",\r\n  \"gameid\": \"dFC1lnGINr\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -435,7 +435,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"group\": \"test\",\r\n  \"gameid\": \"OIXt3DmJU0\"\r\n}",
+					"raw": "{\r\n  \"group\": \"test\",\r\n  \"gameid\": \"cyscZjjlse\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
