@@ -67,8 +67,8 @@ module.exports = function (services) {
 
 	async function createAGroup(req,res){
 		try{
-		const groupName = req.query.name;
-		const groupDesc = req.query.desc;
+		const groupName = req.body.name;
+		const groupDesc = req.body.description;
 		const newGroup = await services.createGroup(getBearerToken(req),groupName,groupDesc)
 		res.json(newGroup);
 
@@ -80,9 +80,9 @@ module.exports = function (services) {
 	
 	async function editAGroup(req,res){
 		try{
-		const groupOldName = req.query.name;
-		const groupNewName = req.query.newname;
-		const groupDesc = req.query.desc;
+		const groupOldName = req.body.name;
+		const groupNewName = req.body.newname;
+		const groupDesc = req.body.description;
 		const newGroup = await services.editGroup(getBearerToken(req),groupOldName,groupNewName,groupDesc)
 		res.json(newGroup);
 
@@ -125,8 +125,8 @@ module.exports = function (services) {
 	
 	async function addGameToGroup(req,res){
 		try{
-			const groupName = req.query.name;
-			const gameId = req.query.gameid;
+			const groupName = req.body.name;
+			const gameId = req.body.gameid;
 			const info = await services.addGameToGroup(getBearerToken(req),groupName,gameId)
 			res.json(info)
 		}catch(err){
@@ -146,8 +146,8 @@ module.exports = function (services) {
 
 	async function removeGameFromGroup(req,res){
 		try{
-			const groupName = req.query.group;
-			const gameID = req.query.gameid;
+			const groupName = req.body.group;
+			const gameID = req.body.gameid;
 			const groups = await services.removeGameFromGroup(getBearerToken(req),groupName,gameID)
 			res.json(groups)
 		}catch(err){

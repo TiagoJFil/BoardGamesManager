@@ -1,11 +1,22 @@
 'use strict';
-const errors= require('./borga-errors.js')
+
+const errors= require('./borga-errors.js');
+
 const fetch = require('node-fetch');
 
+/**
+ * reads the client id so it can access board games atlas api
+ */
 const CLIENT_ID = process.env['ATLAS_CLIENT_ID'];
 
+/**
+ * default uri of the requests that will be made
+ */ 
 const BOARD_ATLAS_BASE_URI = 'https://api.boardgameatlas.com/api/search?';
 
+/**
+ * first digit of the server errors code
+ */
 const HTTP_SERVER_ERROR = 5;
 
 /**
@@ -88,7 +99,7 @@ function getGameByName(name) {
  */
 function getGameById(id) {
 	const search_uri =BOARD_ATLAS_BASE_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;
-
+	
 	return do_fetch(search_uri)
 		.then(answer => {
 			if(answer.length != 0 && answer.count != 0){
@@ -110,7 +121,7 @@ function getListPopularGames() {
 			if (answer.length != 0 && answer.count != 0) {
 				return makeListObj(answer.games);
 			} else {
-				throw errors.NOT_FOUND({  });
+				throw errors.FAIL();
 			}
 		});
 }

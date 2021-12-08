@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * 
+ * @returns an object with all errors that can happen in this project
+ */
 function buildErrorList() {
 	const errors = {};
 

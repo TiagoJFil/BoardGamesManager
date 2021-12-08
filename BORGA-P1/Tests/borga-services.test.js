@@ -125,20 +125,6 @@ describe('editGroup function tests', () => {
 
 });
 
-/* describe('listGroup function tests', () => {
-
-    test('trying to access groups of a non existing token throws ERROR', async () => {
-        const services =
-        services_builder();
-        try{
-            await services.listGroup(test_token);
-        } catch(err){
-            expect(err.name).toEqual('UNAUTHENTICATED');
-        }
-    });
-
-}); */
-
 describe('getGroupInfo function tests', () => {
 
     test('trying to access group info without giving a group name throws ERROR', async () => {
@@ -219,7 +205,7 @@ describe('removeGameFromGroup function tests', () => {
 
     test('trying to remove a game from a group without providing games name throws ERROR', async () => {
         try{
-            await default_services.removeGameFromGroup(test_token,'undefined',undefined);
+            await default_services.removeGameFromGroup(test_token,'abc',undefined);
         } catch(err){
             expect(err.name).toEqual('MISSING_PARAMETER');
         }
@@ -228,6 +214,14 @@ describe('removeGameFromGroup function tests', () => {
     test('trying to remove a game that doesnt exist in group throws ERROR', async () => {
         try{
             await default_services.removeGameFromGroup(test_token,'test','gameId');
+        } catch(err){
+            expect(err.name).toEqual('NOT_FOUND');
+        }
+    });
+
+    test('trying to remove a game that without passing a valid group', async () => {
+        try{
+            await default_services.removeGameFromGroup(test_token,'abcdef','gameId');
         } catch(err){
             expect(err.name).toEqual('NOT_FOUND');
         }

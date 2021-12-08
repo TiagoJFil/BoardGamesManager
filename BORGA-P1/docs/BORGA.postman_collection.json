@@ -1,0 +1,465 @@
+{
+	"info": {
+		"_postman_id": "21f6da96-4172-4164-805c-a5a5f91fd336",
+		"name": "BORGA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get-Ranks",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"received the top 10 ranked games\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const keys = Object.keys(jsonData);\r",
+							"\r",
+							"     pm.expect(jsonData).to.be.an(\"object\");\r",
+							"     pm.expect(keys.length).to.eql(10);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/api/all/games/rank",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"all",
+						"games",
+						"rank"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search a game using a query",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"received a game\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const query = pm.request.url.getQueryString().slice(5);\r",
+							"    \r",
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"     \r",
+							"});//falta tipo quando se recebe alguma coisa ver se contem\r",
+							"\r",
+							"\r",
+							"pm.test(\"when no query is sent receive a MISSING_PARAMETER error\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const query = pm.request.url.getQueryString().slice(5);\r",
+							"    if(query){\r",
+							"        pm.expect(true).to.eql(true) //pass the test\r",
+							"        \r",
+							"    } \r",
+							"    \r",
+							"    pm.response.to.have.status(400);\r",
+							"    pm.expect(jsonData).to.eql({ \"cause\": { \"code\": 1003, \"name\": \"MISSING_PARAMETER\", \"message\": \"A required parameter is missing\", \"info\": \"Name of the game to search\" } });\r",
+							"     \r",
+							"});\r",
+							"\r",
+							"pm.test(\"when no game was found returns NOT_FOUND error \", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const query = pm.request.url.getQueryString().slice(5);\r",
+							"    if(query) pm.expect(true).to.eql(true) //pass the test\r",
+							"    \r",
+							"    pm.response.to.have.status(404);\r",
+							"    pm.expect(jsonData).to.eql({\"cause\":{\"code\":1001,\"name\":\"NOT_FOUND\",\"message\":\"The item does not exist\",\"info\":{\"name\":\"awdq\"}}});\r",
+							"     \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/api/all/games/search/?name=cards_against_humanity",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"all",
+						"games",
+						"search",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "cards_against_humanity"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/api/users/create/abc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"users",
+						"create",
+						"abc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createGroup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer asd",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"abc\",\r\n  \"description\": \"isto é um exemplo de descrição\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8888/api/my/group/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"my",
+						"group",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "editGroup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer abc",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"test\",\r\n  \"newname\": \"renomeado\",\r\n  \"description\": \"novadescriçao\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8888/api/my/group/edit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"my",
+						"group",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listGroups",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8888/api/my/group/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"my",
+						"group",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get Docs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/api/docs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"docs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDetails from group",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer abc",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer 0c59ea54-1037-410e-945c-af38c9dfb034",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8888/api/my/group/details/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"my",
+						"group",
+						"details",
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addGame",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer abc",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"abc\",\r\n  \"gameid\": \"dFC1lnGINr\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8888/api/my/group/games/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"my",
+						"group",
+						"games",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete a group",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer abc",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer 0c59ea54-1037-410e-945c-af38c9dfb034",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8888/api/my/group/delete/abc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"my",
+						"group",
+						"delete",
+						"abc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete a game from group",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer abc",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer 0c59ea54-1037-410e-945c-af38c9dfb034",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"group\": \"test\",\r\n  \"gameid\": \"OIXt3DmJU0\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8888/api/my/group/games/delete/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"my",
+						"group",
+						"games",
+						"delete",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

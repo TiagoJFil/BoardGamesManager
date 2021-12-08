@@ -82,8 +82,9 @@ async function editGroup(user,oldName,newName,description){
 	delete mock_users[user][oldName];
 	mock_users[user][newName] = updatedGroup;
 
-	return updatedGroup;
+	return getDisplayableGroupWithGameObjs(user,newName);
 }
+
 
 async function listGroups(user){
 	const userGroups = Object.values(mock_users[user]);
