@@ -1,0 +1,25 @@
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+	overflow: hidden;
+  background-color: black;	
+}
+#course {
+color: red;
+}
+#image0 {
+	display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+  
+}
+h1 {
+	font-family: "Lucida Console", monospace;
+	text-align:center;
+	color: #5FBDF4;
+	margin: 4px;
+	padding: 4px;
+}
+

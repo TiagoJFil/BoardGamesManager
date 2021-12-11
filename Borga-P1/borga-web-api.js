@@ -237,14 +237,14 @@ module.exports = function (services) {
 	router.get('/my/group/list/', listGroups);
 	// Resource: /my/group/create
 	router.post('/my/group/create/', createAGroup);
-	// Resource: /my/group/delete/<name>
-	router.delete('/my/group/delete/:name', deleteGroup)
+	// Resource: /my/group/<name>
+	router.delete('/my/group/:name', deleteGroup)
 	// Resource: /my/group/edit
 	router.post('/my/group/edit/', editAGroup);
 	// Resource: /my/group/games/add
 	router.post('/my/group/games/add', addGameToGroup);
-	// Resource: /my/group/games/delete/
-	router.delete('/my/group/games/delete/', removeGameFromGroup);
+	// Resource: /my/group/games
+	router.delete('/my/group/games', removeGameFromGroup);
 	
 	
 	

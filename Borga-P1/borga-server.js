@@ -14,13 +14,19 @@ const data_mem = require('./borga-data-mem');
 const services = require('./borga-services')(data_borga, data_mem);
 
 const webapi = require('./borga-web-api')(services);
+const webui = require('./borga-web-ui')(services);
 
 const express = require('express');
 
 const app = express();
 
+app.set('view engine', 'hbs');
+
+app.use('/favicon.ico',	express.static('static-files/favicon.ico'));
+app.use('/public', express.static('static-files'));
 
 app.use('/api', webapi);
+app.use('/', webui);
 
 /**
  * starts a server and listens on port for connections.
