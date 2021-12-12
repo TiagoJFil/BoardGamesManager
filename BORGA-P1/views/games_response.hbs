@@ -1,14 +1,29 @@
 <h1>{{header}}</h1>
 
 {{#if query}}
-	<p>Query: {{query}}</p>
+	<p>The query searched for was: {{query}}</p>
 {{/if}}
-
+<p>We found this result:</p>
 {{#if game}}
 	<table>
 		<tr>
 			<td>Title:</td>
 			<td>{{game.name}}</td>
 		</tr>	
+		<tr>
+			<td>Price:</td>
+			<td>{{game.price}}</td>
+		</tr>	
+		<tr>
+			<td>Url:</td>
+			<td><a href={{game.url}}>{{game.url}}</a></td>
+		</tr>
 	</table>	
-{{/if}}			
+{{/if}}
+
+{{#if error}}
+	{{#if code}}
+		<p style="text-align: center;"><strong> ERROR {{code}}: {{error}}</strong></p>
+	{{/if}}
+{{/if}}
+			

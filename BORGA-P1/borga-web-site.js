@@ -58,8 +58,18 @@ module.exports = function (services) {
 		res.render('search');
 	} 
 
-	function getGroupsPage(req,res){
-		res.render('groups')
+	async function getGroupsPage(req,res){
+		try{
+		//const groups = await services.listGroups(getBearerToken(req))
+		
+		res.render(
+			'groups',
+			
+			);
+		}catch(err){
+
+
+		};
 	}
 
 	async function findBook(req,res){
@@ -73,20 +83,20 @@ module.exports = function (services) {
 			);
 		}catch(err){
 			switch(err.name){
-				case 'MISSING_PARAM':
+				case 'MISSING_PARAMETER':
 					res.status(400).render(
 						'games_response',
-						{ header, error: 'no query provided' }
+						{ header, code: 400 , error: 'no query provided' }
 					);
 				case 'NOT_FOUND':
 					res.status(404).render(
 						'games_response',
-						{ header, error: 'no game found for the query provided' }
+						{ header, code: 404 ,error: 'no game found for the query provided' }
 					)
 				default:
 					res.status(500).render(
 						'games_response',
-						{ header, query, error: JSON.stringify(err) }
+						{ header, query, code: 500,error: JSON.stringify(err) }
 					);
 					break;	
 				
@@ -94,8 +104,12 @@ module.exports = function (services) {
 		}
 
 	}
-	async function getGroups(){
-		
+	async function createGroup(req,res){
+		try{
+
+		}catch(err){
+
+		}
 	}
 
 
@@ -112,10 +126,11 @@ module.exports = function (services) {
 	// Groups page
 	router.get('/groups', getGroupsPage);
 	
-	// Search_Result
+	// Search Result page
 	router.get('/search/result', findBook);
 
-	router.get('/groups/list', getGroups)
+	// group creation
+	router.get('/groups/create', createGroup);
 	
 	return router;
 }

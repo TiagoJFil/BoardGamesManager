@@ -14,7 +14,7 @@ const data_mem = require('./borga-data-mem');
 const services = require('./borga-services')(data_borga, data_mem);
 
 const webapi = require('./borga-web-api')(services);
-const webui = require('./borga-web-ui')(services);
+const webui = require('./borga-web-site')(services);
 
 const express = require('express');
 
