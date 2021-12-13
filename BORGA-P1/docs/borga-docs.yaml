@@ -15,7 +15,7 @@ tags:
   - name: MyGroups
     description: Your personal games collection
 paths:
-  /api/all/games/search:
+  /api/all/games:
     get:
       tags:
         - Games
@@ -73,7 +73,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /api/user/create/{name}:
+  
+  /api/user/{name}:
     post:
       tags:
         - User
@@ -106,7 +107,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /api/my/group/details/{name}:
+  
+  /api/my/group/{name}:
     get:
       tags:
         - MyGroups
@@ -147,73 +149,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /api/my/group/list:
-    get:
-      tags:
-        - MyGroups
-      summary: List all groups
-      description: Returns a list of groups
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Group list found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListGroup'
-        '401':
-          description: Missing API token. The user is not authenticated.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        '404':
-          description: Group List not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        '502':
-          description: API is not responding,
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-  /api/my/group/create:
-    post:
-      tags:
-        - MyGroups
-      summary: Add a group to the personal collection
-      security:
-        - bearerAuth: []
-      requestBody:
-        description: New groups name and decription 
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EditedGroupHeader'
-      responses:
-        '200':
-          description: Group has been created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Group'
-        '401':
-          description: Missing API token. The user is not authenticated.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-        '502':
-          description: API is not responding,
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-  /api/my/group/delete/{name}:
     delete:
       tags:
         - MyGroups
@@ -253,9 +188,74 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/AppError'            
+  
+  /api/my/group:
+    get:
+      tags:
+        - MyGroups
+      summary: List all groups
+      description: Returns a list of groups
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Group list found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListGroup'
+        '401':
+          description: Missing API token. The user is not authenticated.
+          content:
+            application/json:
+              schema:
                 $ref: '#/components/schemas/AppError'
-  /api/my/group/edit:
+        '404':
+          description: Group List not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '502':
+          description: API is not responding,
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
     post:
+      tags:
+        - MyGroups
+      summary: Add a group to the personal collection
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: New groups name and decription 
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditedGroupHeader'
+      responses:
+        '200':
+          description: Group has been created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '401':
+          description: Missing API token. The user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+        '502':
+          description: API is not responding,
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+    put:
       tags:
         - MyGroups
       summary: Edit group name and description
@@ -294,7 +294,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /api/my/group/games/add:
+  
+  /api/my/group/games:
     post:
       tags:
         - MyGroups
@@ -328,7 +329,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /api/my/group/games/delete:
     delete:
       tags:
         - MyGroups
