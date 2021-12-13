@@ -66,6 +66,16 @@ module.exports = function (services) {
 	function getSearchPage(req, res) {
 		res.render('search');
 	} 
+
+		/**
+	 * Retrieves the popular page
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
+	function getPopularPage(req, res) {
+		res.render('popular_games');
+	} 
+
 	/**
 	 * Retrieves the groups page
 	 * @param {Promise} req 
@@ -85,14 +95,14 @@ module.exports = function (services) {
 		};
 	}
 
-	async function findBook(req,res){
+	async function findGame(req,res){
 		const header = 'Find Game Result';
-		const query = req.query.name;
+		const query_name = req.query.name;
 		try{
-			const game = await services.searchGame(query);
+			const game = await services.searchGame(query_name);
 			res.render(
 				'games_response',
-				{header,query,game}
+				{header,query: query_name,game}
 			);
 		}catch(err){
 			switch(err.name){
@@ -109,7 +119,7 @@ module.exports = function (services) {
 				default:
 					res.status(500).render(
 						'games_response',
-						{ header, query, code: 500,error: JSON.stringify(err) }
+						{ header, query: query_name, code: 500,error: JSON.stringify(err) }
 					);
 					break;	
 				
@@ -122,6 +132,26 @@ module.exports = function (services) {
 
 		}catch(err){
 
+		}
+	}
+
+	async function popularGames(req,res){
+		const header = 'Popular games Result';
+		try{
+			const games = await services.getPopularGames();
+			res.render(
+				'popular_games_response',
+				{header,games: games}
+			);
+		}catch(err){
+			switch(err.name){
+				default:
+					res.status(500).render(
+						'popular_games_response',
+						{ header, query: query_name, code: 500,error: JSON.stringify(err) }
+					);
+					break;	
+			}
 		}
 	}
 
@@ -138,12 +168,18 @@ module.exports = function (services) {
 	
 	// Groups page
 	router.get('/groups', getGroupsPage);
-	
+
+	//Popular games page
+	router.get('/popular', getPopularPage);
+
 	// Search Result page
-	router.get('/search/result', findBook);
+	router.get('/search/result', findGame);
 
 	// group creation
 	router.get('/groups/create', createGroup);
+
+	//Popular games result page
+	router.get('/popular/result', popularGames)
 	
 	return router;
 }

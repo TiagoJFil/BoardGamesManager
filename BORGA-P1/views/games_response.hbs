@@ -1,10 +1,11 @@
 <h1>{{header}}</h1>
 
 {{#if query}}
-	<p>The query searched for was: {{query}}</p>
+	<p>The game searched for was: {{query}}</p>
 {{/if}}
-<p>We found this result:</p>
+
 {{#if game}}
+	<p>We found this result:</p>
 	<table>
 		<tr>
 			<td>Title:</td>
@@ -12,7 +13,7 @@
 		</tr>	
 		<tr>
 			<td>Price:</td>
-			<td>{{game.price}}</td>
+			<td>{{game.price}}$</td>
 		</tr>	
 		<tr>
 			<td>Url:</td>

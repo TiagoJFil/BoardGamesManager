@@ -1,0 +1,34 @@
+<h1>{{header}}</h1>
+
+{{#if true}}
+    <p>Here are the most popular games according to board game atlas website:</p>
+    
+    {{#each games}}
+        <table>
+            <tr>
+                <td>Title:</td>
+                <td>{{name}}    
+                    <action= "/groups" method = "GET">
+                        <input type="submit" value="Add to group">  	
+                </td>
+            </tr>	
+            <tr>
+                <td>Price:</td>
+                <td>{{price}}$</td>
+            </tr>	
+            <tr>
+                <td>Url:</td>
+                <td><a href={{url}}>{{url}}</a></td>
+            </tr>
+            <tr></tr>
+        </table>	
+        
+    {{/each}}
+    
+{{/if}}
+
+{{#if error}}
+	{{#if code}}
+		<p style="text-align: center;"><strong> ERROR {{code}}: {{error}}</strong></p>
+	{{/if}}
+{{/if}}
