@@ -52,14 +52,15 @@ module.exports = function (services) {
 	}
 	
 	/**
-	 * Lists top 10 popular games
+	 * Lists top x popular games
 	 * @param {Promise} req 
 	 * @param {Promise} res 
+	 * if there is no count sent in the query then the function will return the top 10 ranked games
 	 */
 	async function listPopularGames(req,res){
 		try{
-			
-			const list = await services.getPopularGames()
+			const count = req.query.count
+			const list = await services.getPopularGames(count)
 			res.json(list);
 
 		}catch(err){

@@ -112,10 +112,11 @@ function getGameById(id) {
 
 /**
  * transforms a rank query from the api in a object 
- * @returns {Object} top 10 games
+ * @param {Int} count
+ * @returns {Object} top x games
  */
-function getListPopularGames() { 
-	const search_uri =BOARD_ATLAS_BASE_URI + '&order_by=rank&limit=10&client_id=' + CLIENT_ID;
+function getListPopularGames(count) { 
+	const search_uri =BOARD_ATLAS_BASE_URI + '&order_by=rank&limit=' + count  +'&client_id=' + CLIENT_ID;
 	return do_fetch(search_uri)
 		.then(answer => {
 			if (answer.length != 0 && answer.count != 0) {

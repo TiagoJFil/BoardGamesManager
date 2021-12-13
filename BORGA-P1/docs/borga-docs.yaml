@@ -60,6 +60,14 @@ paths:
         - Games
       summary: Return the list of 10 most popular games.
       description: Uses boardgameatlas API to find the top 10 ranked games.
+      parameters:
+        - name: count
+          in: query
+          description: Count of how many games you want to get
+          required: false
+          schema:
+            type: string
+          example: 5
       responses:
         '200':
           description: List has been retrieved
@@ -73,7 +81,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  
   /api/user/{name}:
     post:
       tags:
@@ -107,7 +114,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  
   /api/my/group/{name}:
     get:
       tags:
@@ -188,8 +194,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'            
-  
+                $ref: '#/components/schemas/AppError'
   /api/my/group:
     get:
       tags:
@@ -230,7 +235,7 @@ paths:
       security:
         - bearerAuth: []
       requestBody:
-        description: New groups name and decription 
+        description: New groups name and decription
         required: true
         content:
           application/json:
@@ -294,7 +299,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  
   /api/my/group/games:
     post:
       tags:
@@ -408,12 +412,11 @@ components:
           example: An error occurred
         info:
           $ref: '#/components/schemas/AppErrorInfo'
-
     GameListResponse:
       type: object
       description: Response with a list of games
       properties:
-        number: 
+        number:
           $ref: '#/components/schemas/Game'
     Game:
       type: object
@@ -484,8 +487,8 @@ components:
       type: object
       description: Response with a list of groups
       properties:
-          name:
-            $ref: '#/components/schemas/EditedGroup'        
+        name:
+          $ref: '#/components/schemas/EditedGroup'
     EditedGroup:
       type: object
       description: Group data
@@ -497,7 +500,6 @@ components:
           type: string
         Description:
           type: string
-    
     EditedGroupHeader:
       type: object
       description: Group data
@@ -521,14 +523,13 @@ components:
         newname:
           type: string
         desc:
-          type: string      
+          type: string
     ListGroup:
       type: object
       description: List of groups
       properties:
         name:
           $ref: '#/components/schemas/EditedGroup'
-     
     AddGame:
       type: object
       description: Group data
@@ -540,5 +541,3 @@ components:
           type: string
         gameid:
           type: string
-          
-          

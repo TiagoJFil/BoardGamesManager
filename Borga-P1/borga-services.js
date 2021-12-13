@@ -22,10 +22,13 @@ module.exports = function (data_borga, data_mem) {
 	
 	/**
  	* Gets the popular games
- 	* @returns {Object} top 10 games
+ 	* @returns {Object} top x games
+	  if there is no count sent then the function will return the top 10 ranked games
  	*/
-	async function getPopularGames(){
-		const list =  data_borga.getListPopularGames();
+	async function getPopularGames(count){
+		if(!count) count = 10
+		if(count <=0) throw errors.INVALID_PARAMETER('the ranked count cant be 0 or bellow');
+		const list =  data_borga.getListPopularGames(count);
 		return list;
 	}
 

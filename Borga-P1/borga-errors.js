@@ -20,6 +20,7 @@ function buildErrorList() {
 	addError(1004, 'USER_ALREADY_EXISTS', 'The user you wanted to add already exists');
 	addError(1005, 'GROUP_ALREADY_EXISTS', 'The group you wanted already exists');
 	addError(1006, 'UNAUTHENTICATED', 'Invalid or missing token');
+	addError(1007, 'INVALID_PARAMETER', 'The parameter is invalid');
 	
 	return errors;
 }

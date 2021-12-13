@@ -95,6 +95,18 @@
         ],
         "summary": "Return the list of 10 most popular games.",
         "description": "Uses boardgameatlas API to find the top 10 ranked games.",
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "description": "Count of how many games you want to get",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": 5
+          }
+        ],
         "responses": {
           "200": {
             "description": "List has been retrieved",

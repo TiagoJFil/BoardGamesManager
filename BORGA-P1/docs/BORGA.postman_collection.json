@@ -6,6 +6,76 @@
 	},
 	"item": [
 		{
+			"name": "search a game using a query",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"received a game\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const query = pm.request.url.getQueryString().slice(5);\r",
+							"    \r",
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"     \r",
+							"});//falta tipo quando se recebe alguma coisa ver se contem\r",
+							"\r",
+							"\r",
+							"pm.test(\"when no query is sent receive a MISSING_PARAMETER error\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const query = pm.request.url.getQueryString().slice(5);\r",
+							"    if(query){\r",
+							"        pm.expect(true).to.eql(true) //pass the test\r",
+							"        \r",
+							"    } \r",
+							"    \r",
+							"    pm.response.to.have.status(400);\r",
+							"    pm.expect(jsonData).to.eql({ \"cause\": { \"code\": 1003, \"name\": \"MISSING_PARAMETER\", \"message\": \"A required parameter is missing\", \"info\": \"Name of the game to search\" } });\r",
+							"     \r",
+							"});\r",
+							"\r",
+							"pm.test(\"when no game was found returns NOT_FOUND error \", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const query = pm.request.url.getQueryString().slice(5);\r",
+							"    if(query) pm.expect(true).to.eql(true) //pass the test\r",
+							"    \r",
+							"    pm.response.to.have.status(404);\r",
+							"    pm.expect(jsonData).to.eql({\"cause\":{\"code\":1001,\"name\":\"NOT_FOUND\",\"message\":\"The item does not exist\",\"info\":{\"name\":\"awdq\"}}});\r",
+							"     \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/api/all/games/?name=cards_against_humanity",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"all",
+						"games",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "cards_against_humanity"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "get-Ranks",
 			"event": [
 				{
@@ -58,83 +128,12 @@
 			"response": []
 		},
 		{
-			"name": "search a game using a query",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"received a game\", function () {\r",
-							"    const jsonData = pm.response.json();\r",
-							"    const query = pm.request.url.getQueryString().slice(5);\r",
-							"    \r",
-							"    pm.expect(jsonData).to.be.an(\"object\");\r",
-							"     \r",
-							"});//falta tipo quando se recebe alguma coisa ver se contem\r",
-							"\r",
-							"\r",
-							"pm.test(\"when no query is sent receive a MISSING_PARAMETER error\", function () {\r",
-							"    const jsonData = pm.response.json();\r",
-							"    const query = pm.request.url.getQueryString().slice(5);\r",
-							"    if(query){\r",
-							"        pm.expect(true).to.eql(true) //pass the test\r",
-							"        \r",
-							"    } \r",
-							"    \r",
-							"    pm.response.to.have.status(400);\r",
-							"    pm.expect(jsonData).to.eql({ \"cause\": { \"code\": 1003, \"name\": \"MISSING_PARAMETER\", \"message\": \"A required parameter is missing\", \"info\": \"Name of the game to search\" } });\r",
-							"     \r",
-							"});\r",
-							"\r",
-							"pm.test(\"when no game was found returns NOT_FOUND error \", function () {\r",
-							"    const jsonData = pm.response.json();\r",
-							"    const query = pm.request.url.getQueryString().slice(5);\r",
-							"    if(query) pm.expect(true).to.eql(true) //pass the test\r",
-							"    \r",
-							"    pm.response.to.have.status(404);\r",
-							"    pm.expect(jsonData).to.eql({\"cause\":{\"code\":1001,\"name\":\"NOT_FOUND\",\"message\":\"The item does not exist\",\"info\":{\"name\":\"awdq\"}}});\r",
-							"     \r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8888/api/all/games/search/?name=cards_against_humanity",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8888",
-					"path": [
-						"api",
-						"all",
-						"games",
-						"search",
-						""
-					],
-					"query": [
-						{
-							"key": "name",
-							"value": "cards_against_humanity"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "create User",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8888/api/users/create/abc",
+					"raw": "http://localhost:8888/api/users/abc",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -143,7 +142,6 @@
 					"path": [
 						"api",
 						"users",
-						"create",
 						"abc"
 					]
 				}
@@ -151,7 +149,115 @@
 			"response": []
 		},
 		{
-			"name": "createGroup",
+			"name": "getDetails from group",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer abc",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer 0c59ea54-1037-410e-945c-af38c9dfb034",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8888/api/my/group/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"my",
+						"group",
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete a group",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer abc",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer 0c59ea54-1037-410e-945c-af38c9dfb034",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8888/api/my/group/abc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"my",
+						"group",
+						"abc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listGroups",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8888/api/my/group/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"my",
+						"group",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addGroup",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -196,7 +302,7 @@
 		{
 			"name": "editGroup",
 			"request": {
-				"method": "POST",
+				"method": "PUT",
 				"header": [
 					{
 						"key": "Authorization",
@@ -220,7 +326,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8888/api/my/group/edit",
+					"raw": "http://localhost:8888/api/my/group",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -229,97 +335,7 @@
 					"path": [
 						"api",
 						"my",
-						"group",
-						"edit"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "listGroups",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8888/api/my/group/list",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8888",
-					"path": [
-						"api",
-						"my",
-						"group",
-						"list"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get Docs",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8888/api/docs",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8888",
-					"path": [
-						"api",
-						"docs"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "getDetails from group",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "bearer abc",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "Authorization",
-						"value": "bearer 0c59ea54-1037-410e-945c-af38c9dfb034",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8888/api/my/group/details/test",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8888",
-					"path": [
-						"api",
-						"my",
-						"group",
-						"details",
-						"test"
+						"group"
 					]
 				}
 			},
@@ -352,7 +368,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8888/api/my/group/games/add",
+					"raw": "http://localhost:8888/api/my/group/games",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -362,49 +378,7 @@
 						"api",
 						"my",
 						"group",
-						"games",
-						"add"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete a group",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "bearer abc",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "Authorization",
-						"value": "bearer 0c59ea54-1037-410e-945c-af38c9dfb034",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8888/api/my/group/delete/abc",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8888",
-					"path": [
-						"api",
-						"my",
-						"group",
-						"delete",
-						"abc"
+						"games"
 					]
 				}
 			},
@@ -443,7 +417,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8888/api/my/group/games/delete/",
+					"raw": "http://localhost:8888/api/my/group/games/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -454,8 +428,27 @@
 						"my",
 						"group",
 						"games",
-						"delete",
 						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get Docs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/api/docs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"docs"
 					]
 				}
 			},
