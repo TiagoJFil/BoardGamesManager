@@ -10,6 +10,7 @@ const port = process.argv[2] || default_port;
 const data_borga = require('./borga-games-data');
 
 const data_mem = require('./borga-data-mem');
+const data_online = require('./borga-data-elasticsearch');
 
 const services = require('./borga-services')(data_borga, data_mem);
 

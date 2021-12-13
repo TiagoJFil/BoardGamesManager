@@ -49,15 +49,28 @@ module.exports = function (services) {
 		}
 		res.json({ cause: err });
 	}
-	
+
+	/**
+	 * Retrieves the home page
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	function getHomepage(req, res) {
 		res.render('home');
 	} 
-
+	/**
+	 * Retrieves the search page
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	function getSearchPage(req, res) {
 		res.render('search');
 	} 
-
+	/**
+	 * Retrieves the groups page
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function getGroupsPage(req,res){
 		try{
 		//const groups = await services.listGroups(getBearerToken(req))

@@ -1,12 +1,12 @@
-nav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-	overflow: hidden;
-  background-color: black;	
+
+
+
+.redirects{
+	margin :4px;
+	padding: 4px;
 }
 #course {
-color: red;
+color: green;
 }
 #image0 {
 	display: block;
@@ -23,3 +23,17 @@ h1 {
 	padding: 4px;
 }
 
+h1::before {
+	content: '';
+	padding-right: 32px;
+	background-image: url(/public/dice-1024.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+h1::after {
+	content: '';
+	padding-right: 48px;
+	background-image: url(/public/dice-1024.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+}
