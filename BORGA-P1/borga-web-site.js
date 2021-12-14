@@ -137,11 +137,12 @@ module.exports = function (services) {
 
 	async function popularGames(req,res){
 		const header = 'Popular games Result';
+		const count = req.query.count;
 		try{
-			const games = await services.getPopularGames();
+			const games = await services.getPopularGames(count);
 			res.render(
 				'popular_games_response',
-				{header,games: games}
+				{header,games: games,count}
 			);
 		}catch(err){
 			switch(err.name){

@@ -2,7 +2,7 @@
 
 const crypto = require('crypto');
 
-const errors = require('./app-errors');
+const errors = require('./borga-errors');
 
 const fetch = require('node-fetch');
 
