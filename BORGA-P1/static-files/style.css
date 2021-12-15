@@ -1,7 +1,7 @@
 .redirects{
 	margin :4px;
 	padding: 4px;
-	color:black;
+	color:rgb(255, 255, 255);
 	display:inline-block;
 	text-align:center
 	
@@ -14,8 +14,10 @@
 .redirects:hover{
 	color: #5FBDF4;
 }
+
 #course {
-color: green;
+color: rgb(255, 255, 255);
+
 }
 #image0 {
 	display: block;
@@ -25,6 +27,13 @@ color: green;
   
 }
 
+p {
+	color:rgb(255, 255, 255)
+}
+
+h2 {
+	color: rgb(255, 255, 255)
+}
 
 h1 {
 	font-family: "Lucida Console", monospace;
