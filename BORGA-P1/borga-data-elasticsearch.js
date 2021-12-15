@@ -6,12 +6,12 @@ const errors = require('./borga-errors');
 
 const fetch = require('node-fetch');
 
-module.exports = function(es_host, es_port,idx_prefix,guest_user, guest_token){
+module.exports = function(es_host, es_port,idx_prefix){
 
     const baseUrl = `http://${es_host}:${es_port}`;
 
 	const userGamesUrl = username =>
-		`${baseUrl}/${idx_prefix}_${username}_books`;
+		`${baseUrl}/${idx_prefix}_${username}_games`;
 
     /**
      * object with user token as key and its name as value

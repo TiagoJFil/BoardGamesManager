@@ -3,14 +3,18 @@
 /**
  * default port of the server
  */
+const default_host = "localhost";
 const default_port = 8888;
+const db_port = 9000;
+const db_name = "test"
 
 const port = process.argv[2] || default_port;
 
 const data_borga = require('./borga-games-data');
 
 const data_mem = require('./borga-data-mem');
-const data_online = require('./borga-data-elasticsearch');
+
+const data_online = require('./borga-data-elasticsearch')(default_host,db_port,db_name);
 
 const services = require('./borga-services')(data_borga, data_mem);
 
