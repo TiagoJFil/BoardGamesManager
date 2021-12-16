@@ -2,6 +2,8 @@
 
 const crypto = require('crypto')
 
+let count = 0;
+
 /**
  * object with user token as key and its name as value
  */
@@ -31,30 +33,25 @@ const games = {
  * object with all users with their respective information such as its groups
  */
 const users = {
-	'tiago' : {
-		'test' : {
-			Name : 'test',
-			Description:'Grupo de Teste',
-			games:['cyscZjjlse']
-	}},
+	'tiago': {}
 };
 
 /**
  * checks if the user already has a group with that name 
  * @param {String} user 
- * @param {String} groupName 
+ * @param {String} groupId 
  * @returns {Boolean} true if the user has certain group
  */
-const hasGroup = async (user,groupName) => users[user].hasOwnProperty(groupName);
+const hasGroup = async (user,groupId) => users[user].hasOwnProperty(groupId);
 
 /**
  * checks if a certain user's group has a the same gameId
  * @param {String} user 
- * @param {String} groupName 
+ * @param {String} groupId 
  * @param {String} gameId 
  * @returns {Boolean} true if certain group of a user has the same game identified by the gameId
  */
-const hasGame = async (user,groupName,gameId) => users[user][groupName].games.includes(gameId);
+const hasGame = async (user,groupId,gameId) => users[user][groupId].games.includes(gameId);
 
 /**
  * checks if username is already in use
@@ -86,13 +83,15 @@ async function createGroup(user,name,description){
 		games : []	
 	};
 
-	users[user][name] = newGroup;
+	users[user][count] = newGroup;
 
 	const displayableGroup =  {
 		Name : name,
 		Description : description,
 		games : {}	
 	};
+
+	count++
 
 	return displayableGroup;
 }
@@ -105,15 +104,15 @@ async function createGroup(user,name,description){
  * @param {String} description 
  * @returns {Object} the new edited group
  */
-async function editGroup(user,oldName,newName,description){
-	const oldGamesList = users[user][oldName].games;
+async function editGroup(user,groupId,newName,description){
+	const oldGamesList = users[user][groupId].games;
 	const updatedGroup =  {
 		Name : newName,
 		Description : description,
 		games : oldGamesList	
 	};
-	delete users[user][oldName];
-	users[user][newName] = updatedGroup;
+	delete users[user][groupId];
+	users[user][count] = updatedGroup;
 	
 	return getDisplayableGroupWithGameObjs(user,newName);
 }
@@ -124,31 +123,18 @@ async function editGroup(user,oldName,newName,description){
  * @returns {Object} containing all groups
  */
 async function listGroups(user){
-	const userGroups = Object.values(users[user]);
-
-	let displayableObject = {}
-	for (let i = 0; i < userGroups.length; i++){
-		
-		userGroups[i] = {
-			Name : userGroups[i].Name,
-			Description : userGroups[i].Description
-		}
-		
-		displayableObject[userGroups[i].Name] = userGroups[i]
-	  }
-	
-	return displayableObject;
+	return await getDisplayableGroupsWithGameObjs(user);
 }
 
 /**
  * Deletes a group from a user
  * @param {String} user 
- * @param {String} groupName 
+ * @param {String} groupId 
  * @returns {Object} user's groups updated
  */
-async function deleteGroup(user, groupName){
+async function deleteGroup(user, groupId){
 
-	delete users[user][groupName];
+	delete users[user][groupId];
 	return listGroups(user);
 
 }
@@ -156,49 +142,59 @@ async function deleteGroup(user, groupName){
 /**
  * Displays a group with all the games as an object
  * @param {String} user 
- * @param {String} groupName 
+ * @param {String} groupId 
  * @returns {Object} the same group but with all the information of its games
  */
-async function getDisplayableGroupWithGameObjs(user,groupName){
+async function getDisplayableGroupWithGameObjs(user,groupId){
 	let GamesObjFromIds = new Object();
-	users[user][groupName].games.forEach( it => GamesObjFromIds[it] = games[it]);
+	users[user][groupId].games.forEach( it => GamesObjFromIds[it] = games[it]);
 	
 	const groupToDisplayWithGameObjs = {
-		Name : users[user][groupName].Name,
-		Description : users[user][groupName].Description,
+		Name : users[user][groupId].Name,
+		Description : users[user][groupId].Description,
 		games : GamesObjFromIds
 	};
 
 	return groupToDisplayWithGameObjs;
 }
 
+async function getDisplayableGroupsWithGameObjs(user){
+	let obj = new Object()
+	for(const key in users[user]){
+		obj[key] = await getDisplayableGroupWithGameObjs(user,key) 
+	}
+	return obj
+}
+
+
 /**
  * Adds a game to a user's group 
  * @param {String} user 
- * @param {String} groupName 
+ * @param {String} groupId 
  * @param {Object} game 
  * @returns {Object} group with games updated
  */
-async function addGameToGroup(user,groupName,game){
+async function addGameToGroup(user,groupId,game){
 	const gameId = game.id;
 	games[gameId] = game;
 	
-	users[user][groupName].games.push(gameId);
+	users[user][groupId].games.push(gameId);
 
-	return await getDisplayableGroupWithGameObjs(user,groupName);
+	return await getDisplayableGroupWithGameObjs(user,groupId);
 }
 
 /**
  * Removes a game from a user's group 
  * @param {String} user 
- * @param {String} groupName 
+ * @param {String} groupId 
  * @param {String} gameId 
  * @returns {Object} group with games updated
  */
-async function removeGameFromGroup(user,groupName,gameId){
-	users[user][groupName].games = users[user][groupName].games.filter(it => it != gameId);
-
-	return await getDisplayableGroupWithGameObjs(user,groupName);
+async function removeGameFromGroup(user,groupId,gameId){
+	console.log(users)
+	users[user][groupId].games = users[user][groupId].games.filter(it => it != gameId);
+	
+	return await getDisplayableGroupWithGameObjs(user,groupId);
 }
 
 /**

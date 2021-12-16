@@ -114,7 +114,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /api/my/group/{name}:
+  /api/my/group/{groupId}:
     get:
       tags:
         - MyGroups
@@ -123,7 +123,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: name
+        - name: groupId
           in: path
           description: Name of the group
           required: true
@@ -163,7 +163,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: name
+        - name: groupId
           in: path
           description: Name of the group to delete
           required: true
@@ -341,14 +341,14 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: group
+        - name: groupId
           in: query
           description: Group to remove the game from
           required: true
           schema:
             type: string
           example: Favoritos
-        - name: gameid
+        - name: gameId
           in: query
           description: Game id to remove
           required: true
@@ -515,10 +515,10 @@ components:
       type: object
       description: Group data
       required:
-        - Name
+        - GameId
         - Description
       properties:
-        name:
+        groupId:
           type: string
         newname:
           type: string
@@ -528,7 +528,7 @@ components:
       type: object
       description: List of groups
       properties:
-        name:
+        grouId:
           $ref: '#/components/schemas/EditedGroup'
     AddGame:
       type: object
@@ -537,7 +537,7 @@ components:
         - Name
         - Description
       properties:
-        name:
+        groupId:
           type: string
         gameid:
           type: string

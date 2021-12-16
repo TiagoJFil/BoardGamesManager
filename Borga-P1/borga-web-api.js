@@ -108,10 +108,10 @@ module.exports = function (services) {
 	 */
 	async function editAGroup(req,res){
 		try{
-		const groupOldName = req.body.name;
+		const groupId = req.body.groupId;
 		const groupNewName = req.body.newname;
 		const groupDesc = req.body.desc;
-		const newGroup = await services.editGroup(getBearerToken(req),groupOldName,groupNewName,groupDesc)
+		const newGroup = await services.editGroup(getBearerToken(req),groupId,groupNewName,groupDesc)
 		res.json(newGroup);
 
 		}catch(err){
@@ -142,8 +142,8 @@ module.exports = function (services) {
 	 */
 	async function getGroupDetails(req,res){
 		try{
-			const groupName = req.params.name;
-			const group = await services.getGroupInfo(getBearerToken(req),groupName)
+			const groupId = req.params.groupId;
+			const group = await services.getGroupInfo(getBearerToken(req),groupId)
 			res.json(group);
 		}catch(err){
 			onError(req,res,err);
@@ -173,9 +173,9 @@ module.exports = function (services) {
 	 */
 	async function addGameToGroup(req,res){
 		try{
-			const groupName = req.body.name;
-			const gameId = req.body.gameid;
-			const info = await services.addGameToGroup(getBearerToken(req),groupName,gameId)
+			const groupId = req.body.groupId;
+			const gameId = req.body.gameId;
+			const info = await services.addGameToGroup(getBearerToken(req),groupId,gameId)
 			res.json(info)
 		}catch(err){
 			onError(req,res,err)
@@ -188,11 +188,13 @@ module.exports = function (services) {
 	 * @param {Promise} res 
 	 */
 	async function deleteGroup(req,res){
+		console.log('debug')
 		try{
-			const groupName = req.params.name;
-			const groups = await services.deleteAGroup(getBearerToken(req),groupName)
+			const groupId = req.params.groupId;
+			const groups = await services.deleteAGroup(getBearerToken(req),groupId)
 			res.json(groups)
 		}catch(err){
+			console.log('debug'),
 			onError(req,res,err)
 		}
 	}
@@ -203,12 +205,14 @@ module.exports = function (services) {
 	 * @param {Promise} res 
 	 */
 	async function removeGameFromGroup(req,res){
+		
 		try{
-			const groupName = req.body.group;
-			const gameID = req.body.gameid;
+			const groupName = req.body.groupId;
+			const gameID = req.body.gameId;
 			const groups = await services.removeGameFromGroup(getBearerToken(req),groupName,gameID)
 			res.json(groups)
 		}catch(err){
+			
 			onError(req,res,err)
 		}
 	}

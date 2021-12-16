@@ -132,33 +132,33 @@ module.exports = function (data_borga, data_mem) {
 	/**
 	 * Gets a group information
 	 * @param {String} token 
-	 * @param {String} groupName 
+	 * @param {String} groupId 
 	 * @returns {Object} group information
 	 */
-	async function getGroupInfo(token,groupName){
+	async function getGroupInfo(token,groupId){
 		const username = await getUsername(token);
 
-		if(!groupName){
+		if(!groupId){
 			throw(errors.MISSING_PARAMETER('Group name missing'));
 		}
-		if( !await data_mem.hasGroup(username, groupName) ){
+		if( !await data_mem.hasGroup(username, groupId) ){
 			throw(errors.NOT_FOUND(`The group you were trying to get the info does not exist`));
 		}
 
-		return data_mem.getDisplayableGroupWithGameObjs(username,groupName);
+		return data_mem.getDisplayableGroupWithGameObjs(username,groupId);
 	}
 
 	/**
 	 * Adds a gameId to a group
 	 * @param {String} token 
-	 * @param {String} groupName 
+	 * @param {String} groupId 
 	 * @param {Number} gameId 
 	 * @returns {Object} updated group
 	 */
-	async function addGameToGroup(token,groupName,gameId){
+	async function addGameToGroup(token,groupId,gameId){
 		const username = await getUsername(token);
 
-		if(!groupName){
+		if(!groupId){
 			throw(errors.MISSING_PARAMETER('Group name missing'));
 		}
 
@@ -166,13 +166,13 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.MISSING_PARAMETER('Game Id is missing'));
 		}
 
-		if( !await data_mem.hasGroup(username, groupName) ){
+		if( !await data_mem.hasGroup(username, groupId) ){
 			throw(errors.NOT_FOUND(`The group you were trying to get the info does not exist`));
 		}
 		
 		const game = await data_borga.getGameById(gameId);
 		
-		return await data_mem.addGameToGroup(username,groupName,game);
+		return await data_mem.addGameToGroup(username,groupId,game);
 
 	}
 
@@ -180,51 +180,55 @@ module.exports = function (data_borga, data_mem) {
 	/**
 	 * Deletes a user's group
 	 * @param {String} token 
-	 * @param {String} groupName 
+	 * @param {String} groupId 
 	 * @returns {Object} list of updated groups
 	 */
-	async function deleteAGroup(token,groupName){
+	async function deleteAGroup(token,groupId){
 		const username = await getUsername(token);
 
-		if(!groupName){
+		if(!groupId){
 			throw(errors.MISSING_PARAMETER('Group name missing'));
 		}
 
-		if( !await data_mem.hasGroup(username, groupName) ){
+		if( !await data_mem.hasGroup(username, groupId) ){
 			throw(errors.NOT_FOUND(`The group you were trying to delete does not exist`));
 		}
 
-		const groups = await data_mem.deleteGroup(username,groupName);
+		const groups = await data_mem.deleteGroup(username,groupId);
 		return groups;
 	}
 
 	/**
 	 * Removes a game from a user's group
 	 * @param {String} token 
-	 * @param {String} groupName 
+	 * @param {String} groupId 
 	 * @param {String} gameID 
 	 * @returns {Object} updated group
 	 */
-	async function removeGameFromGroup(token,groupName,gameID){
+	async function removeGameFromGroup(token,groupId,gameID){
 		const username = await getUsername(token);
 
-		if(!groupName){
-			throw(errors.MISSING_PARAMETER('Group name missing'));
+		console.log('debug')
+
+		if(!groupId){
+			throw(errors.MISSING_PARAMETER('Group Id missing'));
 		}
+
+		console.log('debug')
 
 		if(!gameID){
 			throw(errors.MISSING_PARAMETER('Game Id is missing'));
 		}
 
-		if( !await data_mem.hasGroup(username, groupName) ){
+		if( !await data_mem.hasGroup(username, groupId) ){
 			throw(errors.NOT_FOUND(`The group you were trying to delete the game from does not exist`));
 		}
 
-		if( !await data_mem.hasGame(username, groupName, gameID) ){
+		if( !await data_mem.hasGame(username, groupId, gameID) ){
 			throw(errors.NOT_FOUND(`The Game you are trying to remove was not found`));
 		}
 
-		const group = await data_mem.removeGameFromGroup(username,groupName,gameID);
+		const group = await data_mem.removeGameFromGroup(username,groupId,gameID);
 		return group;
 	}
 

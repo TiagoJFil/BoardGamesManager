@@ -184,7 +184,7 @@
         }
       }
     },
-    "/api/my/group/{name}": {
+    "/api/my/group/{groupId}": {
       "get": {
         "tags": [
           "MyGroups"
@@ -198,7 +198,7 @@
         ],
         "parameters": [
           {
-            "name": "name",
+            "name": "groupId",
             "in": "path",
             "description": "Name of the group",
             "required": true,
@@ -264,7 +264,7 @@
         ],
         "parameters": [
           {
-            "name": "name",
+            "name": "groupId",
             "in": "path",
             "description": "Name of the group to delete",
             "required": true,
@@ -562,7 +562,7 @@
         ],
         "parameters": [
           {
-            "name": "group",
+            "name": "groupId",
             "in": "query",
             "description": "Group to remove the game from",
             "required": true,
@@ -572,7 +572,7 @@
             "example": "Favoritos"
           },
           {
-            "name": "gameid",
+            "name": "gameId",
             "in": "query",
             "description": "Game id to remove",
             "required": true,
@@ -816,11 +816,11 @@
         "type": "object",
         "description": "Group data",
         "required": [
-          "Name",
+          "GameId",
           "Description"
         ],
         "properties": {
-          "name": {
+          "groupId": {
             "type": "string"
           },
           "newname": {
@@ -835,7 +835,7 @@
         "type": "object",
         "description": "List of groups",
         "properties": {
-          "name": {
+          "grouId": {
             "$ref": "#/components/schemas/EditedGroup"
           }
         }
@@ -848,7 +848,7 @@
           "Description"
         ],
         "properties": {
-          "name": {
+          "groupId": {
             "type": "string"
           },
           "gameid": {
