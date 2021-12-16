@@ -15,8 +15,14 @@ module.exports = function(es_spec){
 	const userGroupsUrl = username =>
 		`${baseUrl}/${es_spec.prefix}_${username}_groups`;
 
-    const userGamesUrl = username =>
-        `${baseUrl}/${idx_prefix.prefix}_${username}_games`
+
+
+    const allUsersUrl = `${baseUrl}/data_${es_spec.prefix}_users`
+        
+    const allGamesUrl = `${baseUrl}/data_${es_spec.prefix}_games`
+
+    const allTokensUrl = `${baseUrl}/data_${es_spec.prefix}_tokens`
+
     /**
      * object with user token as key and its name as value
      */
@@ -111,10 +117,10 @@ module.exports = function(es_spec){
         };
 
         try {
-
+            
 
 			const response = await fetch(
-				`${userGroupsUrl(username)}/_doc/${counter}?refresh=wait_for`,
+				`${userGroupsUrl(user)}/_doc/${counter}?refresh=wait_for`,
 					{
 						method: 'POST',
                         headers: {
@@ -159,20 +165,22 @@ module.exports = function(es_spec){
      * @returns {Object} containing all groups
      */
     async function listGroups(user){
-        const userGroups = Object.values(users[user]);
 
-        let displayableObject = {}
-        for (let i = 0; i < userGroups.length; i++){
-            
-            userGroups[i] = {
-                Name : userGroups[i].Name,
-                Description : userGroups[i].Description
+        try{
+            const response = await fetch(
+                `${userGroupsUrl(user)}/_search`
+            );
+            if (response.status === 404) {
+                return {};
             }
-            
-            displayableObject[userGroups[i].Name] = userGroups[i]
+            const answer = await response.json();
+            const hits = answer.hits.hits;
+            const groupsList = hits.map(hit => hit._source);
+            return groupsList;
+        }catch(err){
+            throw errors.FAIL(err);
+
         }
-        
-        return displayableObject;
     }
 
     /**
@@ -265,17 +273,66 @@ module.exports = function(es_spec){
     }
 
     /**
+    * checks if username is already in use
+    * @param {String}} Username 
+    * @returns {Boolean} true if users object has certain user
+    */
+    async function hasUser(Username){
+        try {
+			const response = await fetch(`${allUsersUrl}/_doc/${Username}`);
+			return response.status === 200;
+		} catch (err) {
+			throw errors.FAIL(err);
+		}
+    }
+    /**
      * Creates a new user 
      * @param {String} Username user's name   
      * @returns {Object} an object with the id of the user and its name
      */
     async function createUser(Username){
-        const id = crypto.randomUUID()
-        tokens[id] = Username
-        users[Username] = new Array()
-        return {
+
+        const id = crypto.randomUUID();
+        const newUser = {
             AuthToken: id,
             UserName: Username
         };
+        const idToUser ={
+            user: Username 
+        }
+        try {
+
+            const TokensResponse = await fetch(
+                `${allTokensUrl}/_doc/${id}?`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(idToUser)
+                    }
+            );
+
+            const UserResponse = await fetch(
+                `${allUsersUrl}/_doc/${Username}?refresh=wait_for`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newUser)
+                    }
+            );
+            return newUser;
+                
+        
+        }catch(err){
+			throw errors.FAIL(err);
+        }
+    }
+    return{
+        listGroups,
+        hasUser,
+        createUser
     }
 }
