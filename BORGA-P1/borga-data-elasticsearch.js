@@ -8,7 +8,7 @@ const fetch = require('node-fetch');
 
 module.exports = function(es_spec){
 
-    let counter = 0;
+    let counter = 0; ///PRECISA SE DE FAZER UMA FUNÇAO QUE VEJA QUAL é O VALOR DO COUTNER COM A QUANTIDADE DE GRUPOS DO UTILIZADOR
 
     const baseUrl = es_spec.url;
 
@@ -129,35 +129,47 @@ module.exports = function(es_spec){
                         body: JSON.stringify(newGroup)
 					}
 			);
-
-            }
-        catch(err){
-
-            
+        return displayableGroup
         }
-
-    }
+        catch(err){
+            throw errors.DATABASE_ERROR(err);
+        }
+    };
 
     /**
      * edits a user's group name and description
      * @param {String} user 
-     * @param {String} oldName group's old name
+     * @param {String} groupId group's id
      * @param {String} newName griups's new name
      * @param {String} description 
      * @returns {Object} the new edited group
      */
-    async function editGroup(user,oldName,newName,description){
-        const oldGamesList = users[user][oldName].games;
-        const updatedGroup =  {
-            Name : newName,
-            Description : description,
-            games : oldGamesList	
-        };
-        delete users[user][oldName];
-        users[user][newName] = updatedGroup;
-        
-        return getDisplayableGroupWithGameObjs(user,newName);
-    }
+    async function editGroup(user,groupId,newName,description){
+        try{
+            const group = await fetch(`${userGroupsUrl(user)}/_doc/${groupId}?refresh=wait_for` );    
+
+            const updatedGroup =  {
+                        Name : newName,
+                        Description : description,
+                        games : group._source.games	
+                    };  
+
+            const response = await fetch(
+                `${userGroupsUrl(user)}/_doc/${groupId}?refresh=wait_for`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updatedGroup)
+                    }
+                  
+            );
+        return updatedGroup;  
+        }catch(err){
+            throw errors.DATABASE_ERROR(err);
+        }
+    };
 
     /**
      * Lists all groups of a certain user 
@@ -178,21 +190,27 @@ module.exports = function(es_spec){
             const groupsList = hits.map(hit => hit._source);
             return groupsList;
         }catch(err){
-            throw errors.FAIL(err);
-
+            throw errors.DATABASE_ERROR(err);
         }
     }
 
     /**
      * Deletes a group from a user
-     * @param {String} user 
-     * @param {String} groupName 
+     * @param {String} user      the user to delete the group from
+     * @param {String} groupId   the groupId to reach the group to delete 
      * @returns {Object} user's groups updated
      */
-    async function deleteGroup(user, groupName){
-
-        delete users[user][groupName];
+    async function deleteGroup(user, groupId){
+        try{
+        const response = await fetch(`${userGroupsUrl(user)}/_doc/${groupId}?refresh=wait_for`,
+        {
+            method: 'DELETE',
+        } 
+        );
         return listGroups(user);
+        }catch(err){
+            throw errors.DATABASE_ERROR(err);
+        }
 
     }
 
@@ -282,7 +300,7 @@ module.exports = function(es_spec){
 			const response = await fetch(`${allUsersUrl}/_doc/${Username}`);
 			return response.status === 200;
 		} catch (err) {
-			throw errors.FAIL(err);
+			throw errors.DATABASE_ERROR(err);
 		}
     }
     /**
@@ -303,7 +321,7 @@ module.exports = function(es_spec){
         try {
 
             const TokensResponse = await fetch(
-                `${allTokensUrl}/_doc/${id}?`,
+                `${allTokensUrl}/_doc/${id}`,
                     {
                         method: 'POST',
                         headers: {
@@ -314,23 +332,27 @@ module.exports = function(es_spec){
             );
 
             const UserResponse = await fetch(
-                `${allUsersUrl}/_doc/${Username}?refresh=wait_for`,
+                `${allUsersUrl}/_doc/${Username}`,
                     {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(newUser)
+                        body: JSON.stringify({
+                            AuthToken: id
+                        })
                     }
             );
             return newUser;
                 
         
         }catch(err){
-			throw errors.FAIL(err);
+			throw errors.DATABASE_ERROR(err);
         }
     }
     return{
+        deleteGroup,
+        editGroup,
         listGroups,
         hasUser,
         createUser
