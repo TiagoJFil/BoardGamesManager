@@ -6,17 +6,17 @@ const errors = require('./borga-errors');
 
 const fetch = require('node-fetch');
 
-module.exports = function(es_host, es_port,idx_prefix){
+module.exports = function(es_spec){
 
     let counter = 0;
 
-    const baseUrl = `http://${es_host}:${es_port}`;
+    const baseUrl = es_spec.url;
 
 	const userGroupsUrl = username =>
-		`${baseUrl}/${idx_prefix}_${username}_groups`;
+		`${baseUrl}/${es_spec.prefix}_${username}_groups`;
 
     const userGamesUrl = username =>
-        `${baseUrl}/${idx_prefix}_${username}_games`
+        `${baseUrl}/${idx_prefix.prefix}_${username}_games`
     /**
      * object with user token as key and its name as value
      */
@@ -207,6 +207,7 @@ module.exports = function(es_host, es_port,idx_prefix){
         return groupToDisplayWithGameObjs;
     }
 
+    
     /**
      * Adds a game to a user's group 
      * @param {String} user 
@@ -214,13 +215,14 @@ module.exports = function(es_host, es_port,idx_prefix){
      * @param {Object} game 
      * @returns {Object} group with games updated
      */
+    /*
     async function addGameToGroup(user,groupName,game){
         try{
 
 
 
 		const group = await fetch(
-			`${userGroupsUrl(username)}/_doc/${counter}?refresh=wait_for`,
+			`${userGroupsUrl(username)}/_doc/${counter}?refresh=wait_for`
 
 
 
@@ -246,6 +248,8 @@ module.exports = function(es_host, es_port,idx_prefix){
 
         return await getDisplayableGroupWithGameObjs(user,groupName);
     }
+    
+    */
 
     /**
      * Removes a game from a user's group 

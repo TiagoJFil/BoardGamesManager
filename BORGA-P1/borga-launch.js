@@ -18,4 +18,4 @@ const config = require('./borga-config')
  /**
  * starts a server and listens on port for connections.
  */
-app.listen(port);
+app.listen(default_port);
