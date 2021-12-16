@@ -1,11 +1,7 @@
 'use strict';
 
-/**
- * default port of the server
- */
-const default_host = "localhost";
-const default_port = 8888;
-const db_port = 9000;
+module.exports = function (es_spec) {
+const db_port = 9200;
 const db_name = "test"
 
 const port = process.argv[2] || default_port;
@@ -33,7 +29,6 @@ app.use('/public', express.static('static-files'));
 app.use('/api', webapi);
 app.use('/', webui);
 
-/**
- * starts a server and listens on port for connections.
- */
-app.listen(port);
+return app;
+
+}

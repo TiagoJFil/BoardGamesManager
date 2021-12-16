@@ -8,11 +8,15 @@ const fetch = require('node-fetch');
 
 module.exports = function(es_host, es_port,idx_prefix){
 
+    let counter = 0;
+
     const baseUrl = `http://${es_host}:${es_port}`;
 
-	const userGamesUrl = username =>
-		`${baseUrl}/${idx_prefix}_${username}_games`;
+	const userGroupsUrl = username =>
+		`${baseUrl}/${idx_prefix}_${username}_groups`;
 
+    const userGamesUrl = username =>
+        `${baseUrl}/${idx_prefix}_${username}_games`
     /**
      * object with user token as key and its name as value
      */
@@ -74,6 +78,7 @@ module.exports = function(es_host, es_port,idx_prefix){
             throw errors.UNAUTHENTICATED(username);
         }
     }
+
     /**
      * gets username from unique token
      * @param {String} token 
@@ -97,7 +102,7 @@ module.exports = function(es_host, es_port,idx_prefix){
             games : []	
         };
 
-        users[user][name] = newGroup;
+       // users[user][name] = newGroup;
 
         const displayableGroup =  {
             Name : name,
@@ -105,7 +110,26 @@ module.exports = function(es_host, es_port,idx_prefix){
             games : {}	
         };
 
-        return displayableGroup;
+        try {
+
+
+			const response = await fetch(
+				`${userGroupsUrl(username)}/_doc/${counter}?refresh=wait_for`,
+					{
+						method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newGroup)
+					}
+			);
+
+            }
+        catch(err){
+
+            
+        }
+
     }
 
     /**
@@ -191,10 +215,34 @@ module.exports = function(es_host, es_port,idx_prefix){
      * @returns {Object} group with games updated
      */
     async function addGameToGroup(user,groupName,game){
-        const gameId = game.id;
+        try{
+
+
+
+		const group = await fetch(
+			`${userGroupsUrl(username)}/_doc/${counter}?refresh=wait_for`,
+
+
+
+        const responseGames = await fetch(
+            `${userGamesUrl(username)}/_doc/${game.id}?refresh=wait_for`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(game)
+                }
+        );
+                
+        }
+
+
+       
         games[gameId] = game;
         
         users[user][groupName].games.push(gameId);
+
 
         return await getDisplayableGroupWithGameObjs(user,groupName);
     }
