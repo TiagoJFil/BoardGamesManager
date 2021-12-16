@@ -1,7 +1,7 @@
 .redirects{
 	margin :4px;
 	padding: 4px;
-	color:rgb(255, 255, 255);
+	color:rgb(134, 0, 0);
 	display:inline-block;
 	text-align:center
 	
@@ -28,11 +28,11 @@ color: rgb(255, 255, 255);
 }
 
 p {
-	color:rgb(255, 255, 255)
+	color:rgb(131, 4, 4)
 }
 
 h2 {
-	color: rgb(255, 255, 255)
+	color: rgb(116, 2, 2)
 }
 
 h1 {
