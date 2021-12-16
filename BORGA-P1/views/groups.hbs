@@ -1,8 +1,16 @@
 <h1>Groups</h1>
 
 
-<form action= "/groups/create" method = "POST">
+<form action= "/groups/create" method = "GET">
+	<h2>Create a group</h2>
 	<label > Need a group? </label>
-	<input type="submit" value="Create group">
+	<input type="submit" value="Create">
+</form>	
+
+<form action= "/groups/name" method = "GET">
+	<h2>Search a group by it's name</h2>
+	<label >Name:</label>
+	<input type="text" id="txtQuery" name="name">
+	<input type="submit" value="Search">
 </form>	
 

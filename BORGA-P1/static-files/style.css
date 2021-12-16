@@ -1,34 +1,27 @@
 .redirects{
 	margin :4px;
 	padding: 4px;
-	color:rgb(134, 0, 0);
+	color:rgb(255, 255, 255);
 	display:inline-block;
 	text-align:center
-	
 }
  nav {
-    text-align: center; 
+    text-align: center;
+	background-color: rgb(8, 0, 0);
 }
-
 
 .redirects:hover{
 	color: #5FBDF4;
 }
 
 #course {
-color: rgb(1, 138, 1);
-
+	color: rgb(131, 2, 2);
 }
+
 #image0 {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-
-  
-}
-
-p {
-	color:rgb(131, 4, 4)
 }
 
 h2 {
@@ -50,10 +43,21 @@ h1::before {
 	background-size: contain;
 	background-repeat: no-repeat;
 }
+
 h1::after {
 	content: '';
 	padding-right: 48px;
 	background-image: url(/public/dice-1024.png);
 	background-size: contain;
 	background-repeat: no-repeat;
+}
+
+h3 {
+	font-size: small;
+	color: rgb(109, 2, 2);
+}
+
+h5 {
+	font-size: medium;
+	color: rgb(0, 0, 0);
 }
