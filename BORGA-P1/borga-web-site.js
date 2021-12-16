@@ -77,6 +77,15 @@ module.exports = function (services) {
 	} 
 
 	/**
+	 * Retrieves create groups page
+	 * @param {*Promise} req 
+	 * @param {*Promise} res 
+	 */
+	function createGroups(req,res){
+		res.render('create_groups');
+	}
+
+	/**
 	 * Retrieves the groups page
 	 * @param {Promise} req 
 	 * @param {Promise} res 
@@ -94,6 +103,10 @@ module.exports = function (services) {
 
 		};
 	}
+
+/* 	async function searchGroup(req,res){
+
+	} */
 
 	async function findGame(req,res){
 		const header = 'Find Game Result';
@@ -126,13 +139,6 @@ module.exports = function (services) {
 			}
 		}
 
-	}
-	async function createGroup(req,res){
-		try{
-
-		}catch(err){
-
-		}
 	}
 
 	async function popularGames(req,res){
@@ -177,10 +183,13 @@ module.exports = function (services) {
 	router.get('/search/result', findGame);
 
 	// group creation
-	router.get('/groups/create', createGroup);
+	router.get('/groups/create', createGroups);
 
 	//Popular games result page
-	router.get('/popular/result', popularGames)
-	
+	router.get('/popular/result', popularGames);
+/* 
+	//Searching groups response
+	router.get('groups/name', searchGroup) */
+
 	return router;
 }

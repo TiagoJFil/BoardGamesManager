@@ -21,6 +21,7 @@ function buildErrorList() {
 	addError(1005, 'GROUP_ALREADY_EXISTS', 'The group you wanted already exists');
 	addError(1006, 'UNAUTHENTICATED', 'Invalid or missing token');
 	addError(1007, 'INVALID_PARAMETER', 'The parameter is invalid');
+	addError(1008, 'DATABASE_ERROR', 'An error has occurred with the database');
 	
 	return errors;
 }
