@@ -10,7 +10,7 @@ const config = require('./borga-config')
 
  const es_spec = {
 	url: config.devl_es_url,
-	prefix: 'prod'
+	prefix: 'test'
 };
 
  const app = require('./borga-server')(es_spec);

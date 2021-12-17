@@ -851,7 +851,7 @@
           "groupId": {
             "type": "string"
           },
-          "gameid": {
+          "gameId": {
             "type": "string"
           }
         }

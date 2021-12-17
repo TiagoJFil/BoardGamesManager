@@ -8,7 +8,28 @@ const fetch = require('node-fetch');
 
 module.exports = function(es_spec){
 
-    let counter = 0; ///PRECISA SE DE FAZER UMA FUNÇAO QUE VEJA QUAL é O VALOR DO COUTNER COM A QUANTIDADE DE GRUPOS DO UTILIZADOR
+
+    /**
+     * gets the list of groups from a user and determines what is the next
+     * @param {String} user 
+     * @returns the next group id
+     */
+    async function getGroupCounter(user){
+        try{
+            const response = await fetch(
+                `${userGroupsUrl(user)}/_search`
+            );
+            if (response.status === 404) {
+                return 0;
+            }
+            const answer = await response.json();
+            const count = answer.hits.total.value;
+            return count;
+        }catch(err){
+            throw errors.DATABASE_ERROR(err);
+        }
+    }
+
 
     const baseUrl = es_spec.url;
 
@@ -17,11 +38,11 @@ module.exports = function(es_spec){
 
 
 
-    const allUsersUrl = `${baseUrl}/data_${es_spec.prefix}_users`
+    const allUsersUrl = `${baseUrl}data_${es_spec.prefix}_users`
         
-    const allGamesUrl = `${baseUrl}/data_${es_spec.prefix}_games`
+    const allGamesUrl = `${baseUrl}data_${es_spec.prefix}_games`
 
-    const allTokensUrl = `${baseUrl}/data_${es_spec.prefix}_tokens`
+    const allTokensUrl = `${baseUrl}data_${es_spec.prefix}_tokens`
 
     /**
      * object with user token as key and its name as value
@@ -120,7 +141,7 @@ module.exports = function(es_spec){
             
 
 			const response = await fetch(
-				`${userGroupsUrl(user)}/_doc/${counter}?refresh=wait_for`,
+				`${userGroupsUrl(user)}/_doc/${await getGroupCounter(user)}?refresh=wait_for`,
 					{
 						method: 'POST',
                         headers: {
@@ -248,7 +269,7 @@ module.exports = function(es_spec){
 
 
 		const group = await fetch(
-			`${userGroupsUrl(username)}/_doc/${counter}?refresh=wait_for`
+			`${userGroupsUrl(username)}/_doc/${await getGroupCounter(user)}?refresh=wait_for`
 
 
 
@@ -298,6 +319,7 @@ module.exports = function(es_spec){
     async function hasUser(Username){
         try {
 			const response = await fetch(`${allUsersUrl}/_doc/${Username}`);
+            
 			return response.status === 200;
 		} catch (err) {
 			throw errors.DATABASE_ERROR(err);

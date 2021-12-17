@@ -55,7 +55,6 @@ module.exports = function (data_borga, data_mem) {
 		if(!name){
 			throw(errors.MISSING_PARAMETER('Name of user missing'));
 		}
-
 		if(await data_mem.hasUser(name))
 			throw errors.USER_ALREADY_EXISTS(name);
 
@@ -167,7 +166,7 @@ module.exports = function (data_borga, data_mem) {
 		}
 
 		if( !await data_mem.hasGroup(username, groupId) ){
-			throw(errors.NOT_FOUND(`The group you were trying to get the info does not exist`));
+			throw(errors.NOT_FOUND(`The group you add the game to does not exist`));
 		}
 		
 		const game = await data_borga.getGameById(gameId);
