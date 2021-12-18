@@ -97,6 +97,85 @@ describe('Integration tests', () => {
 		});
 	});
 
+	test('Create a new Group', async () => {
+		const response = await request(app)
+			.post('/api/my/group')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.send({
+				"name": "test",
+				"desc": "este é um grupo de teste"
+			  })
+			.expect(200); // or see below
+
+		expect(response.status).toBe(200); // or see above
+		expect(response.body).toBeTruthy();
+		expect(response.body.name).toEqual("test");
+	    expect(response.body.desc).toEqual("este é um grupo de teste");
+	});
+
+	test('Create a new Group with the same name', async () => {
+		const response = await request(app)
+			.post('/api/my/group')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.send({
+				"name": "test",
+				"desc": "este é outro grupo de teste diferente"
+			  })
+			.expect('Content-Type', /json/)
+			.expect(200); // or see below
+
+		expect(response.status).toBe(200); // or see above
+		expect(response.body).toBeTruthy();
+		expect(response.body.name).toEqual("test");
+	    expect(response.body.desc).toEqual("este é outro grupo de teste diferente");
+	});
+
+	test('trying to create a group without the body returns an error', async () => {
+		const response = await request(app)
+			.post('/api/my/group')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(500); // or see below
+
+
+		expect(response.status).toBe(500); // or see above
+		expect(response.body).toBeTruthy();
+		expect(response.body).toEqual(
+			{
+				"cause": {
+					"code": 1003,
+					"name": "MISSING_PARAMETER",
+					"message": "A required parameter is missing",
+					"info": "Group name missing"
+				}
+			}
+		);
+	});
+
+	test('list groups returns the groups created', async () => {
+
+		const response = await request(app)
+			.get('/api/my/groups')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200); // or see below
+
+		expect(response.status).toBe(200); // or see above
+		expect(response.body).toBeTruthy();
+		expect(response.body.length).toEqual(2);
+		expect(response.body[0].name).toEqual("test");
+		expect(response.body[1].name).toEqual("test");
+		expect(response.body[0].desc).toEqual("este é um grupo de teste");
+		expect(response.body[1].desc).toEqual("este é outro grupo de teste diferente");
+	});
+
+
+	
 	/*
 	test('Get empty bookshelf', async () => {
 		const response = await request(app)

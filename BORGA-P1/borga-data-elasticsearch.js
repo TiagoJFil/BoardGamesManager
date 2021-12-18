@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const errors = require('./borga-errors');
 
 const fetch = require('node-fetch');
+const { response } = require('express');
 
 module.exports = function(es_spec){
 
@@ -77,34 +78,44 @@ module.exports = function(es_spec){
     /**
      * checks if the user already has a group with that name 
      * @param {String} user 
-     * @param {String} groupName 
+     * @param {String} groupId 
      * @returns {Boolean} true if the user has certain group
      */
-/*     async function hasGroup(user,groupName){
+     async function hasGroup(user,groupId){
+         try{
+            const response = await fetch(
+                `${userGroupsUrl(user)}/_doc/${groupId}`
+            );
+            return response.status === 200;
 
-		}
-    } */
+        }catch(err){
+            throw errors.DATABASE_ERROR(err);
+        }
+    }; 
     /**
      * checks if a certain user's group has a the same gameId
      * @param {String} user 
-     * @param {String} groupName 
+     * @param {String} groupId 
      * @param {String} gameId 
      * @returns {Boolean} true if certain group of a user has the same game identified by the gameId
      */
-/*    async function hasGame(user,groupName,gameId){
+    async function hasGame(user,groupId,gameId){
+        try {
+            
+            const response =await fetch(
+                 `${userGroupsUrl(user)}/_doc/${groupId}?refresh=wait_for`);
+            const body = await response.json();
 
-    }  */
 
-    /**
-     * checks if username is already in use
-     * @param {String}} Username 
-     * @returns {Boolean} true if users object has certain user
-     */
-    function hasUser(username){	
-        if (!users.has(username)) {
-            throw errors.UNAUTHENTICATED(username);
-        }
-    }
+       return body._source.games.includes(gameId);
+       }
+       catch(err){
+           throw errors.DATABASE_ERROR(err);
+       }
+   };
+      
+
+
 
     /**
      * gets username from unique token
@@ -112,7 +123,14 @@ module.exports = function(es_spec){
      * @returns {Object} the name of user identified by the token
      */
     async function tokenToUsername(token) {
-        return tokens[token];
+        try {
+			const response = await fetch(`${allTokensUrl}/_doc/${token}`);
+            const body = await response.json()
+			return response.status === 404 ? null : body._source.user;
+		} catch (err) {
+			throw errors.DATABASE_ERROR(err);
+		}
+       
     }
 
     /**
@@ -138,9 +156,7 @@ module.exports = function(es_spec){
         };
 
         try {
-            
-
-			const response = await fetch(
+			 await fetch(
 				`${userGroupsUrl(user)}/_doc/${await getGroupCounter(user)}?refresh=wait_for`,
 					{
 						method: 'POST',
@@ -175,7 +191,7 @@ module.exports = function(es_spec){
                         games : group._source.games	
                     };  
 
-            const response = await fetch(
+            const groupResponse = await fetch(
                 `${userGroupsUrl(user)}/_doc/${groupId}?refresh=wait_for`,
                     {
                         method: 'PUT',
@@ -301,11 +317,11 @@ module.exports = function(es_spec){
     /**
      * Removes a game from a user's group 
      * @param {String} user 
-     * @param {String} groupName 
+     * @param {String} groupId 
      * @param {String} gameId 
      * @returns {Object} group with games updated
      */
-    async function removeGameFromGroup(user,groupName,gameId){
+    async function removeGameFromGroup(user,groupId,gameId){
         users[user][groupName].games = users[user][groupName].games.filter(it => it != gameId);
 
         return await getDisplayableGroupWithGameObjs(user,groupName);
@@ -373,6 +389,10 @@ module.exports = function(es_spec){
         }
     }
     return{
+        hasGroup,
+        hasGame,
+        tokenToUsername,
+        createGroup,
         deleteGroup,
         editGroup,
         listGroups,
