@@ -78,16 +78,16 @@ async function tokenToUsername(token) {
  */
 async function createGroup(user,name,description){
 	var newGroup =  {
-		Name : name,
-		Description : description,
+		name : name,
+		description : description,
 		games : []	
 	};
 
 	users[user][count] = newGroup;
 
 	const displayableGroup =  {
-		Name : name,
-		Description : description,
+		name : name,
+		description : description,
 		games : {}	
 	};
 

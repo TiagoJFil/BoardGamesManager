@@ -35,8 +35,7 @@ module.exports = function(es_spec){
     const baseUrl = es_spec.url;
 
 	const userGroupsUrl = username =>
-		`${baseUrl}/${es_spec.prefix}_${username}_groups`;
-
+		`${baseUrl}${es_spec.prefix}_${username}_groups`;
 
 
     const allUsersUrl = `${baseUrl}data_${es_spec.prefix}_users`
@@ -45,35 +44,6 @@ module.exports = function(es_spec){
 
     const allTokensUrl = `${baseUrl}data_${es_spec.prefix}_tokens`
 
-    /**
-     * object with user token as key and its name as value
-     */
-    const tokens = {
-        '8b85d489-bcd3-477b-9563-5155af9f08ca': 'tiago',
-        'fc6dbc68-adad-4770-ae6a-2d0e4eb1d0ea': 'joao'
-    };
-
-    /**
-     * object with all game's id's as keys and the repective information as values
-     */
-    const games = {
-        cyscZjjlse: {
-            id: 'cyscZjjlse',
-            name: 'Telestrations',
-            url: 'https://www.boardgameatlas.com/game/cyscZjjlse/telestrations',
-            price: '22.99',
-            publisher: 'USAopoly',
-            min_age: 12,
-            min_players: 4,
-            max_players: 8,
-            rank: 252
-        }  
-    }
-
-    /**
-     * object with all users with their respective information such as its groups
-     */
-    const users = new Set(['tiago']);
 
     /**
      * checks if the user already has a group with that name 
@@ -124,8 +94,10 @@ module.exports = function(es_spec){
      */
     async function tokenToUsername(token) {
         try {
+            
 			const response = await fetch(`${allTokensUrl}/_doc/${token}`);
             const body = await response.json()
+    
 			return response.status === 404 ? null : body._source.user;
 		} catch (err) {
 			throw errors.DATABASE_ERROR(err);
@@ -142,16 +114,16 @@ module.exports = function(es_spec){
      */
     async function createGroup(user,name,description){
         var newGroup =  {
-            Name : name,
-            Description : description,
+            name : name,
+            description : description,
             games : []	
         };
 
        // users[user][name] = newGroup;
 
         const displayableGroup =  {
-            Name : name,
-            Description : description,
+            name : name,
+            description : description,
             games : {}	
         };
 
@@ -223,9 +195,14 @@ module.exports = function(es_spec){
                 return {};
             }
             const answer = await response.json();
+            let groups = {};
             const hits = answer.hits.hits;
-            const groupsList = hits.map(hit => hit._source);
-            return groupsList;
+            hits.map(hit =>{ 
+                 groups[hit._id] = hit._source
+             });
+
+            
+            return groups;
         }catch(err){
             throw errors.DATABASE_ERROR(err);
         }

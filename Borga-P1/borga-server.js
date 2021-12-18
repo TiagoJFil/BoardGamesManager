@@ -9,7 +9,7 @@ const data_mem = require('./borga-data-mem');
 
 const data_online = require('./borga-data-elasticsearch')(es_spec);
 
-const services = require('./borga-services')(data_borga, data_mem);
+const services = require('./borga-services')(data_borga, data_online);
 
 const webapi = require('./borga-web-api')(services);
 const webui = require('./borga-web-site')(services);

@@ -26,20 +26,20 @@ describe('Integration tests', () => {
 	
 	beforeAll(async () => {
 		const StoreTokens = await fetch(
-			`${es_spec.url}/data_${es_spec.prefix}_tokens/_doc/${config.guest.token}`,
+			`${es_spec.url}data_${es_spec.prefix}_tokens/_doc/${config.guest.token}`,
 				{
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify({
-						"user": "abc"
+						"user": "tiago"
 					})
 				}
 		);
 
 		const StoreUser = await fetch(
-			`${es_spec.url}/data_${es_spec.prefix}_users/_doc/${config.guest.token}`,
+			`${es_spec.url}data_${es_spec.prefix}_users/_doc/${config.guest.user}`,
 				{
 					method: 'POST',
 					headers: {
@@ -51,6 +51,7 @@ describe('Integration tests', () => {
 				}
 		);
 	});
+	
 	afterAll(async () => {
 		await fetch(
 			`${es_spec.url}${es_spec.prefix}_${config.guest.user}_groups`,
@@ -108,11 +109,11 @@ describe('Integration tests', () => {
 				"desc": "este é um grupo de teste"
 			  })
 			.expect(200); // or see below
-
+		
 		expect(response.status).toBe(200); // or see above
 		expect(response.body).toBeTruthy();
-		expect(response.body.name).toEqual("test");
-	    expect(response.body.desc).toEqual("este é um grupo de teste");
+		expect(response.body.name).toEqual('test');
+	    expect(response.body.description).toEqual('este é um grupo de teste');
 	});
 
 	test('Create a new Group with the same name', async () => {
@@ -129,8 +130,9 @@ describe('Integration tests', () => {
 
 		expect(response.status).toBe(200); // or see above
 		expect(response.body).toBeTruthy();
-		expect(response.body.name).toEqual("test");
-	    expect(response.body.desc).toEqual("este é outro grupo de teste diferente");
+		
+		expect(response.body.name).toEqual('test');
+	    expect(response.body.description).toEqual('este é outro grupo de teste diferente');
 	});
 
 	test('trying to create a group without the body returns an error', async () => {
@@ -139,10 +141,10 @@ describe('Integration tests', () => {
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
-			.expect(500); // or see below
+			.expect(400); // or see below
 
 
-		expect(response.status).toBe(500); // or see above
+		expect(response.status).toBe(400); // or see above
 		expect(response.body).toBeTruthy();
 		expect(response.body).toEqual(
 			{
@@ -159,7 +161,7 @@ describe('Integration tests', () => {
 	test('list groups returns the groups created', async () => {
 
 		const response = await request(app)
-			.get('/api/my/groups')
+			.get('/api/my/group')
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
@@ -167,11 +169,12 @@ describe('Integration tests', () => {
 
 		expect(response.status).toBe(200); // or see above
 		expect(response.body).toBeTruthy();
-		expect(response.body.length).toEqual(2);
+		console.log(response.body);
+		expect(Object.keys(response.body).length).toEqual(2);
 		expect(response.body[0].name).toEqual("test");
 		expect(response.body[1].name).toEqual("test");
-		expect(response.body[0].desc).toEqual("este é um grupo de teste");
-		expect(response.body[1].desc).toEqual("este é outro grupo de teste diferente");
+		expect(response.body[0].description).toEqual("este é um grupo de teste");
+		expect(response.body[1].description).toEqual("este é outro grupo de teste diferente");
 	});
 
 
