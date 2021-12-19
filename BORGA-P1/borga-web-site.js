@@ -64,8 +64,7 @@ module.exports = function (services) {
 	 * @param {Promise} res 
 	 */
 	function getSearchPage(req, res) {
-		const query_name = req.query.name;
-		res.render('search',{query:query_name});
+		res.render('search');
 	} 
 
 		/**
@@ -125,11 +124,13 @@ module.exports = function (services) {
 						'games_response',
 						{ header, code: 400 , error: 'no query provided' }
 					);
+					break;
 				case 'NOT_FOUND':
 					res.status(404).render(
 						'games_response',
 						{ header, code: 404 ,error: 'no game found for the query provided' }
-					)
+					);
+					break;
 				default:
 					res.status(500).render(
 						'games_response',

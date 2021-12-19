@@ -28,16 +28,18 @@
 
 {{/if}}
 
-{{#if error}}
+{{#if error }}
 	{{#if code}}
-		<h1>Find a Game</h1>
-		<form action= "/search" method = "GET">
-			<h2>Write the name of the game you want to search right below </h2>
-			<label for="txtQuery">Name:</label>
-			<input type="text" id="txtQuery" name="name">
-			<input type="submit" value="Search">
+		<h1>Find a Game</h1>		
+		<form action= "/search/result" method = "GET">
+			<body>
+				<h2>Write the name of the game you want to search right below </h2>
+				<p><label for="txtQuery">Name:</label></p>
+				<input type="text" id="txtQuery" size='20' name="name">
+				<input type="submit" value="Search">
+			</body>
 		</form>
-		<p style="text-align: center;"><strong> ERROR {{code}}: {{error}}</strong></p>
+		<p1><strong> ERROR {{code}}: {{error}}</strong></p1>
 	{{/if}}
 {{/if}}
-			
+
