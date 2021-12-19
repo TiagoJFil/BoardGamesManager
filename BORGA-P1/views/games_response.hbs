@@ -1,6 +1,7 @@
-<h1>{{header}}</h1>
 
 {{#if query}}
+	<h1>{{header}}</h1>
+
 	<p>The game searched for was: {{query}}</p>
 {{/if}}
 
@@ -22,15 +23,20 @@
 	</table>
 	
 	<h5>
-		<label for="txtQuery">Wanna add to a group? Write the name:</label>
-		<input type="text" id="txtQuery" name="name">
-		<input type="submit" value="Add">
+		<input type="submit" value="Add To Group">
 	</h5>
 
 {{/if}}
 
 {{#if error}}
 	{{#if code}}
+		<h1>Find a Game</h1>
+		<form action= "/search" method = "GET">
+			<h2>Write the name of the game you want to search right below </h2>
+			<label for="txtQuery">Name:</label>
+			<input type="text" id="txtQuery" name="name">
+			<input type="submit" value="Search">
+		</form>
 		<p style="text-align: center;"><strong> ERROR {{code}}: {{error}}</strong></p>
 	{{/if}}
 {{/if}}

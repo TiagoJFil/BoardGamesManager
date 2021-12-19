@@ -64,7 +64,8 @@ module.exports = function (services) {
 	 * @param {Promise} res 
 	 */
 	function getSearchPage(req, res) {
-		res.render('search');
+		const query_name = req.query.name;
+		res.render('search',{query:query_name});
 	} 
 
 		/**
