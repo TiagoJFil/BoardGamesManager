@@ -2,7 +2,7 @@
 {{#if query}}
 	<h1>{{header}}</h1>
 
-	<p>The game searched for was: {{query}}</p>
+	<h4>The game searched for was: {{query}}</h4>
 {{/if}}
 
 {{#if game}}
@@ -35,11 +35,10 @@
 			<body>
 				<h2>Write the name of the game you want to search right below </h2>
 				<p><label for="txtQuery">Name:</label></p>
-				<input type="text" id="txtQuery" size='20' name="name">
+				<input type="text" id="txtQuery" name="name" size="35">
 				<input type="submit" value="Search">
 			</body>
 		</form>
 		<p1><strong> ERROR {{code}}: {{error}}</strong></p1>
 	{{/if}}
 {{/if}}
-
