@@ -135,6 +135,30 @@ describe('Integration tests', () => {
 	    expect(response.body.description).toEqual('este é outro grupo de teste diferente');
 	});
 
+	test('try to create a group without the bearer token', async () => {
+		const response = await request(app)
+			.post('/api/my/group')
+			.set('Accept', 'application/json')
+			.send({
+				"name": "test",
+				"desc": "este é outro grupo de teste diferente"
+			  })
+			.expect('Content-Type', /json/)
+			.expect(401); // or see below
+
+		expect(response.status).toBe(401); // or see above
+		expect(response.body).toEqual(
+			{
+				"cause": {
+					code: 1006,
+					name: 'UNAUTHENTICATED',
+					message: 'Invalid or missing token',
+					info: 'no token'
+			  	}
+			}
+		);
+	});
+
 	test('trying to create a group without the body returns an error', async () => {
 		const response = await request(app)
 			.post('/api/my/group')
@@ -171,6 +195,7 @@ describe('Integration tests', () => {
 		expect(response.body).toBeTruthy();
 		console.log(response.body);
 		expect(Object.keys(response.body).length).toEqual(2);
+		console.log(response.body);
 		expect(response.body[0].name).toEqual("test");
 		expect(response.body[1].name).toEqual("test");
 		expect(response.body[0].description).toEqual("este é um grupo de teste");

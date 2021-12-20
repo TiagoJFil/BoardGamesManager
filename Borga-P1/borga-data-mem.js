@@ -107,14 +107,15 @@ async function createGroup(user,name,description){
 async function editGroup(user,groupId,newName,description){
 	const oldGamesList = users[user][groupId].games;
 	const updatedGroup =  {
-		Name : newName,
-		Description : description,
+		name : newName,
+		description : description,
 		games : oldGamesList	
 	};
+
 	delete users[user][groupId];
-	users[user][count] = updatedGroup;
+	users[user][groupId] = updatedGroup;
 	
-	return getDisplayableGroupWithGameObjs(user,newName);
+	return getDisplayableGroupWithGameObjs(user,groupId);
 }
 
 /**
@@ -147,11 +148,12 @@ async function deleteGroup(user, groupId){
  */
 async function getDisplayableGroupWithGameObjs(user,groupId){
 	let GamesObjFromIds = new Object();
+
 	users[user][groupId].games.forEach( it => GamesObjFromIds[it] = games[it]);
 	
 	const groupToDisplayWithGameObjs = {
-		Name : users[user][groupId].Name,
-		Description : users[user][groupId].Description,
+		name : users[user][groupId].name,
+		description : users[user][groupId].description,
 		games : GamesObjFromIds
 	};
 
@@ -161,7 +163,9 @@ async function getDisplayableGroupWithGameObjs(user,groupId){
 async function getDisplayableGroupsWithGameObjs(user){
 	let obj = new Object()
 	for(const key in users[user]){
+		
 		obj[key] = await getDisplayableGroupWithGameObjs(user,key) 
+	
 	}
 	return obj
 }
@@ -191,7 +195,6 @@ async function addGameToGroup(user,groupId,game){
  * @returns {Object} group with games updated
  */
 async function removeGameFromGroup(user,groupId,gameId){
-	console.log(users)
 	users[user][groupId].games = users[user][groupId].games.filter(it => it != gameId);
 	
 	return await getDisplayableGroupWithGameObjs(user,groupId);

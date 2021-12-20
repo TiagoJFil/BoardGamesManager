@@ -188,13 +188,12 @@ module.exports = function (services) {
 	 * @param {Promise} res 
 	 */
 	async function deleteGroup(req,res){
-		console.log('debug')
+		
 		try{
 			const groupId = req.params.groupId;
 			const groups = await services.deleteAGroup(getBearerToken(req),groupId)
 			res.json(groups)
 		}catch(err){
-			console.log('debug'),
 			onError(req,res,err)
 		}
 	}
@@ -205,10 +204,9 @@ module.exports = function (services) {
 	 * @param {Promise} res 
 	 */
 	async function removeGameFromGroup(req,res){
-		
 		try{
-			const groupName = req.body.groupId;
-			const gameID = req.body.gameId;
+			const groupName = req.params.groupId;
+			const gameID = req.params.gameId;
 			const groups = await services.removeGameFromGroup(getBearerToken(req),groupName,gameID)
 			res.json(groups)
 		}catch(err){
@@ -248,8 +246,8 @@ module.exports = function (services) {
 	router.put('/my/group', editAGroup);
 	// Resource: /my/group/games
 	router.post('/my/group/games', addGameToGroup);
-	// Resource: /my/group/games
-	router.delete('/my/group/games', removeGameFromGroup);
+	// Resource: /my/group/games/<groupId>/<gameId>
+	router.delete('/my/group/games/:groupId/:gameId', removeGameFromGroup);
 	
 	
 	

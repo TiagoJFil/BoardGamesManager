@@ -11,7 +11,7 @@ tags:
       description: Based on
       url: https://api.boardgameatlas.com
   - name: User
-    description: Users to create
+    description: Users operations
   - name: MyGroups
     description: Your personal games collection
 paths:
@@ -81,7 +81,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /api/user/{name}:
+  /api/users/{name}:
     post:
       tags:
         - User
@@ -176,7 +176,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupsResponse'
+                 $ref: '#/components/schemas/ListGroup'
         '401':
           description: Missing API token. The user is not authenticated.
           content:
@@ -280,7 +280,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EditedGroup'
+                $ref: '#/components/schemas/Group'
         '401':
           description: Missing API token. The user is not authenticated.
           content:
@@ -333,6 +333,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
+  /api/my/group/games/{groupId}/{gameId}:
     delete:
       tags:
         - MyGroups
@@ -342,14 +343,14 @@ paths:
         - bearerAuth: []
       parameters:
         - name: groupId
-          in: query
+          in: path
           description: Group to remove the game from
           required: true
           schema:
             type: string
           example: Favoritos
         - name: gameId
-          in: query
+          in: path
           description: Game id to remove
           required: true
           schema:
@@ -483,23 +484,6 @@ components:
           type: object
           items:
             type: object
-    GroupsResponse:
-      type: object
-      description: Response with a list of groups
-      properties:
-        name:
-          $ref: '#/components/schemas/EditedGroup'
-    EditedGroup:
-      type: object
-      description: Group data
-      required:
-        - Name
-        - Description
-      properties:
-        Name:
-          type: string
-        Description:
-          type: string
     EditedGroupHeader:
       type: object
       description: Group data
@@ -528,8 +512,8 @@ components:
       type: object
       description: List of groups
       properties:
-        grouId:
-          $ref: '#/components/schemas/EditedGroup'
+        groupId:
+          $ref: '#/components/schemas/Group'
     AddGame:
       type: object
       description: Group data

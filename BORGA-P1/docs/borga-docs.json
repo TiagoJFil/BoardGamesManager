@@ -17,7 +17,7 @@
     },
     {
       "name": "User",
-      "description": "Users to create"
+      "description": "Users operations"
     },
     {
       "name": "MyGroups",
@@ -131,7 +131,7 @@
         }
       }
     },
-    "/api/user/{name}": {
+    "/api/users/{name}": {
       "post": {
         "tags": [
           "User"
@@ -280,7 +280,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GroupsResponse"
+                  "$ref": "#/components/schemas/ListGroup"
                 }
               }
             }
@@ -455,7 +455,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EditedGroup"
+                  "$ref": "#/components/schemas/Group"
                 }
               }
             }
@@ -548,7 +548,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/my/group/games/{groupId}/{gameId}": {
       "delete": {
         "tags": [
           "MyGroups"
@@ -563,7 +565,7 @@
         "parameters": [
           {
             "name": "groupId",
-            "in": "query",
+            "in": "path",
             "description": "Group to remove the game from",
             "required": true,
             "schema": {
@@ -573,7 +575,7 @@
           },
           {
             "name": "gameId",
-            "in": "query",
+            "in": "path",
             "description": "Game id to remove",
             "required": true,
             "schema": {
@@ -771,31 +773,6 @@
           }
         }
       },
-      "GroupsResponse": {
-        "type": "object",
-        "description": "Response with a list of groups",
-        "properties": {
-          "name": {
-            "$ref": "#/components/schemas/EditedGroup"
-          }
-        }
-      },
-      "EditedGroup": {
-        "type": "object",
-        "description": "Group data",
-        "required": [
-          "Name",
-          "Description"
-        ],
-        "properties": {
-          "Name": {
-            "type": "string"
-          },
-          "Description": {
-            "type": "string"
-          }
-        }
-      },
       "EditedGroupHeader": {
         "type": "object",
         "description": "Group data",
@@ -835,8 +812,8 @@
         "type": "object",
         "description": "List of groups",
         "properties": {
-          "grouId": {
-            "$ref": "#/components/schemas/EditedGroup"
+          "groupId": {
+            "$ref": "#/components/schemas/Group"
           }
         }
       },

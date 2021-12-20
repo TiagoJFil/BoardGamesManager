@@ -206,7 +206,7 @@ module.exports = function (data_borga, data_mem) {
 	 */
 	async function removeGameFromGroup(token,groupId,gameID){
 		const username = await getUsername(token);
-
+		
 
 		if(!groupId){
 			throw(errors.MISSING_PARAMETER('Group Id missing'));
