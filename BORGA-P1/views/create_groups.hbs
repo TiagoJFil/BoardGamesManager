@@ -1,8 +1,19 @@
-<h1>Find a Game</h1>
+<h1>Create a group</h1>
 
-<form action= "/search/result" method = "GET">
-	<h2>Write the name of the game you want to search right below </h2>
-	<label for="txtQuery">Name:</label>
-	<input type="text" id="txtQuery" name="name">
-	<input type="submit" value="Search">
+{{!-- <form action= "/search/result" method = "GET">
+	<p><label for="txtQuery">Name:</label></p>
+	<input type="text" id="txtQuery" name="name"><br></br>
+	<p><label for="desc">Description (Max 100 characters):</label></p>
+	<input	type="text" id="desc" name="Description"  
+			maxlength="100" size="36">
+			<br></br>
+</form>
+ --}}
+ 
+<form action= "/groups" method = "GET">
+	<p><label for="txtQuery">Name:</label></p>
+	<input type="text" id="txtQuery" name="name"><br></br>
+	<p><label for="desc">Description (Max 100 characters):</label></p>
+	<textarea></textarea><br></br>
+	<input type="submit" value="Create">
 </form>
