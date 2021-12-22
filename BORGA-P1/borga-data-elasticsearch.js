@@ -5,17 +5,18 @@ const crypto = require('crypto');
 const errors = require('./borga-errors');
 
 const fetch = require('node-fetch');
+const { json } = require('express/lib/response');
 
 
 module.exports = function(es_spec){
 
 
     /**
-     * gets the list of groups from a user and determines what is the next
+     * gets the list of groups from a user and determines what is the next group id
      * @param {String} user 
      * @returns the next group id
      */
-    async function getGroupCounter(user){
+    async function getGroupCounter(user){//___________________________________________________________________________________________ TEHRE IS A PROBLEM WITH THIS FUNCTION, IF WE DELETE THE GROUP LIKE 0 WE WONT BE ABLE TO CREATE MORE GROUPS
         try{
             const response = await fetch(
                 `${userGroupsUrl(user)}/_search`
@@ -71,11 +72,9 @@ module.exports = function(es_spec){
      */
     async function hasGame(user,groupId,gameId){
         try {
-            
             const response =await fetch(
-                 `${userGroupsUrl(user)}/_doc/${groupId}?refresh=wait_for`);
+                 `${userGroupsUrl(user)}/_doc/${groupId}`);
             const body = await response.json();
-
 
        return body._source.games.includes(gameId);
        }
@@ -103,7 +102,7 @@ module.exports = function(es_spec){
 			throw errors.DATABASE_ERROR(err);
 		}
        
-    }
+    };
 
     /**
      * Creates a new user group with the provided name and description
@@ -119,7 +118,7 @@ module.exports = function(es_spec){
             games : []	
         };
 
-       // users[user][name] = newGroup;
+      
 
         const displayableGroup =  {
             name : name,
@@ -155,25 +154,33 @@ module.exports = function(es_spec){
      */
     async function editGroup(user,groupId,newName,description){
         try{
-            const group = await fetch(`${userGroupsUrl(user)}/_doc/${groupId}?refresh=wait_for` );    
-
+            const response = await fetch(`${userGroupsUrl(user)}/_doc/${groupId}` );    
+            const group = await response.json();
             const updatedGroup =  {
-                        Name : newName,
-                        Description : description,
-                        games : group._source.games	
+                        name : newName,
+                        description : description,
+                        games : await gameArrayToObject(group._source.games)
                     };  
 
-            const groupResponse = await fetch(
-                `${userGroupsUrl(user)}/_doc/${groupId}?refresh=wait_for`,
+            const infoToSend =  {
+                doc :{
+                    name : newName,
+                    description : description
+                }
+            };
+            await fetch(
+                `${userGroupsUrl(user)}/_update/${groupId}?refresh=wait_for`,
                     {
-                        method: 'PUT',
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(updatedGroup)
-                    }
+                        body: JSON.stringify(infoToSend)
+                    
+                }
                   
             );
+            
         return updatedGroup;  
         }catch(err){
             throw errors.DATABASE_ERROR(err);
@@ -186,20 +193,24 @@ module.exports = function(es_spec){
      * @returns {Object} containing all groups
      */
     async function listGroups(user){
-
         try{
             const response = await fetch(
                 `${userGroupsUrl(user)}/_search`
             );
+            
             if (response.status === 404) {
                 return {};
             }
             const answer = await response.json();
             let groups = {};
             const hits = answer.hits.hits;
-            hits.map(hit =>{ 
-                 groups[hit._id] = hit._source
-             });
+            for(let hit of hits){
+                groups[hit._id] = {
+                    name : hit._source.name,
+                    description : hit._source.description,
+                    games : await gameArrayToObject(hit._source.games)
+                };
+             };
 
             
             return groups;
@@ -208,6 +219,23 @@ module.exports = function(es_spec){
         }
     }
 
+    /**
+     * Transforms an array of game ids into an object of games
+     * @param {Array} gameArray 
+     * @returns  {Object} containing all games objects
+     */
+     async function gameArrayToObject(gameArray){
+        let gameObj = {};
+       
+        for(let game of gameArray){
+            const response = await fetch(`${allGamesUrl}/_doc/${game}`);
+            const body = await response.json();
+          
+           gameObj[game] = body._source;
+        }
+
+        return gameObj;
+    }
     /**
      * Deletes a group from a user
      * @param {String} user      the user to delete the group from
@@ -228,68 +256,77 @@ module.exports = function(es_spec){
 
     }
 
+
     /**
-     * Displays a group with all the games as an object
-     * @param {String} user 
-     * @param {String} groupName 
-     * @returns {Object} the same group but with all the information of its games
+     * Checks wheter a Game exists in the db or not
+     * @param {String} gameId
+     * @returns {Boolean} true if the game exists
+     * @throws {Error} if the game doesn't exist
      */
-    async function getDisplayableGroupWithGameObjs(user,groupName){
-        let GamesObjFromIds = new Object();
-        users[user][groupName].games.forEach( it => GamesObjFromIds[it] = games[it]);
-        
-        const groupToDisplayWithGameObjs = {
-            Name : users[user][groupName].Name,
-            Description : users[user][groupName].Description,
-            games : GamesObjFromIds
-        };
-
-        return groupToDisplayWithGameObjs;
-    }
-
+    async function dbHasGame(gameID){
+        try{
+            const response = await fetch(`${allGamesUrl}/_doc/${gameID}`);
+            return response.status === 404 ? false : true;
+        }catch(err){
+            throw errors.DATABASE_ERROR(err);
+        }
+    };
+   
     
     /**
      * Adds a game to a user's group 
      * @param {String} user 
-     * @param {String} groupName 
+     * @param {String} groupId 
      * @param {Object} game 
      * @returns {Object} group with games updated
      */
-    /*
-    async function addGameToGroup(user,groupName,game){
+    async function addGameToGroup(user,groupId,game){
         try{
+            const response = await fetch(`${userGroupsUrl(user)}/_doc/${groupId}` );    
+            const group = (await response.json())._source;
+           
 
+            if(!(await dbHasGame(game.id))){
+                 await fetch(
+                    `${allGamesUrl}/_doc/${game.id}?refresh=wait_for`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(game)
+                        }
+                );
+            };
+            group.games.push(game.id);
 
+            await fetch(
+                `${userGroupsUrl(user)}/_update/${groupId}`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            doc :{
+                                games : group.games
+                            }
+                        })
+                    }
+            );
 
-		const group = await fetch(
-			`${userGroupsUrl(username)}/_doc/${await getGroupCounter(user)}?refresh=wait_for`
-
-
-
-        const responseGames = await fetch(
-            `${userGamesUrl(username)}/_doc/${game.id}?refresh=wait_for`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(game)
-                }
-        );
+            return {
+                name : group.name,
+                description : group.description,
+                games : await gameArrayToObject(group.games)
+            };
                 
+        }catch(err){
+            throw errors.DATABASE_ERROR(err);
         }
-
-
-       
-        games[gameId] = game;
-        
-        users[user][groupName].games.push(gameId);
-
-
-        return await getDisplayableGroupWithGameObjs(user,groupName);
     }
     
-    */
+    
 
     /**
      * Removes a game from a user's group 
@@ -299,9 +336,38 @@ module.exports = function(es_spec){
      * @returns {Object} group with games updated
      */
     async function removeGameFromGroup(user,groupId,gameId){
-        users[user][groupName].games = users[user][groupName].games.filter(it => it != gameId);
-
-        return await getDisplayableGroupWithGameObjs(user,groupName);
+        try{
+            const response = await fetch(`${userGroupsUrl(user)}/_doc/${groupId}` );    
+            const group = (await response.json())._source;
+           
+            group.games = group.games.filter(game => game !== gameId);
+            
+            await fetch(
+                `${userGroupsUrl(user)}/_update/${groupId}/?refresh=wait_for`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body:  JSON.stringify(
+                            {
+                                doc :{
+                                    games : group.games
+                            }
+                        })
+                        
+                    }
+            );
+            
+            return {
+                name : group.name,
+                description : group.description,
+                games : await gameArrayToObject(group.games)
+            };
+                
+        }catch(err){
+            throw errors.DATABASE_ERROR(err);
+        }
     }
 
     /**
@@ -370,6 +436,8 @@ module.exports = function(es_spec){
         hasGame,
         tokenToUsername,
         createGroup,
+        addGameToGroup,
+        removeGameFromGroup,
         deleteGroup,
         editGroup,
         listGroups,
