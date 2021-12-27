@@ -5,11 +5,9 @@ const crypto = require('crypto');
 const errors = require('./borga-errors');
 
 const fetch = require('node-fetch');
-const { json } = require('express/lib/response');
 
 
 module.exports = function(es_spec){
-
 
     /**
      * gets the list of groups from a user and determines what is the next group id
@@ -25,6 +23,7 @@ module.exports = function(es_spec){
                 return 0;
             }
             const answer = await response.json();
+            console.log(answer.hits);
             const count = answer.hits.total.value;
             return count;
         }catch(err){
@@ -37,7 +36,6 @@ module.exports = function(es_spec){
 
 	const userGroupsUrl = username =>
 		`${baseUrl}${es_spec.prefix}_${username}_groups`;
-
 
     const allUsersUrl = `${baseUrl}data_${es_spec.prefix}_users`
         
@@ -52,7 +50,7 @@ module.exports = function(es_spec){
      * @param {String} groupId 
      * @returns {Boolean} true if the user has certain group
      */
-     async function hasGroup(user,groupId){
+    async function hasGroup(user,groupId){
          try{
             const response = await fetch(
                 `${userGroupsUrl(user)}/_doc/${groupId}`
@@ -63,6 +61,7 @@ module.exports = function(es_spec){
             throw errors.DATABASE_ERROR(err);
         }
     }; 
+
     /**
      * checks if a certain user's group has a the same gameId
      * @param {String} user 
@@ -81,10 +80,7 @@ module.exports = function(es_spec){
        catch(err){
            throw errors.DATABASE_ERROR(err);
        }
-   };
-      
-
-
+    };
 
     /**
      * gets username from unique token
@@ -217,25 +213,32 @@ module.exports = function(es_spec){
         }catch(err){
             throw errors.DATABASE_ERROR(err);
         }
-    }
+    };
 
     /**
-     * Transforms an array of game ids into an object of games
-     * @param {Array} gameArray 
-     * @returns  {Object} containing all games objects
-     */
-     async function gameArrayToObject(gameArray){
-        let gameObj = {};
-       
-        for(let game of gameArray){
-            const response = await fetch(`${allGamesUrl}/_doc/${game}`);
-            const body = await response.json();
-          
-           gameObj[game] = body._source;
-        }
+     * Gets a group's information
+     * @param {String} user
+     * @param {String} groupId
+     * @returns {Object} containing the group's information
+     */ 
+    async function getGroup(user,groupId){
+        try{
+            const response = await fetch(
+               `${userGroupsUrl(user)}/_doc/${groupId}`
+            );
+            const group = await response.json();
 
-        return gameObj;
-    }
+            return {
+                name : group._source.name,
+                description : group._source.description,
+                games : await gameArrayToObject(group._source.games)
+            };
+
+       }catch(err){
+           throw errors.DATABASE_ERROR(err);
+       }
+   }; 
+
     /**
      * Deletes a group from a user
      * @param {String} user      the user to delete the group from
@@ -254,8 +257,7 @@ module.exports = function(es_spec){
             throw errors.DATABASE_ERROR(err);
         }
 
-    }
-
+    };
 
     /**
      * Checks wheter a Game exists in the db or not
@@ -271,7 +273,6 @@ module.exports = function(es_spec){
             throw errors.DATABASE_ERROR(err);
         }
     };
-   
     
     /**
      * Adds a game to a user's group 
@@ -324,9 +325,7 @@ module.exports = function(es_spec){
         }catch(err){
             throw errors.DATABASE_ERROR(err);
         }
-    }
-    
-    
+    };
 
     /**
      * Removes a game from a user's group 
@@ -368,7 +367,7 @@ module.exports = function(es_spec){
         }catch(err){
             throw errors.DATABASE_ERROR(err);
         }
-    }
+    };
 
     /**
     * checks if username is already in use
@@ -383,7 +382,8 @@ module.exports = function(es_spec){
 		} catch (err) {
 			throw errors.DATABASE_ERROR(err);
 		}
-    }
+    };
+
     /**
      * Creates a new user 
      * @param {String} Username user's name   
@@ -430,7 +430,27 @@ module.exports = function(es_spec){
         }catch(err){
 			throw errors.DATABASE_ERROR(err);
         }
-    }
+    };
+
+
+    /**
+     * Transforms an array of game ids into an object of games
+     * @param {Array} gameArray 
+     * @returns  {Object} containing all games objects
+     */
+     async function gameArrayToObject(gameArray){
+        let gameObj = {};
+       
+        for(let game of gameArray){
+            const response = await fetch(`${allGamesUrl}/_doc/${game}`);
+            const body = await response.json();
+          
+           gameObj[game] = body._source;
+        }
+
+        return gameObj;
+    };
+
     return{
         hasGroup,
         hasGame,
@@ -440,6 +460,7 @@ module.exports = function(es_spec){
         removeGameFromGroup,
         deleteGroup,
         editGroup,
+        getGroup,
         listGroups,
         hasUser,
         createUser

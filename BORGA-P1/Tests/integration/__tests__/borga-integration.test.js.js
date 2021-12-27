@@ -74,9 +74,9 @@ describe('Integration tests', () => {
 	test('Create a new User', async () => {
 		const response = await request(app)
 			.post('/api/users/miguel')
-			.expect(200); // or see below
+			.expect(200);
 		
-		expect(response.status).toBe(200); // or see above
+
 		expect(response.body).toBeTruthy();
 		expect(response.body.UserName).toEqual("miguel");
 	});
@@ -84,9 +84,9 @@ describe('Integration tests', () => {
 	test('trying to create a user with the same name throws an error', async () => {
 		const response = await request(app)
 			.post('/api/users/miguel')
-			.expect(500); // or see below
+			.expect(500); 
 		
-		expect(response.status).toBe(500); // or see above
+
 		expect(response.body).toBeTruthy();
 		expect(response.body).toEqual({
 			"cause": {
@@ -96,6 +96,19 @@ describe('Integration tests', () => {
 				"info": "miguel"
 			}
 		});
+	});
+
+	test('list groups without any group returns {}', async () => {
+
+		const response = await request(app)
+			.get('/api/my/group')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200); 
+
+		expect(response.body).toBeTruthy();
+		expect(response.body).toEqual({});
 	});
 
 	test('Create a new Group', async () => {
@@ -108,9 +121,9 @@ describe('Integration tests', () => {
 				"name": "test",
 				"desc": "este é um grupo de teste"
 			  })
-			.expect(200); // or see below
+			.expect(200); 
 		
-		expect(response.status).toBe(200); // or see above
+
 		expect(response.body).toBeTruthy();
 		expect(response.body.name).toEqual('test');
 	    expect(response.body.description).toEqual('este é um grupo de teste');
@@ -126,9 +139,9 @@ describe('Integration tests', () => {
 				"desc": "este é outro grupo de teste diferente"
 			  })
 			.expect('Content-Type', /json/)
-			.expect(200); // or see below
+			.expect(200);
 
-		expect(response.status).toBe(200); // or see above
+
 		expect(response.body).toBeTruthy();
 		
 		expect(response.body.name).toEqual('test');
@@ -144,9 +157,9 @@ describe('Integration tests', () => {
 				"desc": "este é outro grupo de teste diferente"
 			  })
 			.expect('Content-Type', /json/)
-			.expect(401); // or see below
+			.expect(401); 
 
-		expect(response.status).toBe(401); // or see above
+
 		expect(response.body).toEqual(
 			{
 				"cause": {
@@ -165,10 +178,8 @@ describe('Integration tests', () => {
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
-			.expect(400); // or see below
+			.expect(400); 
 
-
-		expect(response.status).toBe(400); // or see above
 		expect(response.body).toBeTruthy();
 		expect(response.body).toEqual(
 			{
@@ -189,60 +200,201 @@ describe('Integration tests', () => {
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
-			.expect(200); // or see below
+			.expect(200);
 
-		expect(response.status).toBe(200); // or see above
+
 		expect(response.body).toBeTruthy();
-		console.log(response.body);
+		
 		expect(Object.keys(response.body).length).toEqual(2);
-		console.log(response.body);
+		
 		expect(response.body[0].name).toEqual("test");
 		expect(response.body[1].name).toEqual("test");
 		expect(response.body[0].description).toEqual("este é um grupo de teste");
 		expect(response.body[1].description).toEqual("este é outro grupo de teste diferente");
 	});
 
-
-	
-	/*
-	test('Get empty bookshelf', async () => {
+	test('gets a details from the group 0', async () => {
+		
 		const response = await request(app)
-			.get('/api/my/books')
+			.get('/api/my/group/0')
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
-			.expect(200); // or see below
-		
-		expect(response.status).toBe(200); // or see above
+			.expect(200); 
+	
+
 		expect(response.body).toBeTruthy();
-		expect(response.body.books).toEqual([]);
+		expect(response.body.name).toEqual("test");
+		expect(response.body.description).toEqual("este é um grupo de teste");
 	});
-		
-	test('Add book', async () => {
-		const bookId = 'viRtzgEACAAJ';
 
-		const addResponse = await request(app)
-			.post('/api/my/books')
-			.set('Authorization', `Bearer ${config.guest.token}`)
-			.set('Accept', 'application/json')
-			.send({ bookId })
-			.expect('Content-Type', /json/)
-			.expect(200);
+	test('try to get details from a group that doesnt exists', async () => {
 		
-		expect(addResponse.body).toBeTruthy();
-		expect(addResponse.body.bookId).toEqual(bookId);
-
-		const listResponse = await request(app)
-			.get('/api/my/books')
+		const response = await request(app)
+			.get('/api/my/group/60')
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
-			.expect(200);
+			.expect(404); 
+		
 
-		expect(listResponse.body).toBeTruthy();
-		expect(listResponse.body.books).toHaveLength(1);
-		expect(listResponse.body.books[0].id).toEqual(bookId);
+		expect(response.body).toEqual(
+			{
+				"cause": {
+					"code": 1001,
+					"name": 'NOT_FOUND',
+					"message": 'The item does not exist',
+					"info": 'The group you were trying to get the info does not exist'
+			  }
+			});
 	});
 
-	*/
+	test('delete group 1 works',async () => {
+		
+		const response = await request(app)
+			.delete('/api/my/group/1')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200); 
+
+
+		expect(response.body).toBeTruthy();
+		expect(response.body).toEqual({
+			"0": {
+				"name": "test",
+				"description": "este é um grupo de teste",
+				"games": {}
+			}
+		})	
+	});
+
+	test('delete group 1 doesnt work because it doesnt exist',async () => {
+		
+		const response = await request(app)
+			.delete('/api/my/group/1')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(404); 
+
+			
+		expect(response.body).toBeTruthy();
+		expect(response.body).toEqual(
+			{
+				"cause": {
+					"code": 1001,
+					"name": 'NOT_FOUND',
+					"message": 'The item does not exist',
+					"info": 'The group you were trying to delete does not exist'
+			  }
+			});
+	});
+
+	test('edit group 1 works', async () => {
+		
+		const response = await request(app)
+			.put('/api/my/group/')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.send({
+				"groupId": "0",
+				"name": "changedName",
+				"desc": "changedDescription"
+			})
+			.expect('Content-Type', /json/)
+			.expect(200);
+
+			expect(response.body).toBeTruthy();
+			expect(response.body).toEqual(
+				{
+					"name": "changedName",
+					"description": "changedDescription",
+					"games": {}
+				
+				});
+	
+	});
+
+	test('edit group 2 doesnt work because it doesnt exists', async () => {
+		
+		const response = await request(app)
+			.put('/api/my/group/')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.send({
+				"groupId": "2",
+				"name": "changedName",
+				"desc": "changedDescription"
+			})
+			.expect('Content-Type', /json/)
+			.expect(404);
+
+			expect(response.body).toBeTruthy();
+			expect(response.body).toEqual(
+				{
+					"cause": {
+						"code": 1001,
+						"name": 'NOT_FOUND',
+						"message": 'The item does not exist',
+						"info": 'The group you were trying to edit does not exist'
+				  }
+				});
+	});
+
+	test('successfully add a game to group 0', async () => {
+	
+		const response = await request(app)
+			.post('/api/my/group/games')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.send({
+				"groupId": "0",
+				"gameId": "dFC1lnGINr"
+			})
+			.expect('Content-Type', /json/)
+			.expect(200);
+			
+			expect(response.body).toBeTruthy();
+			expect(response.body).toEqual(
+				{
+					name: 'changedName',
+					description: 'changedDescription',
+					games: {
+					  dFC1lnGINr: {
+						id: 'dFC1lnGINr',
+						name: 'Cards Against Humanity',
+						url: 'https://www.boardgameatlas.com/game/dFC1lnGINr/cards-against-humanity',
+						price: '21.25',
+						publisher: 'Cards Against Humanity LLC.',  
+						min_age: 17,
+						min_players: 4,
+						max_players: 30,
+						rank: 313
+					  }
+					}
+				});
+	})
+
+	test('Remove a game from a group that has the game', async () => {
+	
+		const response = await request(app)
+			.delete('/api/my/group/games/0/dFC1lnGINr')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200);
+
+			expect(response.body).toBeTruthy();
+			expect(response.body).toEqual(
+				{
+					name: 'changedName',
+					description: 'changedDescription',
+					games: {}
+				});
+	
+	});
+
+
+
 });

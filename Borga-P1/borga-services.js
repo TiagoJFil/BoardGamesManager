@@ -140,11 +140,11 @@ module.exports = function (data_borga, data_mem) {
 		if(!groupId){
 			throw(errors.MISSING_PARAMETER('Group name missing'));
 		}
-		if( !await data_mem.hasGroup(username, groupId) ){
+		if(!await data_mem.hasGroup(username, groupId) ){
 			throw(errors.NOT_FOUND(`The group you were trying to get the info does not exist`));
 		}
 
-		return data_mem.getDisplayableGroupWithGameObjs(username,groupId);
+		return data_mem.getGroup(username,groupId);
 	}
 
 	/**
