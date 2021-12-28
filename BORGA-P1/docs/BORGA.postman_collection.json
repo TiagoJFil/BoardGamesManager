@@ -156,7 +156,8 @@
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text"
+						"type": "text",
+						"disabled": true
 					},
 					{
 						"key": "Authorization",
@@ -166,13 +167,12 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "bearer 0c59ea54-1037-410e-945c-af38c9dfb034",
-						"type": "text",
-						"disabled": true
+						"value": "bearer 47c6a426-c51d-4cd2-b6b4-cf97fe05966c",
+						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8888/api/my/group/test",
+					"raw": "http://localhost:8888/api/my/group/0",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -182,7 +182,7 @@
 						"api",
 						"my",
 						"group",
-						"test"
+						"0"
 					]
 				}
 			},
@@ -196,7 +196,8 @@
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text"
+						"type": "text",
+						"disabled": true
 					},
 					{
 						"key": "Authorization",
@@ -206,13 +207,12 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "bearer 0c59ea54-1037-410e-945c-af38c9dfb034",
-						"type": "text",
-						"disabled": true
+						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
+						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8888/api/my/group/abc",
+					"raw": "http://localhost:8888/api/my/group/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -222,7 +222,7 @@
 						"api",
 						"my",
 						"group",
-						"abc"
+						"2"
 					]
 				}
 			},
@@ -236,11 +236,17 @@
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
 						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8888/api/my/group/list",
+					"raw": "http://localhost:8888/api/my/group/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -250,7 +256,7 @@
 						"api",
 						"my",
 						"group",
-						"list"
+						""
 					]
 				}
 			},
@@ -263,19 +269,19 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "bearer asd",
-						"type": "text",
-						"disabled": true
+						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
+						"type": "text"
 					},
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text"
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"abc\",\r\n  \"desc\": \"isto é um exemplo de descrição\"\r\n}",
+					"raw": "{\r\n  \"name\": \"test\",\r\n  \"desc\": \"isto é um exemplo de descrição\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -283,7 +289,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8888/api/my/group/create",
+					"raw": "http://localhost:8888/api/my/group",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -292,8 +298,7 @@
 					"path": [
 						"api",
 						"my",
-						"group",
-						"create"
+						"group"
 					]
 				}
 			},
@@ -306,19 +311,19 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "bearer abc",
-						"type": "text",
-						"disabled": true
+						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
+						"type": "text"
 					},
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text"
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"test\",\r\n  \"newname\": \"renomeado\",\r\n  \"desc\": \"novadescriçao\"\r\n}",
+					"raw": "{\r\n  \"groupId\": \"1\",\r\n  \"name\": \"renom3eado\",\r\n  \"desc\": \"novadescriçao\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -349,18 +354,18 @@
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text"
+						"type": "text",
+						"disabled": true
 					},
 					{
 						"key": "Authorization",
-						"value": "bearer abc",
-						"type": "text",
-						"disabled": true
+						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
+						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"test\",\r\n  \"gameid\": \"dFC1lnGINr\"\r\n}",
+					"raw": "{\r\n  \"groupId\": \"3\",\r\n  \"gameId\": \"dFC1lnGINr\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -392,7 +397,8 @@
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text"
+						"type": "text",
+						"disabled": true
 					},
 					{
 						"key": "Authorization",
@@ -402,22 +408,12 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "bearer 0c59ea54-1037-410e-945c-af38c9dfb034",
-						"type": "text",
-						"disabled": true
+						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
+						"type": "text"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"group\": \"test\",\r\n  \"gameid\": \"cyscZjjlse\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "http://localhost:8888/api/my/group/games/",
+					"raw": "http://localhost:8888/api/my/group/games/3/dFC1lnGINr",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -428,7 +424,8 @@
 						"my",
 						"group",
 						"games",
-						""
+						"3",
+						"dFC1lnGINr"
 					]
 				}
 			},

@@ -8,10 +8,6 @@ const fetch = require('node-fetch');
 
 
 module.exports = function(es_spec){
-    
-    function makeGroupToken(){
-        return crypto.randomUUID().replaceAll('-','')
-    }
 
 
     const baseUrl = es_spec.url;
@@ -101,10 +97,11 @@ module.exports = function(es_spec){
             description : description,
             games : {}	
         };
+        const groupId = crypto.randomUUID().replace('-','')
 
         try {
 			 await fetch(
-				`${userGroupsUrl(user)}/_doc/${makeGroupToken()}?refresh=wait_for`,
+				`${userGroupsUrl(user)}/_doc/${groupId}?refresh=wait_for`,
 					{
 						method: 'POST',
                         headers: {

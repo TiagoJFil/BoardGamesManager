@@ -1,0 +1,460 @@
+{
+	"info": {
+		"_postman_id": "f585fedc-0d3e-4b16-9b34-a383d3f5636f",
+		"name": "DATABASE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "check status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/_cat/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"_cat",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check indices inside db",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/_cat/indices",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"_cat",
+						"indices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send a group to a user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"Name\" : \"name\",\r\n            \"Description\" : \"description\",\r\n            \"games\" : []\t\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/test_abc_groups/_doc/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"test_abc_groups",
+						"_doc",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create a new user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"AuthToken\": \"274f4512-0682-410f-8419-ae1a084d1056\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/data_test_users/_doc/abc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"data_test_users",
+						"_doc",
+						"abc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "creates a new game",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"dFC1lnGINr\",\r\n    \"name\": \"Cards Against Humanity\",\r\n    \"url\": \"https://www.boardgameatlas.com/game/dFC1lnGINr/cards-against-humanity\",\r\n    \"price\": \"25.00\",\r\n    \"publisher\": \"Cards Against Humanity LLC.\",\r\n    \"min_age\": 17,\r\n    \"min_players\": 4,\r\n    \"max_players\": 30,\r\n    \"rank\": 313\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/data_test_games/_doc/dFC1lnGINr",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"data_test_games",
+						"_doc",
+						"dFC1lnGINr"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "creates a new token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\": \"abc\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/data_test_tokens/_doc/274f4512-0682-410f-8419-ae1a084d1056",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"data_test_tokens",
+						"_doc",
+						"274f4512-0682-410f-8419-ae1a084d1056"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gets info from a token",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/data_test_tokens/_doc/274f4512-0682-410f-8419-ae1a084d1056",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"data_test_tokens",
+						"_doc",
+						"274f4512-0682-410f-8419-ae1a084d1056"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gets a group from a user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/test_abc_groups/_doc/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"test_abc_groups",
+						"_doc",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get a user from db",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/data_test_users/_doc/abc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"data_test_users",
+						"_doc",
+						"abc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search for all groups from a user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/test_abc_groups/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"test_abc_groups",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search for all the games in the db",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/data_test_games/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"data_test_games",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search for all the users in the db Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/data_test_users/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"data_test_users",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search for all the tokens in the db",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/data_test_tokens/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"data_test_tokens",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete all users from test",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/data_test_users/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"data_test_users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete all games from test",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"AuthToken\": \"274f4512-0682-410f-8419-ae1a084d1056\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/data_test_games/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"data_test_games",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete all tokens from test",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/data_test_tokens/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"data_test_tokens",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete EVERYTHING (be carefull)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/_all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"_all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update a description and name",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"doc\" : {\r\n    \"name\" : \"abc\",\r\n    \"description\": \"novaaa\"\r\n }\r\n} ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/test_abc_groups/_update/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"test_abc_groups",
+						"_update",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "removes a game from a group Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"doc\" : {\r\n    \"games\": [\"dFC1lnGINr\"]\r\n }\r\n} ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/test_abc_groups/_update/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"test_abc_groups",
+						"_update",
+						"0"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

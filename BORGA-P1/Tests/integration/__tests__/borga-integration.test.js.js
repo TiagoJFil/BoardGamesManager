@@ -206,17 +206,28 @@ describe('Integration tests', () => {
 		expect(response.body).toBeTruthy();
 		
 		expect(Object.keys(response.body).length).toEqual(2);
-		
-		expect(response.body[0].name).toEqual("test");
-		expect(response.body[1].name).toEqual("test");
-		expect(response.body[0].description).toEqual("este é um grupo de teste");
-		expect(response.body[1].description).toEqual("este é outro grupo de teste diferente");
+		const groups = Object.keys(response.body);
+
+
+		expect(response.body[groups[0]].name).toEqual("test");
+		expect(response.body[groups[1]].name).toEqual("test");
+		expect(response.body[groups[0]].description).toEqual("este é um grupo de teste");
+		expect(response.body[groups[1]].description).toEqual("este é outro grupo de teste diferente");
 	});
 
-	test('gets a details from the group 0', async () => {
+	test('gets a details from the first group created', async () => {
 		
+		const groupList = await request(app)
+			.get('/api/my/group')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200);
+
+		const groupId = Object.keys(groupList.body)[0];
+
 		const response = await request(app)
-			.get('/api/my/group/0')
+			.get(`/api/my/group/${groupId}`)
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
@@ -249,10 +260,21 @@ describe('Integration tests', () => {
 			});
 	});
 
-	test('delete group 1 works',async () => {
+	test('delete second group created  works',async () => {
 		
+		const groupList = await request(app)
+			.get('/api/my/group')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200);
+
+		const groupId = Object.keys(groupList.body)[1];
+		const groupIdThatStays = Object.keys(groupList.body)[0];
+
+
 		const response = await request(app)
-			.delete('/api/my/group/1')
+			.delete(`/api/my/group/${groupId}`)
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
@@ -261,7 +283,7 @@ describe('Integration tests', () => {
 
 		expect(response.body).toBeTruthy();
 		expect(response.body).toEqual({
-			"0": {
+			[groupIdThatStays]: {
 				"name": "test",
 				"description": "este é um grupo de teste",
 				"games": {}
@@ -269,10 +291,20 @@ describe('Integration tests', () => {
 		})	
 	});
 
-	test('delete group 1 doesnt work because it doesnt exist',async () => {
+	test('delete second group doesnt work because it doesnt exist',async () => {
 		
+		const groupList = await request(app)
+			.get('/api/my/group')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200);
+
+		const groupId = Object.keys(groupList.body)[1];
+
+
 		const response = await request(app)
-			.delete('/api/my/group/1')
+			.delete(`/api/my/group/${groupId}`)
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
@@ -291,14 +323,23 @@ describe('Integration tests', () => {
 			});
 	});
 
-	test('edit group 1 works', async () => {
+	test('edit first group works', async () => {
 		
+		const groupList = await request(app)
+			.get('/api/my/group')
+			.set('Authorization', `Bearer ${config.guest.token}`)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200);
+
+		const groupId = Object.keys(groupList.body)[0];
+
 		const response = await request(app)
 			.put('/api/my/group/')
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.send({
-				"groupId": "0",
+				"groupId": `${groupId}`,
 				"name": "changedName",
 				"desc": "changedDescription"
 			})
@@ -316,14 +357,23 @@ describe('Integration tests', () => {
 	
 	});
 
-	test('edit group 2 doesnt work because it doesnt exists', async () => {
+	test('edit second group doesnt work because it doesnt exists', async () => {
 		
+		const groupList = await request(app)
+		.get('/api/my/group')
+		.set('Authorization', `Bearer ${config.guest.token}`)
+		.set('Accept', 'application/json')
+		.expect('Content-Type', /json/)
+		.expect(200);
+
+		const groupId = Object.keys(groupList.body)[1];
+
 		const response = await request(app)
 			.put('/api/my/group/')
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.send({
-				"groupId": "2",
+				"groupId": `${groupId}`,
 				"name": "changedName",
 				"desc": "changedDescription"
 			})
@@ -344,12 +394,21 @@ describe('Integration tests', () => {
 
 	test('successfully add a game to group 0', async () => {
 	
+		const groupList = await request(app)
+		.get('/api/my/group')
+		.set('Authorization', `Bearer ${config.guest.token}`)
+		.set('Accept', 'application/json')
+		.expect('Content-Type', /json/)
+		.expect(200);
+
+		const groupId = Object.keys(groupList.body)[0];
+
 		const response = await request(app)
 			.post('/api/my/group/games')
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.send({
-				"groupId": "0",
+				"groupId": `${groupId}`,
 				"gameId": "dFC1lnGINr"
 			})
 			.expect('Content-Type', /json/)
@@ -378,8 +437,17 @@ describe('Integration tests', () => {
 
 	test('Remove a game from a group that has the game', async () => {
 	
+		const groupList = await request(app)
+		.get('/api/my/group')
+		.set('Authorization', `Bearer ${config.guest.token}`)
+		.set('Accept', 'application/json')
+		.expect('Content-Type', /json/)
+		.expect(200);
+
+		const groupId = Object.keys(groupList.body)[0];
+
 		const response = await request(app)
-			.delete('/api/my/group/games/0/dFC1lnGINr')
+			.delete(`/api/my/group/games/${groupId}/dFC1lnGINr`)
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
