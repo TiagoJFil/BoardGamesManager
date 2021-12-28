@@ -69,6 +69,7 @@ async function tokenToUsername(token) {
 	return tokens[token];
 }
 
+
 /**
  * Creates a new user group with the provided name and description
  * @param {String} user 

@@ -8,27 +8,9 @@ const fetch = require('node-fetch');
 
 
 module.exports = function(es_spec){
-
-    /**
-     * gets the list of groups from a user and determines what is the next group id
-     * @param {String} user 
-     * @returns the next group id
-     */
-    async function getGroupCounter(user){//___________________________________________________________________________________________ TEHRE IS A PROBLEM WITH THIS FUNCTION, IF WE DELETE THE GROUP LIKE 0 WE WONT BE ABLE TO CREATE MORE GROUPS
-        try{
-            const response = await fetch(
-                `${userGroupsUrl(user)}/_search`
-            );
-            if (response.status === 404) {
-                return 0;
-            }
-            const answer = await response.json();
-            console.log(answer.hits);
-            const count = answer.hits.total.value;
-            return count;
-        }catch(err){
-            throw errors.DATABASE_ERROR(err);
-        }
+    
+    function makeGroupToken(){
+        return crypto.randomUUID().replaceAll('-','')
     }
 
 
@@ -114,8 +96,6 @@ module.exports = function(es_spec){
             games : []	
         };
 
-      
-
         const displayableGroup =  {
             name : name,
             description : description,
@@ -124,7 +104,7 @@ module.exports = function(es_spec){
 
         try {
 			 await fetch(
-				`${userGroupsUrl(user)}/_doc/${await getGroupCounter(user)}?refresh=wait_for`,
+				`${userGroupsUrl(user)}/_doc/${makeGroupToken()}?refresh=wait_for`,
 					{
 						method: 'POST',
                         headers: {
