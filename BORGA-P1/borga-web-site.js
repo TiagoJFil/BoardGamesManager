@@ -82,7 +82,30 @@ module.exports = function (services) {
 	 * @param {*Promise} res 
 	 */
 	function createGroups(req,res){
-		res.render('create_groups');
+		const name = req.query.name;
+		const desc = req.query.desc;
+		try{
+			res.render(
+				'create_groups',
+				{name,desc}
+				);
+		}catch(err){
+			switch(err.name){
+				case 'MISSING_PARAMETER':
+					res.status(400).render(
+						'create_groups',
+						{code: 400 , error: 'no query provided' }
+					);
+					break;
+				default:
+					res.status(500).render(
+						'games_response',
+						{ header, query: query_name, code: 500,error: JSON.stringify(err) }
+					);
+					break;	
+				
+			}
+		}
 	}
 
 	/**
@@ -91,22 +114,24 @@ module.exports = function (services) {
 	 * @param {Promise} res 
 	 */
 	async function getGroupsPage(req,res){
-		try{
-		//const groups = await services.listGroups(getBearerToken(req))
 		
-		res.render(
-			'groups',
-			
+		try{
+			const groups = await services.listGroups(getBearerToken(req));
+			res.render(
+				'groups',
+				{groups}
 			);
 		}catch(err){
-
-
-		};
+			switch(err.name){
+				default:
+					res.status(500).render(
+						'groups',
+						{code: 500,error: JSON.stringify(err) }
+					);
+					break;	
+			};
+		}
 	}
-
-/* 	async function searchGroup(req,res){
-
-	} */
 
 	async function findGame(req,res){
 		const header = 'Find Game Result';

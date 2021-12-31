@@ -1,16 +1,25 @@
 <h1>Groups</h1>
 
 
-<form action= "/groups/create" method = "GET">
-	<h2>Create a group</h2>
-	<label > Need a group? </label>
-	<input type="submit" value="Create">
-</form>	
 
 <form action= "/groups/name" method = "GET">
 	<h2>Search a group by it's name</h2>
 	<label >Name:</label>
 	<input type="text" id="txtQuery" name="name">
 	<input type="submit" value="Search">
+</form>	
+
+{{#if groups}}
+	
+{{/if}}
+
+<groupsDisplay>
+	<canvas id="myCanvas" width="1520" height="400" style="border:1px solid #000000;">
+	</canvas> 
+</groupsDisplay>
+
+<form action= "/groups/create" method = "GET">
+	<label > Need a new group? </label>
+	<input type="submit" value="Create">
 </form>	
 

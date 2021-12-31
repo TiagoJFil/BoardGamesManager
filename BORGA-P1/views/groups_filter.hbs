@@ -1,0 +1,22 @@
+{{#if name and desc}}
+		<form action= "/groups/create" method = "GET">
+			<p><label for="txtQuery">Name:</label></p>
+			<input type="text" id="txtQuery" name="name"><br></br>
+			<p><label for="desc">Description (Max 100 characters):</label></p>
+			<textarea></textarea><br></br>
+			<input type="submit" value="Create">
+		</form>
+{{/if}}
+
+{{#if error }}
+	{{#if code}}		
+		<form action= "/groups/create" method = "GET">
+			<p><label for="txtQuery">Name:</label></p>
+			<input type="text" id="txtQuery" name="name"><br></br>
+			<p><label for="desc">Description (Max 100 characters):</label></p>
+			<textarea></textarea><br></br>
+			<input type="submit" value="Create">
+		</form>
+		<error><strong> ERROR {{code}}: {{error}}</strong></error>
+	{{/if}}
+{{/if}}

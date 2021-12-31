@@ -41,7 +41,7 @@ module.exports = function(es_spec){
     }; 
 
     /**
-     * checks if a certain user's group has a the same gameId
+     * checks if a certain user's group has the same gameId
      * @param {String} user 
      * @param {String} groupId 
      * @param {String} gameId 
