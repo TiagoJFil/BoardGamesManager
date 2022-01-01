@@ -67,7 +67,7 @@ module.exports = function (services) {
 		res.render('search');
 	} 
 
-		/**
+	/**
 	 * Retrieves the popular page
 	 * @param {Promise} req 
 	 * @param {Promise} res 
@@ -81,14 +81,16 @@ module.exports = function (services) {
 	 * @param {*Promise} req 
 	 * @param {*Promise} res 
 	 */
-	function createGroups(req,res){
+	async function createGroups(req,res){
 		const name = req.query.name;
 		const desc = req.query.desc;
+		const token = getBearerToken(req);
 		try{
+			const group = await services.createGroup(token,name,desc);
 			res.render(
 				'create_groups',
-				{name,desc}
-				);
+				{name,desc,group}
+			);
 		}catch(err){
 			switch(err.name){
 				case 'MISSING_PARAMETER':
@@ -102,8 +104,7 @@ module.exports = function (services) {
 						'games_response',
 						{ header, query: query_name, code: 500,error: JSON.stringify(err) }
 					);
-					break;	
-				
+					break;
 			}
 		}
 	}

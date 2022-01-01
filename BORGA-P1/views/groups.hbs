@@ -1,25 +1,37 @@
 <h1>Groups</h1>
-
-
-
-<form action= "/groups/name" method = "GET">
-	<h2>Search a group by it's name</h2>
-	<label >Name:</label>
-	<input type="text" id="txtQuery" name="name">
-	<input type="submit" value="Search">
-</form>	
-
-{{#if groups}}
-	
-{{/if}}
-
-<groupsDisplay>
-	<canvas id="myCanvas" width="1520" height="400" style="border:1px solid #000000;">
-	</canvas> 
-</groupsDisplay>
-
 <form action= "/groups/create" method = "GET">
 	<label > Need a new group? </label>
 	<input type="submit" value="Create">
-</form>	
+</form>
 
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for groups..">
+
+{{#if groups}}
+	{{#each groups}}
+		<ul id="myUL">
+		<li><a href="#">{{name}}</a></li>
+		</ul>
+	{{/each}}
+{{/if}}
+
+<script>
+	function myFunction() {
+		// Declare variables
+		var input, filter, ul, li, a, i, txtValue;
+		input = document.getElementById('myInput');
+		filter = input.value.toUpperCase();
+		ul = document.getElementById("myUL");
+		li = ul.getElementsByTagName('li');
+
+		// Loop through all list items, and hide those who don't match the search query
+		for (i = 0; i < li.length; i++) {
+			a = li[i].getElementsByTagName("a")[0];
+			txtValue = a.textContent || a.innerText;
+			if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			li[i].style.display = "";
+			} else {
+			li[i].style.display = "none";
+			}
+		}
+	}
+</script>
