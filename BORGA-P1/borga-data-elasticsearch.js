@@ -377,7 +377,6 @@ module.exports = function(es_spec){
             user: Username 
         }
         try {
-
             const TokensResponse = await fetch(
                 `${allTokensUrl}/_doc/${id}`,
                     {
@@ -402,11 +401,11 @@ module.exports = function(es_spec){
                     }
             );
             return newUser;
-                
         
         }catch(err){
 			throw errors.DATABASE_ERROR(err);
         }
+
     };
 
 

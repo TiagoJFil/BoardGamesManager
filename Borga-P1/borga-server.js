@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (es_spec) {
+module.exports = function (es_spec,defined_user) {
 
 
 const data_borga = require('./borga-games-data');
@@ -12,7 +12,7 @@ const data_elastic = require('./borga-data-elasticsearch')(es_spec);
 const services = require('./borga-services')(data_borga, data_elastic);
 
 const webapi = require('./borga-web-api')(services);
-const webui = require('./borga-web-site')(services);
+const webui = require('./borga-web-site')(services,defined_user);
 
 const express = require('express');
 

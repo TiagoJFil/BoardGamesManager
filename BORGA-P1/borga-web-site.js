@@ -2,7 +2,7 @@ const express = require('express');
 
 const path = require('path');
 
-module.exports = function (services) {
+module.exports = function (services,defined_user) {
 	
 	/**
 	 * Get bearer token from autorization header
@@ -10,6 +10,9 @@ module.exports = function (services) {
 	 * @returns {String}
 	 */
 	function getBearerToken(req) {
+		return defined_user.token;
+		//Commented for now because we are not using bearer tokens now , but we will use it in the future, so we leave it here
+		/*
 		const auth = req.header('Authorization');
 		if (auth) {
 			const authData = auth.trim();
@@ -18,6 +21,8 @@ module.exports = function (services) {
 			}
 		}
 		return null;
+*/
+
 	}
 	
 	
@@ -84,6 +89,7 @@ module.exports = function (services) {
 	async function createGroups(req,res){
 		const name = req.query.name;
 		const desc = req.query.desc;
+		const header = 'Create Group';
 		const token = getBearerToken(req);
 		try{
 			const group = await services.createGroup(token,name,desc);
@@ -101,8 +107,8 @@ module.exports = function (services) {
 					break;
 				default:
 					res.status(500).render(
-						'games_response',
-						{ header, query: query_name, code: 500,error: JSON.stringify(err) }
+						'create_groups',
+						{query: name, code: 500,error: JSON.stringify(err) }
 					);
 					break;
 			}
