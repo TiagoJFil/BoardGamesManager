@@ -97,7 +97,9 @@ module.exports = function(es_spec){
             description : description,
             games : {}	
         };
-        const groupId = crypto.randomUUID().replace('-','')
+        const id = crypto.randomUUID()
+        const groupId = id.replace(/-/g,'');
+
 
         try {
 			 await fetch(
@@ -179,6 +181,7 @@ module.exports = function(es_spec){
             const hits = answer.hits.hits;
             for(let hit of hits){
                 groups[hit._id] = {
+                    id: hit._id,
                     name : hit._source.name,
                     description : hit._source.description,
                     games : await gameArrayToObject(hit._source.games)

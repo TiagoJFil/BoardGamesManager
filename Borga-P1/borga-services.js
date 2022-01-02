@@ -45,7 +45,21 @@ module.exports = function (data_borga, data_mem) {
 		const game = data_borga.getGameByName(name);
 		return game;
 	}
-	
+
+	/**
+	* Gets the details of a game using the game name
+	* @param {String} name
+	* @returns {Object} game or error
+	*/
+	async function getGameDetails(name){
+		if(!name){
+			throw(errors.MISSING_PARAMETER('Name of the game to search'));
+		}
+
+		const game = data_borga.getGameDetails(name);
+		return game;
+	}
+
 	/**
 	 * Adds a user to the local db
 	 * @param {String} name 
@@ -244,6 +258,7 @@ module.exports = function (data_borga, data_mem) {
 		getGroupInfo,
 		addGameToGroup,
 		deleteAGroup,
-		removeGameFromGroup
+		removeGameFromGroup,
+		getGameDetails
 	};
 }

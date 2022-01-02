@@ -25,35 +25,6 @@ module.exports = function (services,defined_user) {
 
 	}
 	
-	
-	/**
-	 * Stops the operation when theres an error 
-	 * @param {Promise} req 
-	 * @param {Promise} res 
-	 * @param {Promise} err 
-	 */
-	function onError(req, res, err) {
-		console.log('[ERROR]', err);
-		switch (err.name) {
-			case 'NOT_FOUND': 
-				res.status(404);
-				break;
-			case 'EXT_SVC_FAIL':
-				res.status(502);
-				break;
-			case 'MISSING_PARAMETER': 
-				res.status(400);
-				break;
-			case 'UNAUTHENTICATED': 
-				res.status(401);
-				break;
-			case 'USER_ALREADY_EXISTS':
-				res.status(409);
-			default:
-				res.status(500);				
-		}
-		res.json({ cause: err });
-	}
 
 	/**
 	 * Retrieves the home page
@@ -63,6 +34,7 @@ module.exports = function (services,defined_user) {
 	function getHomepage(req, res) {
 		res.render('home');
 	} 
+
 	/**
 	 * Retrieves the search page
 	 * @param {Promise} req 
@@ -70,6 +42,91 @@ module.exports = function (services,defined_user) {
 	 */
  	function getSearchPage(req, res) {
 		res.render('search');
+	}
+
+	/**
+	 * Finds a game by name and renders a page with the game info and the possibility to add the game to a group
+	 * @param {String} req 
+	 * @param {String} res 
+	 */
+	async function findGame(req,res){
+		const header = 'Find Game Result';
+		const query_name = req.query.name;
+		const token = getBearerToken(req);
+
+		try{
+			const game = await services.searchGame(query_name);
+			const groups = await services.listGroups(token)
+
+			res.render(
+				'games_response',
+				{header,query: query_name,game, groups:  groups}
+			);
+		}catch(err){
+			switch(err.name){
+				case 'MISSING_PARAMETER':
+					res.status(400).render(
+						'search',
+						{ header, code: 400 , error: 'no query provided' }
+					);
+					break;
+				case 'NOT_FOUND':
+					res.status(404).render(
+						'search',
+						{ header, code: 404 ,error: 'no game found for the query provided' }
+					);
+					break;
+				default:
+					res.status(500).render(
+						'search',
+						{ header, query: query_name, code: 500,error: JSON.stringify(err) }
+					);
+					break;	
+				
+			}
+		}
+
+	}
+
+	/**
+	 *  Adds a game to the user's chosen group and redirects the user to the /groups page
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
+	async function addGameToGroup(req,res){
+		const header = 'Add Game To Group Result';
+		const gameId = req.body.gameId;
+		const groupId = req.body.groupId;
+		const token = getBearerToken(req);
+		try{
+			const game = await services.addGameToGroup(token,groupId,gameId);
+			res.redirect(
+				'/groups'
+			);
+		}catch(err){
+			switch(err.name){
+				case 'MISSING_PARAMETER':
+					res.status(400).render(
+						'errors',
+						{ header, code: 400 , error: 'no game id or group id provided' }
+					);
+					break;
+				case 'FAIL':
+					res.status(400).render(
+						'errors',
+						{ header, code: 500 , error: 'The game you are trying to add is already part of the group' }
+					);
+					break;
+				default:
+					res.status(500).render(
+						'errors',
+						{ header,  code: 500,error: JSON.stringify(err) }
+					);
+					break;	
+				
+			}
+		}
+
 	}
 
 	/**
@@ -88,10 +145,12 @@ module.exports = function (services,defined_user) {
 	 */
 	async function getGroupsPage(req,res){
 		try{
+			const header = 'Groups';
 			const groups = await services.listGroups(getBearerToken(req));
+
 			res.render(
 				'groups',
-				{groups}
+				{header,groups}
 			);
 		}catch(err){
 			switch(err.name){
@@ -150,56 +209,25 @@ module.exports = function (services,defined_user) {
 		}
 	}
 
-	async function findGame(req,res){
-		const header = 'Find Game Result';
-		const query_name = req.query.name;
-		try{
-			const game = await services.searchGame(query_name);
-			res.render(
-				'games_response',
-				{header,query: query_name,game}
-			);
-		}catch(err){
-			switch(err.name){
-				case 'MISSING_PARAMETER':
-					res.status(400).render(
-						'games_response',
-						{ header, code: 400 , error: 'no query provided' }
-					);
-					break;
-				case 'NOT_FOUND':
-					res.status(404).render(
-						'games_response',
-						{ header, code: 404 ,error: 'no game found for the query provided' }
-					);
-					break;
-				default:
-					res.status(500).render(
-						'games_response',
-						{ header, query: query_name, code: 500,error: JSON.stringify(err) }
-					);
-					break;	
-				
-			}
-		}
-
-	}
 
 	async function popularGames(req,res){
 		const header = 'Popular games Result';
 		const count = req.query.count;
+		const token = getBearerToken(req);
 		try{
 			const games = await services.getPopularGames(count);
+			const groups = await services.listGroups(token)
+			
 			res.render(
 				'popular_games_response',
-				{header,games: games,count}
+				{header,games: games,count, groups}
 			);
 		}catch(err){
 			switch(err.name){
 				default:
 					res.status(500).render(
 						'popular_games_response',
-						{ header, query: query_name, code: 500,error: JSON.stringify(err) }
+						{ header, code: 500,error: JSON.stringify(err) }
 					);
 					break;	
 			}
@@ -215,15 +243,19 @@ module.exports = function (services,defined_user) {
 
 	// Search page
 	router.get('/search', getSearchPage);
-	
-	// Groups page
-	router.get('/groups', getGroupsPage);
-
-	//Popular games page
-	router.get('/popular', getPopularPage);
 
 	// Search Result page
 	router.get('/search/result', findGame);
+	
+	//Popular games page
+	router.get('/popular', getPopularPage);
+
+	//adds a game to a group
+	router.post('/add_game_to_group',addGameToGroup);
+
+	// Groups page
+	router.get('/groups', getGroupsPage);
+
 
 	// group creation
 	router.get('/groups/create', renderCreateGroups);

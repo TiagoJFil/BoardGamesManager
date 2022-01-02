@@ -12,7 +12,13 @@ const CLIENT_ID = process.env['ATLAS_CLIENT_ID'];
 /**
  * default uri of the requests that will be made
  */ 
-const BOARD_ATLAS_BASE_URI = 'https://api.boardgameatlas.com/api/search?';
+const BOARD_ATLAS_BASE_SEARCH_URI = 'https://api.boardgameatlas.com/api/search?';
+
+/**
+ * default uri for the specific game requests that will be made
+ */ 
+ const BOARD_ATLAS_BASE_GAME_URI = 'https://api.boardgameatlas.com/api/game/';
+
 
 /**
  * first digit of the server errors code
@@ -51,10 +57,8 @@ function do_fetch(uri) {
 		});
 }
 
-
-
 /**
- * transforms game object response to a more simplified object
+ * Transforms the game object response to a more simplified object
  * @param {Object} gameInfo 
  * @returns {Object}
  */
@@ -72,6 +76,106 @@ function makeGameObj(gameInfo) {
 	};
 	
 }
+/**
+ * Transforms the game object response to a more simplified object
+ * This function gets the game mechanichs and categories
+ * @param {Object} gameInfo 
+ * @returns 
+ */
+async function makeGameDetails(gameInfo){
+    return{
+        id: gameInfo.id,
+        name: gameInfo.name,
+        description: gameInfo.description,
+        url: gameInfo.url,
+        image_url: gameInfo.image_url,
+        mechanics: await getMechanics(gameInfo.mechanics),
+        categories: await getCategories(gameInfo.categories)
+    }
+}
+
+/**
+ * Gets the mechanics of a game
+ * @param {Object} gameArray 
+ * @returns an object with the mechanics now present in the game
+ */
+async function getMechanics(gameArray) {
+    const search_uri = BOARD_ATLAS_BASE_GAME_URI + 'mechanics?' + '&client_id=' + CLIENT_ID;
+    return do_fetch(search_uri)
+        .then(answer => {
+            if (answer.length != 0 && answer.count != 0) {
+                return makeObject(gameArray, answer.mechanics);
+            } else {
+                throw errors.NOT_FOUND({ gameArray });
+            }
+        });
+}
+
+/**
+ * Gets the categories of a game
+ * @param {Object} gameArray 
+ * @returns object with the categories now present in the game
+ */
+async function getCategories(gameArray){
+    const search_uri = BOARD_ATLAS_BASE_GAME_URI + 'categories?' + '&client_id=' + CLIENT_ID;
+    return do_fetch(search_uri)
+    .then(answer => {
+        if(answer.length != 0 && answer.count != 0){
+            return makeObject(gameArray,answer.categories);
+        } else {
+            throw errors.NOT_FOUND({gameArray});
+        }
+    });
+}
+
+/**
+ * @param {Object} gameArray 
+ * @param {Object} answer 
+ * @returns and object with a readeable object for each game
+ */
+function makeObject(gameArray,answer){
+    let k = 0 
+
+    let newObject = {}
+	let newArray = gameArray.map(
+		(idObj) => {
+			return idObj.id
+		}
+	)
+			
+	for(let i = 0; i < answer.length ; i++){
+		const element = answer[i]
+		if(newArray.includes( element.id )){
+			newObject[k] = newObject[element.id] = {
+				"name" :element.name,
+				"url": element.url
+			}
+			k++
+		}
+	}
+
+    return newObject
+}
+
+/**
+ * Searches a game by its name in the api and returns it as a simpler object with its mechanics and categories
+ * @param {String} name 
+ * @returns a game or an error
+ */
+function getGameDetails(name){
+    const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&name=' + name + '&client_id=' + CLIENT_ID;
+    return do_fetch(search_uri)
+    .then(answer => {
+        if(answer.length != 0 && answer.count != 0){
+            return makeGameDetails(answer.games[0]);
+        } else {
+            throw errors.NOT_FOUND({ id });
+        }
+    });
+}
+
+
+
 
 /**
  * returns a game from the api searching by name
@@ -79,7 +183,7 @@ function makeGameObj(gameInfo) {
  * @returns {Object} game or error
  */
 function getGameByName(name) {
-	const search_uri =BOARD_ATLAS_BASE_URI + '&name=' + name + '&client_id=' + CLIENT_ID;
+	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&name=' + name + '&client_id=' + CLIENT_ID;
 
 	return do_fetch(search_uri)
 		.then(answer => {
@@ -93,12 +197,12 @@ function getGameByName(name) {
 
 
 /**
- * searches a game by its id in the api
+ * Searches a game by its id in the api and returns it as a simpler object
  * @param {String} id 
- * @returns {Object} game or error
+ * @returns {Object} a game or an error
  */
 function getGameById(id) {
-	const search_uri =BOARD_ATLAS_BASE_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;
+	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;
 	
 	return do_fetch(search_uri)
 		.then(answer => {
@@ -116,7 +220,7 @@ function getGameById(id) {
  * @returns {Object} top x games
  */
 function getListPopularGames(count) { 
-	const search_uri =BOARD_ATLAS_BASE_URI + '&order_by=rank&limit=' + count  +'&client_id=' + CLIENT_ID;
+	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&order_by=rank&limit=' + count  +'&client_id=' + CLIENT_ID;
 	return do_fetch(search_uri)
 		.then(answer => {
 			if (answer.length != 0 && answer.count != 0) {
@@ -148,5 +252,6 @@ function getListPopularGames(count) {
 module.exports = {
 	getGameByName,
 	getListPopularGames,
-	getGameById
+	getGameById,
+	getGameDetails
 }

@@ -1,32 +1,48 @@
 <h1>{{header}}</h1>
-
-{{#if games}}
-    <p>Here are the most popular games according to board game atlas website:</p>
-    
-    {{#each games}}
-        <table>
-            <tr>
-                <td>Title:</td>
-                <td>{{name}}    
-                    <action= "/groups" method = "GET">
-                        <input type="submit" value="Add to group">  	
-                </td>
-            </tr>	
-            <tr>
-                <td>Price:</td>
-                <td>{{price}}$</td>
-            </tr>	
-            <tr>
-                <td>Url:</td>
-                <td><a href={{url}} target="_blank" rel="noopener noreferrer">{{url}}</a></td>
-            </tr>
-            <tr></tr>
-        </table>	
-        
-    {{/each}}
-    
+{{#if groups}}
+	{{#if games}}
+		<p>Here are the most popular games according to board game atlas website:</p>
+		
+		{{#each games}}
+			<table>
+				<tr>
+					<td>Title:</td>
+					<td>{{name}}</td>
+				</tr>	
+				<h2></h2>
+				<tr>
+					<td>Price:</td>
+					<td>{{price}}$</td>
+				</tr>	
+				<tr>
+					<td>Url:</td>
+					<td><a href={{url}} target="_blank" rel="noopener noreferrer">{{url}}</a></td>
+				</tr>
+				<tr>
+				<td>
+						<label>Choose a group to add to:</label>
+						<form action="/add_game_to_group" id= "form_for_{{name}}" method = "POST">
+							<input type='hidden' name='gameId' value={{this.id}}>
+				
+							<select required name="groupId" form ="form_for_{{name}}" >
+								<option selected></option>
+								{{#each ../groups}}
+									<option value={{this.id}} >{{this.name}}</option>
+								{{/each}}
+							</select>	
+				
+							<input type="submit" required value="Add To Group">
+						</form>
+					</td>
+				
+				</tr>
+				
+			</table>	
+			
+		{{/each}}
+		
+	{{/if}}
 {{/if}}
-
 {{#if error}}
 	{{#if code}}
 		<error><strong> ERROR {{code}}: {{error}}</strong></error>

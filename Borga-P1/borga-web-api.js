@@ -80,8 +80,22 @@ module.exports = function (services) {
 			res.json(game);
 		} catch (err) {
 			onError(req, res, err);
+		}	
+	}
+
+	/**
+	 * Gets the details of a game using the game name
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
+	async function getGameDetails(req,res){
+		try {
+			const gameName = req.params.name;
+			const game = await services.getGameDetails(gameName);
+			res.json(game);
+		} catch (err) {
+			onError(req, res, err);
 		}
-		
 	}
 
 	/**
@@ -230,6 +244,8 @@ module.exports = function (services) {
 	router.get('/all/games/rank/', listPopularGames);
 	// Resource: /all/games
 	router.get('/all/games', searchAnyGame);
+	// Resource: /all/games/<name>
+	router.get('/all/games/:name', getGameDetails);
 
 	// Resource: /users/<name>
 	router.post('/users/:name', addUser);	

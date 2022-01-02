@@ -808,12 +808,30 @@
           }
         }
       },
+      "ListedGroup": {
+        "type": "object",
+        "description": "a group on the list of groups",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "games": {
+            "type": "object"
+          }
+        }
+      },
       "ListGroup": {
         "type": "object",
         "description": "List of groups",
         "properties": {
           "groupId": {
-            "$ref": "#/components/schemas/Group"
+            "$ref": "#/components/schemas/ListedGroup"
           }
         }
       },

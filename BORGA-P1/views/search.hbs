@@ -8,3 +8,9 @@
 		<input type="submit" value="Search">
 	</body>
 </form>
+{{#if error }}
+	{{#if code}}
+		<error><strong> ERROR {{code}}: {{error}}</strong></error>
+	{{/if}}
+{{/if}}
+

@@ -1,8 +1,15 @@
-<h1>Groups</h1>
+<h1>{{header}}</h1>
+
 <form action= "/groups/create" method = "GET">
 	<label > Need a new group? </label>
 	<input type="submit" value="Create">
 </form>
+
+{{#if error}}
+	{{#if code}}
+		<error><strong> ERROR {{code}}: {{error}}</strong></error>
+	{{/if}}
+{{/if}}
 
 {{#if groups}}
 	{{#each groups}}
