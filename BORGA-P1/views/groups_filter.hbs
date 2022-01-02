@@ -1,20 +1,51 @@
 {{#if group}}
-		<form action= "/groups" method = "POST">
-			<p><label for="txtQuery">Name:</label></p>
-			<input type="text" id="txtQuery" name="name"><br></br>
-			<p><label for="desc">Description (Max 100 characters):</label></p>
-			<textarea></textarea><br></br>
-			<input type="submit" value="Create">
-		</form>
+	<h1>Groups</h1>
+	<form action= "/groups/create" method = "GET">
+		<label > Need a new group? </label>
+		<input type="submit" value="Create">
+	</form>
+
+	<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for groups..">
+
+	{{#if groups}}
+		{{#each groups}}
+			<ul id="myUL">
+			<li><a href="#">{{name}}</a></li>
+			</ul>
+		{{/each}}
+	{{/if}}
+
+	<script>
+		function myFunction() {
+			// Declare variables
+			var input, filter, ul, li, a, i, txtValue;
+			input = document.getElementById('myInput');
+			filter = input.value.toUpperCase();
+			ul = document.getElementById("myUL");
+			li = ul.getElementsByTagName('li');
+
+			// Loop through all list items, and hide those who don't match the search query
+			for (i = 0; i < li.length; i++) {
+				a = li[i].getElementsByTagName("a")[0];
+				txtValue = a.textContent || a.innerText;
+				if (txtValue.toUpperCase().indexOf(filter) > -1) {
+				li[i].style.display = "";
+				} else {
+				li[i].style.display = "none";
+				}
+			}
+		}
+	</script>
 {{/if}}
 {{!-- Assim que for criado com sucesso fazer aparecer uma janela com a msg e um botao que volta ao /groups, mudar acima--}}
 {{#if error }}
-	{{#if code}}		
-		<form action= "/groups/create" method = "GET">
+	{{#if code}}
+		<h1>Create a group</h1>		
+		<form action= "/groups/filter" method = "POST">
 			<p><label for="txtQuery">Name:</label></p>
 			<input type="text" id="txtQuery" name="name"><br></br>
 			<p><label for="desc">Description (Max 100 characters):</label></p>
-			<textarea></textarea><br></br>
+			<input type='text' id='descQuery' name='desc'><br></br>
 			<input type="submit" value="Create">
 		</form>
 		<error><strong> ERROR {{code}}: {{error}}</strong></error>

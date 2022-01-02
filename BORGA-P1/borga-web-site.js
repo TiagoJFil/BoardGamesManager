@@ -120,20 +120,30 @@ module.exports = function (services,defined_user) {
 		const token = getBearerToken(req);
 		try{
 			const group = await services.createGroup(token,name,desc);
-			res.render(
-				'groups_filter',
-				{name,desc,group}
+			res.redirect(
+				'groups',
+				{group}
 			);
 		}catch(err){
 			switch(err.name){
 				case 'MISSING_PARAMETER':
-					res.status(400).render(
+					if(name == null){
+						res.status(400).render(
+								'groups_filter',
+								{code: 400 , error:'no name provided'  }
+							);
+							break;
+					}
+					else if (desc == null){
+						res.status(400).redirect(
 						'groups_filter',
-						{code: 400 , error: 'no query provided' }
-					);
-					break;
+						{code: 400 , error:'no desc provided'  }
+						);
+						break;
+					}
+					
 				default:
-					res.status(500).render(
+					res.status(500).redirect(
 						'groups_filter',
 						{query: name, code: 500,error: JSON.stringify(err) }
 					);
@@ -221,7 +231,7 @@ module.exports = function (services,defined_user) {
 	router.get('/groups/create', createGroups);
 
 	//Groups filter response
-	router.post('groups/filter',filterGroupsRes);
+	router.post('/groups/filter',filterGroupsRes);
 
 	//Popular games result page
 	router.get('/popular/result', popularGames);
