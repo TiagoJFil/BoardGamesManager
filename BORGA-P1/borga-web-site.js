@@ -68,9 +68,9 @@ module.exports = function (services,defined_user) {
 	 * @param {Promise} req 
 	 * @param {Promise} res 
 	 */
-	function getSearchPage(req, res) {
+ 	function getSearchPage(req, res) {
 		res.render('search');
-	} 
+	}
 
 	/**
 	 * Retrieves the popular page
@@ -82,46 +82,11 @@ module.exports = function (services,defined_user) {
 	} 
 
 	/**
-	 * Retrieves create groups page
-	 * @param {*Promise} req 
-	 * @param {*Promise} res 
-	 */
-	async function createGroups(req,res){
-		const name = req.query.name;
-		const desc = req.query.desc;
-		const header = 'Create Group';
-		const token = getBearerToken(req);
-		try{
-			const group = await services.createGroup(token,name,desc);
-			res.render(
-				'create_groups',
-				{name,desc,group}
-			);
-		}catch(err){
-			switch(err.name){
-				case 'MISSING_PARAMETER':
-					res.status(400).render(
-						'create_groups',
-						{code: 400 , error: 'no query provided' }
-					);
-					break;
-				default:
-					res.status(500).render(
-						'create_groups',
-						{query: name, code: 500,error: JSON.stringify(err) }
-					);
-					break;
-			}
-		}
-	}
-
-	/**
 	 * Retrieves the groups page
 	 * @param {Promise} req 
 	 * @param {Promise} res 
 	 */
 	async function getGroupsPage(req,res){
-		
 		try{
 			const groups = await services.listGroups(getBearerToken(req));
 			res.render(
@@ -137,6 +102,43 @@ module.exports = function (services,defined_user) {
 					);
 					break;	
 			};
+		}
+	}
+
+	async function createGroups(req,res){
+		res.render('create_groups');
+	}
+
+	/**
+	 * Retrieves create groups page
+	 * @param {*Promise} req 
+	 * @param {*Promise} res 
+	 */
+	async function filterGroupsRes(req,res){
+		const name = req.query.name;
+		const desc = req.query.desc;
+		const token = getBearerToken(req);
+		try{
+			const group = await services.createGroup(token,name,desc);
+			res.render(
+				'groups_filter',
+				{name,desc,group}
+			);
+		}catch(err){
+			switch(err.name){
+				case 'MISSING_PARAMETER':
+					res.status(400).render(
+						'groups_filter',
+						{code: 400 , error: 'no query provided' }
+					);
+					break;
+				default:
+					res.status(500).render(
+						'groups_filter',
+						{query: name, code: 500,error: JSON.stringify(err) }
+					);
+					break;
+			}
 		}
 	}
 
@@ -196,7 +198,6 @@ module.exports = function (services,defined_user) {
 		}
 	}
 
-
 	const router = express.Router();	
 	
 	router.use(express.urlencoded({ extended: true }));
@@ -218,6 +219,9 @@ module.exports = function (services,defined_user) {
 
 	// group creation
 	router.get('/groups/create', createGroups);
+
+	//Groups filter response
+	router.post('groups/filter',filterGroupsRes);
 
 	//Popular games result page
 	router.get('/popular/result', popularGames);

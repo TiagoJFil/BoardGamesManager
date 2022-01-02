@@ -1,5 +1,5 @@
-{{#if name and desc}}
-		<form action= "/groups/create" method = "GET">
+{{#if group}}
+		<form action= "/groups" method = "POST">
 			<p><label for="txtQuery">Name:</label></p>
 			<input type="text" id="txtQuery" name="name"><br></br>
 			<p><label for="desc">Description (Max 100 characters):</label></p>
@@ -7,7 +7,7 @@
 			<input type="submit" value="Create">
 		</form>
 {{/if}}
-
+{{!-- Assim que for criado com sucesso fazer aparecer uma janela com a msg e um botao que volta ao /groups, mudar acima--}}
 {{#if error }}
 	{{#if code}}		
 		<form action= "/groups/create" method = "GET">
