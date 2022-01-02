@@ -105,7 +105,7 @@ module.exports = function (services,defined_user) {
 		}
 	}
 
-	async function createGroups(req,res){
+	async function renderCreateGroups(req,res){
 		res.render('create_groups');
 	}
 
@@ -114,37 +114,35 @@ module.exports = function (services,defined_user) {
 	 * @param {*Promise} req 
 	 * @param {*Promise} res 
 	 */
-	async function filterGroupsRes(req,res){
-		const name = req.query.name;
-		const desc = req.query.desc;
+	async function createGroupAndRedirect(req,res){
+		const name = req.body.name;
+		const desc = req.body.desc;
 		const token = getBearerToken(req);
 		try{
 			const group = await services.createGroup(token,name,desc);
-			res.redirect(
-				'groups',
-				{group}
-			);
+			res.redirect('/groups');
+		
 		}catch(err){
 			switch(err.name){
 				case 'MISSING_PARAMETER':
 					if(name == null){
 						res.status(400).render(
-								'groups_filter',
+								'create_groups',
 								{code: 400 , error:'no name provided'  }
 							);
 							break;
 					}
 					else if (desc == null){
-						res.status(400).redirect(
-						'groups_filter',
+						res.status(400).render(
+						'create_groups',
 						{code: 400 , error:'no desc provided'  }
 						);
 						break;
 					}
 					
 				default:
-					res.status(500).redirect(
-						'groups_filter',
+					res.status(500).render(
+						'create_groups',
 						{query: name, code: 500,error: JSON.stringify(err) }
 					);
 					break;
@@ -228,10 +226,10 @@ module.exports = function (services,defined_user) {
 	router.get('/search/result', findGame);
 
 	// group creation
-	router.get('/groups/create', createGroups);
+	router.get('/groups/create', renderCreateGroups);
 
 	//Groups filter response
-	router.post('/groups/filter',filterGroupsRes);
+	router.post('/groups/create/redirect',createGroupAndRedirect);
 
 	//Popular games result page
 	router.get('/popular/result', popularGames);
