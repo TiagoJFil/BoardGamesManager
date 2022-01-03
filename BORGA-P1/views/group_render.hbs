@@ -1,0 +1,27 @@
+<h1>{{groupdetails.name}}</h1>
+
+<table>
+    <tr>
+        <td>Description:</td>
+        <td>{{groupdetails.description}}</td>
+    </tr>	
+    <h2></h2>
+    <tr>
+        <td>Games:</td>
+        <td>
+            {{#each games}}
+                <table>
+                    <tr>Name : {{name}}</tr>
+                    <h2></h2>
+                    <tr>URL : {{url}}</tr>
+                    <h2></h2>
+                    <tr>Price : {{price}}$</tr>
+                </table>
+            {{/each}}
+        </td>
+    </tr>
+</table>
+
+{{#if error}}
+    {{error}}
+{{/if}}

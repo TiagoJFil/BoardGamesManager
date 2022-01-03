@@ -180,7 +180,6 @@ module.exports = function (services,defined_user) {
 		try{
 			const group = await services.createGroup(token,name,desc);
 			res.redirect('/groups');
-		
 		}catch(err){
 			switch(err.name){
 				case 'MISSING_PARAMETER':
@@ -209,7 +208,6 @@ module.exports = function (services,defined_user) {
 		}
 	}
 
-
 	async function popularGames(req,res){
 		const header = 'Popular games Result';
 		const count = req.query.count;
@@ -230,6 +228,25 @@ module.exports = function (services,defined_user) {
 						{ header, code: 500,error: JSON.stringify(err) }
 					);
 					break;	
+			}
+		}
+	}
+
+	async function renderGroup(req,res){
+		const id = req.params.id;
+		try{
+			const groupdetails = await services.getGroupInfo(getBearerToken(req),id);
+			const games = groupdetails.games;
+			res.render('group_render',{id,groupdetails,games});
+		}
+		catch(err){
+			switch(err.name){
+				default:
+					res.status(500).render(
+						'group_render',
+						{ code: 500,error: JSON.stringify(err) }
+					);
+					break;
 			}
 		}
 	}
@@ -256,7 +273,6 @@ module.exports = function (services,defined_user) {
 	// Groups page
 	router.get('/groups', getGroupsPage);
 
-
 	// group creation
 	router.get('/groups/create', renderCreateGroups);
 
@@ -268,6 +284,8 @@ module.exports = function (services,defined_user) {
 /* 
 	//Searching groups response
 	router.get('groups/name', searchGroup) */
+
+	router.get('/groups/:id',renderGroup);
 
 	return router;
 }

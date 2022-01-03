@@ -7,3 +7,9 @@
 	<input type='text' name='desc'><br></br>
 	<input type="submit" value="Create">
 </form>
+
+{{#if error}}
+	{{#if code}}
+		<error><strong> ERROR {{code}}: {{error}}</strong></error>
+	{{/if}}
+{{/if}}
