@@ -284,6 +284,7 @@ describe('Integration tests', () => {
 		expect(response.body).toBeTruthy();
 		expect(response.body).toEqual({
 			[groupIdThatStays]: {
+				"id": groupIdThatStays,
 				"name": "test",
 				"description": "este é um grupo de teste",
 				"games": {}
