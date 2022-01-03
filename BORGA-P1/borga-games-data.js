@@ -82,7 +82,7 @@ function makeGameObj(gameInfo) {
  * @param {Object} gameInfo 
  * @returns 
  */
-async function makeGameDetails(gameInfo){
+async function makeGameDetailsObj(gameInfo){
     return{
         id: gameInfo.id,
         name: gameInfo.name,
@@ -146,7 +146,7 @@ function makeObject(gameArray,answer){
 	for(let i = 0; i < answer.length ; i++){
 		const element = answer[i]
 		if(newArray.includes( element.id )){
-			newObject[k] = newObject[element.id] = {
+			newObject[element.id] = {
 				"name" :element.name,
 				"url": element.url
 			}
@@ -158,16 +158,16 @@ function makeObject(gameArray,answer){
 }
 
 /**
- * Searches a game by its name in the api and returns it as a simpler object with its mechanics and categories
- * @param {String} name 
+ * Searches a game by its id in the api and returns it as a simpler object with its mechanics and categories
+ * @param {String} id 
  * @returns a game or an error
  */
-function getGameDetails(name){
-    const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&name=' + name + '&client_id=' + CLIENT_ID;
+function getGameDetails(id){
+    const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;
     return do_fetch(search_uri)
     .then(answer => {
         if(answer.length != 0 && answer.count != 0){
-            return makeGameDetails(answer.games[0]);
+            return makeGameDetailsObj(answer.games[0]);
         } else {
             throw errors.NOT_FOUND({ id });
         }

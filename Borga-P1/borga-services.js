@@ -47,16 +47,16 @@ module.exports = function (data_borga, data_mem) {
 	}
 
 	/**
-	* Gets the details of a game using the game name
-	* @param {String} name
+	* Gets the details of a game using the game id
+	* @param {String} id
 	* @returns {Object} game or error
 	*/
-	async function getGameDetails(name){
-		if(!name){
-			throw(errors.MISSING_PARAMETER('Name of the game to search'));
+	async function getGameDetails(id){
+		if(!id){
+			throw(errors.MISSING_PARAMETER('Id of the game to get the details'));
 		}
 
-		const game = data_borga.getGameDetails(name);
+		const game = data_borga.getGameDetails(id);
 		return game;
 	}
 

@@ -71,6 +71,217 @@ describe('Integration tests', () => {
 		);
 	});
 	
+
+	test('find a game by name',async() => {
+	
+		const response = await request(app)
+			.get('/api/all/games')
+			.query({ name: 'Root' });
+
+		expect(response.statusCode).toBe(200);
+		expect(response.body).toEqual({
+			"id": "TAAifFP590",
+			"name": "Root",
+			"url": "https://www.boardgameatlas.com/game/TAAifFP590/root",
+			"price": "48.00",
+			"publisher": "Leder Games",
+			"min_age": 10,
+			"min_players": 2,
+			"max_players": 4,
+			"rank": 1
+			});
+	});
+
+	test('find game details by id',async() => {
+		
+		const response = await request(app)
+			.get('/api/all/games/TAAifFP590')
+		
+		expect(response.statusCode).toBe(200);
+		expect(response.body).toEqual(
+			{
+				"id": "TAAifFP590",
+				"name": "Root",
+				"description": "<p>Find adventure in this marvelous asymmetric game. Root provides limitless replay value as you and your friends explore the unique factions all wanting to rule a fantastic forest kingdom. Play as the Marquise de Cat and dominate the woods, extracting its riches and policing its inhabitants, as the Woodland Alliance, gathering supporters and coordinate revolts against the ruling regime, the Eyrie Dynasties, regaining control of the woods while keeping your squabbling court at bay, or as the Vagabond, seeking fame and fortune as you forge alliances and rivalries with the other players. Each faction has its own play style and paths to victory, providing an immersive game experience you will want to play again and again.</p>",
+				"url": "https://www.boardgameatlas.com/game/TAAifFP590/root",
+				"image_url": "https://s3-us-west-1.amazonaws.com/5cc.images/games/uploaded/1629324760985.jpg",
+				"mechanics": {
+					"PGjmKGi26h": {
+						"name": "Action / Movement Programming",
+						"url": "https://www.boardgameatlas.com/mechanic/PGjmKGi26h/action--movement-programming"
+					},
+					"ckCp1oTVMy": {
+						"name": "Action Queue",
+						"url": "https://www.boardgameatlas.com/mechanic/ckCp1oTVMy/action-queue"
+					},
+					"05zCZoLvQJ": {
+						"name": "Area Control",
+						"url": "https://www.boardgameatlas.com/mechanic/05zCZoLvQJ/area-control"
+					},
+					"R0bGq4cAl4": {
+						"name": "Dice Rolling",
+						"url": "https://www.boardgameatlas.com/mechanic/R0bGq4cAl4/dice-rolling"
+					},
+					"yu3eas6v7A": {
+						"name": "Engine Building",
+						"url": "https://www.boardgameatlas.com/mechanic/yu3eas6v7A/engine-building"
+					},
+					"WPytek5P8l": {
+						"name": "Hand Management",
+						"url": "https://www.boardgameatlas.com/mechanic/WPytek5P8l/hand-management"
+					},
+					"MEAoOygZsA": {
+						"name": "Point to Point Movement",
+						"url": "https://www.boardgameatlas.com/mechanic/MEAoOygZsA/point-to-point-movement"
+					},
+					"qZx4PEzKKz": {
+						"name": "Race",
+						"url": "https://www.boardgameatlas.com/mechanic/qZx4PEzKKz/race"
+					},
+					"XM2FYZmBHH": {
+						"name": "Variable Player Powers",
+						"url": "https://www.boardgameatlas.com/mechanic/XM2FYZmBHH/variable-player-powers"
+					}
+				},
+				"categories": {
+					"KUBCKBkGxV": {
+						"name": "Adventure",
+						"url": "https://www.boardgameatlas.com/category/KUBCKBkGxV/adventure"
+					},
+					"MWoxgHrOJD": {
+						"name": "Animals",
+						"url": "https://www.boardgameatlas.com/category/MWoxgHrOJD/animals"
+					},
+					"Bq6M0TJyg7": {
+						"name": "Asymmetric",
+						"url": "https://www.boardgameatlas.com/category/Bq6M0TJyg7/asymmetric"
+					}
+				}
+			
+			});
+	});
+
+	test('find top 10 ranked games', async () => {
+		
+		const response = await request(app)
+			.get('/api/all/games/rank')
+
+		expect(response.statusCode).toBe(200);
+		expect(response.body).toEqual(
+			{
+				"1": {
+					"id": "TAAifFP590",
+					"name": "Root",
+					"url": "https://www.boardgameatlas.com/game/TAAifFP590/root",
+					"price": "48.00",
+					"publisher": "Leder Games",
+					"min_age": 10,
+					"min_players": 2,
+					"max_players": 4,
+					"rank": 1
+				},
+				"2": {
+					"id": "yqR4PtpO8X",
+					"name": "Scythe",
+					"url": "https://www.boardgameatlas.com/game/yqR4PtpO8X/scythe",
+					"price": "53.54",
+					"publisher": "Stonemaier Games",
+					"min_age": 14,
+					"min_players": 1,
+					"max_players": 5,
+					"rank": 2
+				},
+				"3": {
+					"id": "5H5JS0KLzK",
+					"name": "Wingspan",
+					"url": "https://www.boardgameatlas.com/game/5H5JS0KLzK/wingspan",
+					"price": "40.00",
+					"publisher": "Stonemaier Games",
+					"min_age": 10,
+					"min_players": 1,
+					"max_players": 5,
+					"rank": 3
+				},
+				"4": {
+					"id": "RLlDWHh7hR",
+					"name": "Gloomhaven",
+					"url": "https://www.boardgameatlas.com/game/RLlDWHh7hR/gloomhaven",
+					"price": "112.00",
+					"publisher": "Cephalofair Games",
+					"min_age": 12,
+					"min_players": 1,
+					"max_players": 4,
+					"rank": 4
+				},
+				"5": {
+					"id": "fDn9rQjH9O",
+					"name": "Terraforming Mars",
+					"url": "https://www.boardgameatlas.com/game/fDn9rQjH9O/terraforming-mars",
+					"price": "52.00",
+					"publisher": "FryxGames",
+					"min_age": 12,
+					"min_players": 1,
+					"max_players": 5,
+					"rank": 5
+				},
+				"6": {
+					"id": "i5Oqu5VZgP",
+					"name": "Azul",
+					"url": "https://www.boardgameatlas.com/game/i5Oqu5VZgP/azul",
+					"price": "27.12",
+					"publisher": "Next Move Games",
+					"min_age": 8,
+					"min_players": 2,
+					"max_players": 4,
+					"rank": 6
+				},
+				"7": {
+					"id": "7NYbgH2Z2I",
+					"name": "Viticulture: Essential Edition",
+					"url": "https://www.boardgameatlas.com/game/7NYbgH2Z2I/viticulture-essential-edition",
+					"price": "41.64",
+					"publisher": "Stonemaier Games",
+					"min_age": 13,
+					"min_players": 1,
+					"max_players": 6,
+					"rank": 7
+				},
+				"8": {
+					"id": "6FmFeux5xH",
+					"name": "Pandemic",
+					"url": "https://www.boardgameatlas.com/game/6FmFeux5xH/pandemic",
+					"price": "20.97",
+					"publisher": "Z-Man Games, Inc.",
+					"min_age": 8,
+					"min_players": 2,
+					"max_players": 4,
+					"rank": 8
+				},
+				"9": {
+					"id": "kPDxpJZ8PD",
+					"name": "Spirit Island",
+					"url": "https://www.boardgameatlas.com/game/kPDxpJZ8PD/spirit-island",
+					"price": "60.00",
+					"publisher": "Greater Than Games",
+					"min_age": 13,
+					"min_players": 1,
+					"max_players": 4,
+					"rank": 9
+				},
+				"10": {
+					"id": "j8LdPFmePE",
+					"name": "7 Wonders Duel",
+					"url": "https://www.boardgameatlas.com/game/j8LdPFmePE/7-wonders-duel",
+					"price": "17.88",
+					"publisher": "Repos Production",
+					"min_age": 10,
+					"min_players": 2,
+					"max_players": 2,
+					"rank": 10
+				}
+			});
+	});
+
 	test('Create a new User', async () => {
 		const response = await request(app)
 			.post('/api/users/miguel')
