@@ -175,6 +175,8 @@ function getGameDetails(id){
 }
 
 
+//getGameDetails('TAAifFP590').then(console.log)
+
 
 
 /**

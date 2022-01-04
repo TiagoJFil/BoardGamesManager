@@ -131,6 +131,68 @@
         }
       }
     },
+    "/api/all/games/{id}": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Find a game by query",
+        "description": "Uses boardgameatlas API to find a game corresponding to the query name.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of game to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A game has been found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No query indicated in the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No game found for the query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Boardgameatlas API is not responding",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/users/{name}": {
       "post": {
         "tags": [
@@ -848,6 +910,72 @@
           },
           "gameId": {
             "type": "string"
+          }
+        }
+      },
+      "GameDetails": {
+        "type": "object",
+        "description": "game details",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "url",
+          "image_url",
+          "mechanics",
+          "categories"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Internal game id",
+            "example": "Ho3JtwEACAAJ"
+          },
+          "name": {
+            "type": "string",
+            "description": "The game title",
+            "example": "Root"
+          },
+          "description": {
+            "type": "string",
+            "description": "The game publisher",
+            "example": "Leder Games"
+          },
+          "url": {
+            "type": "string",
+            "description": "Game's rule url",
+            "example": "https://drive.google.com/drive/folders/1i9-iCUDzfGMs7HjFHhahwMS6efvvfX5w"
+          },
+          "image_url": {
+            "type": "integer",
+            "description": "Game's price",
+            "example": 15
+          },
+          "mechanics": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Variable Player Powers"
+              },
+              "url": {
+                "type": "string",
+                "example": "https://www.boardgameatlas.com/mechanic/XM2FYZmBHH/variable-player-powers"
+              }
+            }
+          },
+          "categories": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Animals"
+              },
+              "url": {
+                "type": "string",
+                "example": "https://www.boardgameatlas.com/category/MWoxgHrOJD/animals"
+              }
+            }
           }
         }
       }
