@@ -67,7 +67,6 @@ module.exports = function(es_spec){
      */
     async function tokenToUsername(token) {
         try {
-            
 			const response = await fetch(`${allTokensUrl}/_doc/${token}`);
             const body = await response.json()
     
@@ -86,6 +85,8 @@ module.exports = function(es_spec){
      * @returns {Object} a new group object with the information provided
      */
     async function createGroup(user,name,description){
+        const id = crypto.randomUUID()
+        const groupId = id.replace(/-/g,'');
         var newGroup =  {
             name : name,
             description : description,
@@ -93,12 +94,12 @@ module.exports = function(es_spec){
         };
 
         const displayableGroup =  {
+            id : groupId,
             name : name,
             description : description,
             games : {}	
         };
-        const id = crypto.randomUUID()
-        const groupId = id.replace(/-/g,'');
+        
 
 
         try {
@@ -282,7 +283,7 @@ module.exports = function(es_spec){
             group.games.push(game.id);
 
             await fetch(
-                `${userGroupsUrl(user)}/_update/${groupId}`,
+                `${userGroupsUrl(user)}/_update/${groupId}?refresh=wait_for`,
                     {
                         method: 'POST',
                         headers: {
@@ -380,8 +381,9 @@ module.exports = function(es_spec){
             user: Username 
         }
         try {
-            const TokensResponse = await fetch(
-                `${allTokensUrl}/_doc/${id}`,
+            //add the token toe the token collection
+            await fetch(
+                `${allTokensUrl}/_doc/${id}?refresh=wait_for`,
                     {
                         method: 'POST',
                         headers: {
@@ -390,9 +392,9 @@ module.exports = function(es_spec){
                         body: JSON.stringify(idToUser)
                     }
             );
-
-            const UserResponse = await fetch(
-                `${allUsersUrl}/_doc/${Username}`,
+            //add the user to the users collection
+            await fetch(
+                `${allUsersUrl}/_doc/${Username}?refresh=wait_for`,
                     {
                         method: 'POST',
                         headers: {

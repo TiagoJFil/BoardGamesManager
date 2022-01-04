@@ -39,7 +39,7 @@ return app;
 
 
 
-
+//TO BE REMOVED AFTER IMPLEMENTED LOGIN
 async function beforeAll(es_spec,guest){
 
 	try{

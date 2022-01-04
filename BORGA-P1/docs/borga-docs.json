@@ -384,12 +384,12 @@
           }
         ],
         "requestBody": {
-          "description": "New groups name and decription",
+          "description": "New groups name and description",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EditedGroupHeader"
+                "$ref": "#/components/schemas/AddGroupHeader"
               }
             }
           }
@@ -400,7 +400,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Group"
+                  "$ref": "#/components/schemas/ListedGroup"
                 }
               }
             }
@@ -444,7 +444,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewGroup"
+                "$ref": "#/components/schemas/EditGroupHeader"
               }
             }
           }
@@ -773,7 +773,7 @@
           }
         }
       },
-      "EditedGroupHeader": {
+      "AddGroupHeader": {
         "type": "object",
         "description": "Group data",
         "required": [
@@ -789,11 +789,11 @@
           }
         }
       },
-      "NewGroup": {
+      "EditGroupHeader": {
         "type": "object",
         "description": "Group data",
         "required": [
-          "GameId",
+          "Name",
           "Description"
         ],
         "properties": {

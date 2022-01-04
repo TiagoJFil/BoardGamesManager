@@ -33,7 +33,7 @@ module.exports = function (data_borga, data_mem) {
 	}
 
 	/**
- 	* Searches a game 
+ 	* Searches a game by the name
  	* @param {String} name 
  	* @returns {Object} game or error
  	*/
@@ -61,13 +61,13 @@ module.exports = function (data_borga, data_mem) {
 	}
 
 	/**
-	 * Adds a user to the local db
+	 * Adds a user to the data base
 	 * @param {String} name 
 	 * @returns {Object} new user
 	 */
 	async function addUser(name){
 		if(!name){
-			throw(errors.MISSING_PARAMETER('Name of user missing'));
+			throw(errors.MISSING_PARAMETER('Name of the user is missing'));
 		}
 		if(await data_mem.hasUser(name))
 			throw errors.USER_ALREADY_EXISTS(name);

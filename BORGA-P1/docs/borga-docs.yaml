@@ -235,19 +235,19 @@ paths:
       security:
         - bearerAuth: []
       requestBody:
-        description: New groups name and decription
+        description: New groups name and description
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EditedGroupHeader'
+              $ref:   '#/components/schemas/AddGroupHeader'
       responses:
         '200':
           description: Group has been created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Group'
+                $ref:   '#/components/schemas/ListedGroup'
         '401':
           description: Missing API token. The user is not authenticated.
           content:
@@ -273,7 +273,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewGroup'
+              $ref: '#/components/schemas/EditGroupHeader'
       responses:
         '200':
           description: Group edited
@@ -484,7 +484,7 @@ components:
           type: object
           items:
             type: object
-    EditedGroupHeader:
+    AddGroupHeader:
       type: object
       description: Group data
       required:
@@ -495,11 +495,11 @@ components:
           type: string
         desc:
           type: string
-    NewGroup:
+    EditGroupHeader:
       type: object
       description: Group data
       required:
-        - GameId
+        - Name
         - Description
       properties:
         groupId:
@@ -512,7 +512,7 @@ components:
       type: object
       description: a group on the list of groups
       properties:
-        id: 
+        id:
           type: string
         name:
           type: string
