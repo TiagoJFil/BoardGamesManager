@@ -19,12 +19,12 @@ paths:
     get:
       tags:
         - Games
-      summary: Find a game by query
-      description: Uses boardgameatlas API to find a game corresponding to the query name.
+      summary: Find a game by name
+      description: Uses boardgameatlas API to find a game corresponding to the name.
       parameters:
         - name: name
           in: query
-          description: Name of game to return
+          description: Name of game to search
           required: true
           schema:
             type: string
@@ -53,7 +53,11 @@ paths:
           content:
             application/json:
               schema:
+<<<<<<< HEAD
                 $ref: '#/components/schemas/ExtSrvFail'
+=======
+                $ref: '#/components/schemas/AppError'
+>>>>>>> 58e9b8d3cc3cae743c11699d4b33b5de2eb15f50
   /api/all/games/rank:
     get:
       tags:
@@ -94,24 +98,29 @@ paths:
           content:
             application/json:
               schema:
+<<<<<<< HEAD
                 $ref: '#/components/schemas/ExtSrvFail'
                 
   /api/all/games/{id}:
+=======
+                $ref: '#/components/schemas/AppError'
+  /api/all/games/details/:
+>>>>>>> 58e9b8d3cc3cae743c11699d4b33b5de2eb15f50
     get:
       tags:
         - Games
-      summary: Find a game by query
-      description: Uses boardgameatlas API to find a game corresponding to the query name.
+      summary: Get a game details by id
+      description: Retrieves the details of a game with the mechanics and categories included.
       parameters:
         - name: id
-          in: path
-          description: id of game to return
+          in: query
+          description: id of game to get the details from
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: A game has been found
+          description: Details retrieved sucessfully
           content:
             application/json:
               schema:
@@ -134,8 +143,12 @@ paths:
           content:
             application/json:
               schema:
+<<<<<<< HEAD
                 $ref: '#/components/schemas/ExtSrvFail'
                 
+=======
+                $ref: '#/components/schemas/AppError'
+>>>>>>> 58e9b8d3cc3cae743c11699d4b33b5de2eb15f50
   /api/users/{name}:
     post:
       tags:

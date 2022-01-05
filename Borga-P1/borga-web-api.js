@@ -90,7 +90,7 @@ module.exports = function (services) {
 	 */
 	async function getGameDetails(req,res){
 		try {
-			const gameId = req.params.id;
+			const gameId = req.query.id;
 			const game = await services.getGameDetails(gameId);
 			res.json(game);
 		} catch (err) {
@@ -244,8 +244,8 @@ module.exports = function (services) {
 	router.get('/all/games/rank/', listPopularGames);
 	// Resource: /all/games
 	router.get('/all/games', searchAnyGame);
-	// Resource: /all/games/<id>
-	router.get('/all/games/:id', getGameDetails);
+	// Resource: /all/games/details
+	router.get('/all/games/details', getGameDetails);
 
 	// Resource: /users/<name>
 	router.post('/users/:name', addUser);	
