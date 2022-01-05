@@ -19,12 +19,12 @@ paths:
     get:
       tags:
         - Games
-      summary: Find a game by query
-      description: Uses boardgameatlas API to find a game corresponding to the query name.
+      summary: Find a game by name
+      description: Uses boardgameatlas API to find a game corresponding to the name.
       parameters:
         - name: name
           in: query
-          description: Name of game to return
+          description: Name of game to search
           required: true
           schema:
             type: string
@@ -54,7 +54,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  
   /api/all/games/rank:
     get:
       tags:
@@ -82,23 +81,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-                
-  /api/all/games/{id}:
+  /api/all/games/details/:
     get:
       tags:
         - Games
-      summary: Find a game by query
-      description: Uses boardgameatlas API to find a game corresponding to the query name.
+      summary: Get a game details by id
+      description: Retrieves the details of a game with the mechanics and categories included.
       parameters:
         - name: id
-          in: path
-          description: id of game to return
+          in: query
+          description: id of game to get the details from
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: A game has been found
+          description: Details retrieved sucessfully
           content:
             application/json:
               schema:
@@ -121,7 +119,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-                
   /api/users/{name}:
     post:
       tags:
@@ -578,17 +575,16 @@ components:
           type: string
         gameId:
           type: string
-    
     GameDetails:
-      type: object 
+      type: object
       description: game details
       required:
         - id
         - name
         - description
         - url
-        - image_url 
-        - mechanics 
+        - image_url
+        - mechanics
         - categories
       properties:
         id:
@@ -617,7 +613,7 @@ components:
             name:
               type: string
               example: Variable Player Powers
-            url:  
+            url:
               type: string
               example: https://www.boardgameatlas.com/mechanic/XM2FYZmBHH/variable-player-powers
         categories:
@@ -626,8 +622,6 @@ components:
             name:
               type: string
               example: Animals
-            url:  
+            url:
               type: string
               example: https://www.boardgameatlas.com/category/MWoxgHrOJD/animals
-          
-          
