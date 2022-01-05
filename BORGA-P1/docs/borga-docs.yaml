@@ -41,20 +41,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/MissingParameter'
         '404':
           description: No game found for the query
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/NotFound'
         '502':
           description: Boardgameatlas API is not responding
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
-  
+                $ref: '#/components/schemas/ExtSrvFail'
   /api/all/games/rank:
     get:
       tags:
@@ -76,12 +75,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GameListResponse'
+        '400':
+          description: No query indicated in the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissingParameter'
+                
+        '404':
+          description: No such rank found 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'        
+                
         '502':
           description: Boardgameatlas API is not responding
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/ExtSrvFail'
                 
   /api/all/games/{id}:
     get:
@@ -103,24 +116,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GameDetails'
+                
         '400':
           description: No query indicated in the request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/MissingParameter'
         '404':
           description: No game found for the query
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/NotFound'
         '502':
           description: Boardgameatlas API is not responding
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/ExtSrvFail'
                 
   /api/users/{name}:
     post:
@@ -143,18 +157,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        '401':
-          description: Missing name query
+        '400':
+          description: No query indicated in the request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/MissingParameter'
+                
         '502':
           description: API is not responding
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/ExtSrvFail'
   /api/my/group/{groupId}:
     get:
       tags:
@@ -183,19 +198,27 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/Unauthenticated'
+          
+        '400':
+          description: No query indicated in the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissingParameter'        
+                
         '404':
           description: Group not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/NotFound'
         '502':
           description: API is not responding,
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/ExtSrvFail'
     delete:
       tags:
         - MyGroups
@@ -223,19 +246,27 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/Unauthenticated'
+          
+        '400':
+          description: No query indicated in the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissingParameter'        
+                
         '404':
           description: Group not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/NotFound'
         '502':
           description: API is not responding,
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/ExtSrvFail'
   /api/my/group:
     get:
       tags:
@@ -256,19 +287,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/Unauthenticated'
         '404':
           description: Group List not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/NotFound'
         '502':
           description: API is not responding,
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/ExtSrvFail'
     post:
       tags:
         - MyGroups
@@ -289,18 +320,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListedGroup'
+        '400':
+          description: No query indicated in the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissingParameter'        
         '401':
           description: Missing API token. The user is not authenticated.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/Unauthenticated'
+                
+        '404':
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
         '502':
           description: API is not responding,
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/ExtSrvFail'
     put:
       tags:
         - MyGroups
@@ -322,24 +366,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Group'
+        '400':
+          description: No query indicated in the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissingParameter'        
         '401':
           description: Missing API token. The user is not authenticated.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/Unauthenticated'
+                
         '404':
           description: Group not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/NotFound'
         '502':
           description: API is not responding,
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/ExtSrvFail'
   /api/my/group/games:
     post:
       tags:
@@ -362,18 +413,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Group'
+        '400':
+          description: No query indicated in the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissingParameter'        
         '401':
-          description: Missiing authentication
+          description: Missing API token. The user is not authenticated.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/Unauthenticated'
+                
+        '404':
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
         '502':
-          description: API is not responding
+          description: API is not responding,
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/ExtSrvFail'
   /api/my/group/games/{groupId}/{gameId}:
     delete:
       tags:
@@ -404,18 +468,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Group'
+        
+        '400':
+          description: No query indicated in the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissingParameter'        
         '401':
-          description: Missing authentication
+          description: Missing API token. The user is not authenticated.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/Unauthenticated'
+                
+        '404':
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
         '502':
-          description: API is not responding
+          description: API is not responding,
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppError'
+                $ref: '#/components/schemas/ExtSrvFail'
 components:
   securitySchemes:
     bearerAuth:
@@ -431,7 +509,8 @@ components:
         - type: integer
         - type: number
       example: ...
-    AppError:
+    
+    MissingParameter:
       type: object
       description: Application error
       required:
@@ -442,18 +521,91 @@ components:
         code:
           type: number
           format: int32
-          description: Internal error code
-          example: 1000
+          description: Missing Parameter
+          example: 1003
         name:
           type: string
-          description: Internal error name
-          example: FAIL
+          description: Misssing Parameter
+          example: MISSING_PARAMETER
         message:
           type: string
-          description: Error description message
-          example: An error occurred
+          description: A required parameter is missing
+          example: A required parameter is missing
         info:
           $ref: '#/components/schemas/AppErrorInfo'
+    
+    Unauthenticated:
+      type: object
+      description: Application error
+      required:
+        - code
+        - name
+        - message
+      properties:
+        code:
+          type: number
+          format: int32
+          description: Invalid or missing token
+          example: 1006
+        name:
+          type: string
+          description: Invalid or missing token
+          example: UNAUTHENTICATED
+        message:
+          type: string
+          description: Invalid or missing token
+          example: Invalid or missing token
+        info:
+          $ref: '#/components/schemas/AppErrorInfo' 
+    
+    NotFound:
+      type: object
+      description: Application error
+      required:
+        - code
+        - name
+        - message
+      properties:
+        code:
+          type: number
+          format: int32
+          description: The item does not exist
+          example: 1001
+        name:
+          type: string
+          description: The item does not exist
+          example: NOT_FOUND
+        message:
+          type: string
+          description: The item does not exist
+          example: The item does not exist
+        info:
+          $ref: '#/components/schemas/AppErrorInfo'        
+    
+    ExtSrvFail:
+      type: object
+      description: Application error
+      required:
+        - code
+        - name
+        - message
+      properties:
+        code:
+          type: number
+          format: int32
+          description: External service failure
+          example: 1002
+        name:
+          type: string
+          description: External service failure
+          example: EXT_SVC_FAIL
+        message:
+          type: string
+          description: External service failure
+          example: External service failure
+        info:
+          $ref: '#/components/schemas/AppErrorInfo'     
+          
     GameListResponse:
       type: object
       description: Response with a list of games
@@ -578,17 +730,16 @@ components:
           type: string
         gameId:
           type: string
-    
     GameDetails:
-      type: object 
+      type: object
       description: game details
       required:
         - id
         - name
         - description
         - url
-        - image_url 
-        - mechanics 
+        - image_url
+        - mechanics
         - categories
       properties:
         id:
@@ -617,7 +768,7 @@ components:
             name:
               type: string
               example: Variable Player Powers
-            url:  
+            url:
               type: string
               example: https://www.boardgameatlas.com/mechanic/XM2FYZmBHH/variable-player-powers
         categories:
@@ -626,8 +777,6 @@ components:
             name:
               type: string
               example: Animals
-            url:  
+            url:
               type: string
               example: https://www.boardgameatlas.com/category/MWoxgHrOJD/animals
-          
-          

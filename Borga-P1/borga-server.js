@@ -1,6 +1,6 @@
 'use strict';
 
-const fetch = require('node-fetch'); //Temporary , to be removed when the other group members executes the code at least once
+const fetch = require('node-fetch');
 
 module.exports = function (es_spec,defined_user) {
 

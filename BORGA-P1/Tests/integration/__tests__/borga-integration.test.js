@@ -319,7 +319,7 @@ describe('Integration tests', () => {
 		expect(response.body[groups[1]].description).toEqual("este é outro grupo de teste diferente");
 	});
 
-	test('gets a details from the first group created', async () => {
+	test('gets details from the first group created', async () => {
 		
 		const groupList = await request(app)
 			.get('/api/my/group')

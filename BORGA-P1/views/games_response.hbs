@@ -10,7 +10,11 @@
 		<tr>
 			<td>Title:</td>
 			<td>{{game.name}}</td>
-		</tr>	
+		</tr>
+		<tr>
+			<td>Id:</td>
+			<td>{{game.id}}</td>
+		</tr>		
 		<tr>
 			<td>Price:</td>
 			<td>{{game.price}}$</td>
@@ -25,7 +29,6 @@
 		
 		
 		{{#if groups}}
-			
 			
 			<label >Choose a group to add to:</label>
 			<form action="/add_game_to_group" id= "group_form" method = "POST">

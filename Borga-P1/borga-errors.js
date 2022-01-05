@@ -26,6 +26,7 @@ function buildErrorList() {
 	return errors;
 }
 
+
 const errorList = buildErrorList();
 
 module.exports = errorList;

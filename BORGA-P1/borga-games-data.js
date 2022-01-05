@@ -106,7 +106,7 @@ async function getMechanics(gameArray) {
             if (answer.length != 0 && answer.count != 0) {
                 return makeObject(gameArray, answer.mechanics);
             } else {
-                throw errors.NOT_FOUND({ gameArray });
+                throw errors.NOT_FOUND({gameArray});
             }
         });
 }
@@ -173,9 +173,6 @@ function getGameDetails(id){
         }
     });
 }
-
-
-//getGameDetails('TAAifFP590').then(console.log)
 
 
 

@@ -6,7 +6,6 @@ const errors = require('./borga-errors');
 
 const fetch = require('node-fetch');
 
-
 module.exports = function(es_spec){
 
 
@@ -119,6 +118,7 @@ module.exports = function(es_spec){
             throw errors.DATABASE_ERROR(err);
         }
     };
+    
 
     /**
      * edits a user's group name and description
