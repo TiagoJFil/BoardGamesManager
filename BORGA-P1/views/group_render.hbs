@@ -2,6 +2,45 @@
 
 <table>
     <tr>
+        {{#if game1}}
+            <td>
+                <div style="width: 500px; height: 100px; border: 5px solid #000;">
+                    <table>
+                        <tr>
+                            <td>
+                                <element id='game1URL'>NAME</element> : {{game1.name}} <element id='game1URL'>PUBLISHER</element> : {{game1.publisher}}</br>
+                                <element id='game1URL'>MIN_PLAYERS</element> : {{game1.min_players}}<br>
+                                <element id='game1URL'>PRICE</element> : {{game1.price}}$<br>
+                                <element id='game1URL'>URL</element> : <a href={{game1.url}} target="_blank" rel="noopener noreferrer">{{game1.url}}</a></br>
+                            </td>
+                        </tr>
+                   </table>
+                </div>
+            </td>
+        {{/if}}
+        <td>
+            <div style="width: 490px; height: 100px; border: 1px solid #000;">{{groupdetails.description}}</div>
+        </td>
+        {{#if game2}}
+            <td>
+                <div style="width: 500px; height: 100px; border: 5px solid #000;">
+                    <table>
+                        <tr>
+                            <td>
+                                <element id='game1URL'>NAME</element>: {{game2.name}} <element id='game1URL'>PUBLISHER</element>: {{game2.publisher}}</br>
+                                <element id='game1URL'>MIN_PLAYERS</element>: {{game2.min_players}}<br>
+                                <element id='game1URL'>PRICE</element>: {{game2.price}}$<br>
+                                <element id='game1URL'>URL</element>: <a href={{game2.url}} target="_blank" rel="noopener noreferrer">{{game2.url}}</a></br>
+                            </td>
+                        </tr>
+                   </table>
+                </div>
+            </td>
+        {{/if}}
+    </tr>
+</table>
+{{!-- <table>
+    <tr>
         <td>Description:</td>
         <td>{{groupdetails.description}}</td>
     </tr>	
@@ -20,7 +59,7 @@
             {{/each}}
         </td>
     </tr>
-</table>
+</table> --}}
 
 {{#if error}}
     {{error}}

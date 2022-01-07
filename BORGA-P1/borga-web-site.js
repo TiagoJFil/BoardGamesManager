@@ -236,8 +236,14 @@ module.exports = function (services,defined_user) {
 		const id = req.params.id;
 		try{
 			const groupdetails = await services.getGroupInfo(getBearerToken(req),id);
+
 			const games = groupdetails.games;
-			res.render('group_render',{id,groupdetails,games});
+			const game1 = Object.values(games)[0];
+			const game2 = Object.values(games)[1];
+			delete games[game1.id];
+			delete games[game2.id];
+
+			res.render('group_render',{id,groupdetails,games,game1,game2});
 		}
 		catch(err){
 			switch(err.name){
