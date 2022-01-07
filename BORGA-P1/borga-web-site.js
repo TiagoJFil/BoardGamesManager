@@ -1,7 +1,5 @@
 const express = require('express');
 
-const path = require('path');
-
 module.exports = function (services,defined_user) {
 	
 	/**
@@ -164,12 +162,18 @@ module.exports = function (services,defined_user) {
 		}
 	}
 
+	/**
+	 * Remders the create group page
+	 * @param {Promise} req
+	 * @param {Promise} res
+	 */ 
 	async function renderCreateGroups(req,res){
 		res.render('create_groups');
 	}
 
 	/**
-	 * Retrieves create groups page
+	 * Creates a group and if successful redirects the user to the /groups page 
+	 * Otherwise renders the create_groups page with the error message
 	 * @param {*Promise} req 
 	 * @param {*Promise} res 
 	 */
@@ -208,6 +212,11 @@ module.exports = function (services,defined_user) {
 		}
 	}
 
+	/**
+	 * Retrieves the response page of the search query to search for popular games
+	 * @param {Promise} req
+	 * @param {Promise} res	 
+	 */ 
 	async function popularGames(req,res){
 		const header = 'Popular games Result';
 		const count = req.query.count;
@@ -261,6 +270,120 @@ module.exports = function (services,defined_user) {
 	
 	router.use(express.urlencoded({ extended: true }));
 	
+	/*
+Commented because its code for the 4th assignment
+
+	async function renderLoginPage(req,res){
+		res.render('login');
+	};
+
+	async function EditGroup(req,res){
+		const groupId = req.body.id;
+		const name = req.body.name;
+		const desc = req.body.desc;
+
+		try{
+			const group = await services.editGroup(getBearerToken(req),groupId,name,desc);
+			res.redirect('/groups');
+		}catch(err){
+			switch(err.name){
+				case 'MISSING_PARAMETER':
+					if(name == null){
+						res.status(400).render(
+								'edit_group',
+								{code: 400 , error:'no name provided'}
+							);
+							break;
+					}
+					else if (desc == null){
+						res.status(400).render(
+						'edit_group',
+						{code: 400 , error:'no desc provided'}
+						);
+						break;
+					}
+				default:
+					res.status(500).render(
+						'edit_group',
+						{query: name, code: 500,error: JSON.stringify(err)}
+					);
+					break;
+			}
+		};
+	};
+
+	async function renderEditGroupPage(req,res){
+		res.render('edit_group');
+	};
+
+	async function renderDeleteGroupPage(req,res){
+		res.render('delete_group');
+	};
+
+	async function deleteGroup(req,res){
+		const groupId = req.body.id;
+		try{
+			const group = await services.deleteGroup(getBearerToken(req),groupId);
+			res.redirect('/groups');
+		}catch(err){
+			switch(err.name){
+				default:
+					res.status(500).render(
+						'delete_group',
+						{query: groupId, code: 500,error: JSON.stringify(err)}
+					);
+					break;
+			}
+		};
+	};
+
+	async function renderDeleteGameFromGroupPage(req,res){	
+		res.render('delete_game_from_group');
+	};
+
+	async function deleteGameFromGroup(req,res){
+		const groupId = req.body.id;
+		const gameId = req.body.gameId;
+		try{
+			const group = await services.deleteGameFromGroup(getBearerToken(req),groupId,gameId);
+			res.redirect('/groups');
+		}catch(err){
+			switch(err.name){
+				default:
+					res.status(500).render(
+						'delete_game_from_group',
+						{query: groupId, code: 500,error: JSON.stringify(err)}
+					);
+					break;
+			}
+		};
+	};
+	
+
+	// Edit a Group
+	router.post('/groups/edit/redirect', editGroup);
+
+	// Edit group page
+	router.get('/groups/edit/:id', renderEditGroupPage);
+
+	// Delete a game from a group
+	router.post('/groups/games/delete/redirect', deleteGameFromGroup);
+
+	// Delete a game from a group page
+	router.get('/groups/games/delete/', renderDeleteGameFromGroupPage);
+
+	// Delete a group
+	router.post('/groups/delete/redirect', deleteAGroup);
+
+	// Delete group page
+	router.get('/groups/delete', renderDeleteGroupPage);
+
+	// Login Page
+	router.get('/login', renderLoginPage);
+
+	
+*/
+
 	// Homepage
 	router.get('/', getHomepage);
 

@@ -1,5 +1,6 @@
 'use strict';
 
+//TO BE REMOVED AFTER IMPLEMENTED LOGIN
 const fetch = require('node-fetch');
 
 module.exports = function (es_spec,defined_user) {
