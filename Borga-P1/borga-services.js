@@ -8,6 +8,7 @@ module.exports = function (data_borga, data_mem) {
 	 * Get's username using a token
 	 * @param {String} token 
 	 * @returns {Object} user or error
+	 * @throws {UNAUTHENTICATED} if token is not valid or there is no token received by the function
 	 */
 	async function getUsername(token) {
 		if (!token) {
@@ -21,9 +22,10 @@ module.exports = function (data_borga, data_mem) {
 	}
 	
 	/**
- 	* Gets the popular games
+ 	* Gets the top x popular games
+	* @param {Int} count many games to get
  	* @returns {Object} top x games
-	  if there is no count sent then the function will return the top 10 ranked games
+	* if there is no count sent then the function will return the top 10 ranked games
  	*/
 	async function getPopularGames(count){
 		if(!count) count = 10
@@ -50,6 +52,7 @@ module.exports = function (data_borga, data_mem) {
 	* Gets the details of a game using the game id
 	* @param {String} id
 	* @returns {Object} game or error
+	* @throws {Error} if the game id is missing
 	*/
 	async function getGameDetails(id){
 		if(!id){
@@ -64,6 +67,7 @@ module.exports = function (data_borga, data_mem) {
 	 * Adds a user to the data base
 	 * @param {String} name 
 	 * @returns {Object} new user
+	 * @throws {Object} error if the user already exists
 	 */
 	async function addUser(name){
 		if(!name){
@@ -81,6 +85,9 @@ module.exports = function (data_borga, data_mem) {
 	 * @param {String} name name of the group 
 	 * @param {String} desc description of the group
 	 * @returns {Object} new group
+	 * @throws {GROUP_ALREADY_EXISTS} error if the group already exists
+	 * @throws {MISSING_PARAMETER} error if the group name is missing
+	 * @throws {MISSING_PARAMETER} error if the group description is missing
 	 */
 	async function createGroup(token,name,desc){
 		const username = await getUsername(token);
@@ -108,6 +115,10 @@ module.exports = function (data_borga, data_mem) {
 	 * @param {String} newName 
 	 * @param {String} desc 
 	 * @returns {Object} edited group
+	 * @throws {MISSING_PARAMETER} error if the group id is missing
+	 * @throws {MISSING_PARAMETER} error if the group name is missing
+	 * @throws {MISSING_PARAMETER} error if the group description is missing
+	 * @throws {GROUP_NOT_FOUND} error if the group does not exist
 	 */
 	async function editGroup(token,groupId,newName,desc){
 		const username = await getUsername(token);
@@ -145,14 +156,16 @@ module.exports = function (data_borga, data_mem) {
 	/**
 	 * Gets a group information
 	 * @param {String} token 
-	 * @param {String} groupId 
+	 * @param {String} groupId  group id to get the info from
 	 * @returns {Object} group information
+	 * @throws {MISSING_PARAMETER} error if the group id is missing
+	 * @throws {NOT_FOUND} error if the group does not exist
 	 */
 	async function getGroupInfo(token,groupId){
 		const username = await getUsername(token);
 
 		if(!groupId){
-			throw(errors.MISSING_PARAMETER('Group name missing'));
+			throw(errors.MISSING_PARAMETER('Group id is missing'));
 		}
 		if(!await data_mem.hasGroup(username, groupId) ){
 			throw(errors.NOT_FOUND(`The group you were trying to get the info does not exist`));
@@ -164,9 +177,13 @@ module.exports = function (data_borga, data_mem) {
 	/**
 	 * Adds a gameId to a group
 	 * @param {String} token 
-	 * @param {String} groupId 
-	 * @param {Number} gameId 
+	 * @param {String} groupId the group id to add the game to
+	 * @param {Number} gameId the game id to add to the group
 	 * @returns {Object} updated group
+	 * @throws {MISSING_PARAMETER} error if the group id is missing
+	 * @throws {MISSING_PARAMETER} error if the game id is missing
+	 * @throws {NOT_FOUND} error if the group does not exist
+	 * @throws {FAIL} error if the game is already in the group or if the game was not found
 	 */
 	async function addGameToGroup(token,groupId,gameId){
 		const username = await getUsername(token);
@@ -180,7 +197,7 @@ module.exports = function (data_borga, data_mem) {
 		}
 
 		if( !await data_mem.hasGroup(username, groupId) ){
-			throw(errors.NOT_FOUND(`The group you add the game to does not exist`));
+			throw(errors.NOT_FOUND(`The group you are trying to add the game to does not exist`));
 		}
 
 		if( await data_mem.hasGame(username,groupId,gameId) ){
@@ -199,12 +216,14 @@ module.exports = function (data_borga, data_mem) {
 	 * @param {String} token 
 	 * @param {String} groupId 
 	 * @returns {Object} list of updated groups
+	 * @throws {MISSING_PARAMETER} error if the group id is missing
+	 * @throws {NOT_FOUND} error if the group does not exist
 	 */
 	async function deleteAGroup(token,groupId){
 		const username = await getUsername(token);
 
 		if(!groupId){
-			throw(errors.MISSING_PARAMETER('Group name missing'));
+			throw(errors.MISSING_PARAMETER('Group id is missing'));
 		}
 
 		if( !await data_mem.hasGroup(username, groupId) ){
@@ -221,6 +240,10 @@ module.exports = function (data_borga, data_mem) {
 	 * @param {String} groupId 
 	 * @param {String} gameID 
 	 * @returns {Object} updated group
+	 * @throws {MISSING_PARAMETER} error if the group id is missing
+	 * @throws {MISSING_PARAMETER} error if the game id is missing
+	 * @throws {NOT_FOUND} error if the group does not exist
+	 * @throws {NOT_FOUND} error if the game does not exist in the group
 	 */
 	async function removeGameFromGroup(token,groupId,gameID){
 		const username = await getUsername(token);
