@@ -35,6 +35,24 @@ function getStatusClass(statusCode) {
 }
 
 /**
+ * const with all games categories
+ */
+const categories = require('./docs/categories.json')
+
+/**
+ * const with all games mechanics
+ */
+const mechanics = require('./docs/mechanics.json')
+
+
+/**
+ * Map with all the categories names and id's as key
+ */
+const mapCatMech = getMapCatMech()
+
+
+
+/**
  * fetches uri's
  * @param {String} uri 
  * @returns {Object} response or error
@@ -94,22 +112,21 @@ async function makeGameDetailsObj(gameInfo){
     }
 }
 
+
+
 /**
  * Gets the mechanics of a game
  * @param {Object} gameArray 
  * @returns an object with the mechanics now present in the game
  */
 async function getMechanics(gameArray) {
-    const search_uri = BOARD_ATLAS_BASE_GAME_URI + 'mechanics?' + '&client_id=' + CLIENT_ID;
-    return do_fetch(search_uri)
-        .then(answer => {
-            if (answer.length != 0 && answer.count != 0) {
-                return makeObject(gameArray, answer.mechanics);
-            } else {
-                throw errors.NOT_FOUND({gameArray});
-            }
-        });
+    let array = new Array()
+	await gameArray.forEach(element => {
+		array.push(mapCatMech.get(element.id))
+	});
+	return array
 }
+
 
 /**
  * Gets the categories of a game
@@ -117,45 +134,13 @@ async function getMechanics(gameArray) {
  * @returns object with the categories now present in the game
  */
 async function getCategories(gameArray){
-    const search_uri = BOARD_ATLAS_BASE_GAME_URI + 'categories?' + '&client_id=' + CLIENT_ID;
-    return do_fetch(search_uri)
-    .then(answer => {
-        if(answer.length != 0 && answer.count != 0){
-            return makeObject(gameArray,answer.categories);
-        } else {
-            throw errors.NOT_FOUND({gameArray});
-        }
-    });
+    let array = new Array()
+	await gameArray.forEach(element => {
+		array.push(mapCatMech.get(element.id))
+	});
+	return array
 }
 
-/**
- * @param {Object} gameArray 
- * @param {Object} answer 
- * @returns and object with a readeable object for each game
- */
-function makeObject(gameArray,answer){
-    let k = 0 
-
-    let newObject = {}
-	let newArray = gameArray.map(
-		(idObj) => {
-			return idObj.id
-		}
-	)
-			
-	for(let i = 0; i < answer.length ; i++){
-		const element = answer[i]
-		if(newArray.includes( element.id )){
-			newObject[element.id] = {
-				"name" :element.name,
-				"url": element.url
-			}
-			k++
-		}
-	}
-
-    return newObject
-}
 
 /**
  * Searches a game by its id in the api and returns it as a simpler object with its mechanics and categories
@@ -173,7 +158,6 @@ function getGameDetails(id){
         }
     });
 }
-
 
 
 /**
@@ -247,6 +231,26 @@ function getListPopularGames(count) {
 	return gamesList
 }
 
+
+/**
+ * Adds all mechanics and categories pair id and name to a map
+ * @returns a map containing ids and names
+ */
+function getMapCatMech(){
+	
+	let map = new Map()
+	
+	for(let i = 0; i < mechanics.mechanics.length ; i++){
+		const element = mechanics.mechanics[i]
+		map.set(element.id,element.name)
+	}
+	
+	for(let i = 0; i < categories.categories.length ; i++){
+		const element = categories.categories[i]
+		map.set(element.id,element.name)
+	}
+	return map
+}
 
 module.exports = {
 	getGameByName,

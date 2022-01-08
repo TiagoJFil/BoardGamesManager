@@ -165,7 +165,8 @@
             "description": "id of game to get the details from",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "TAAifFP590"
             }
           }
         ],
@@ -1152,29 +1153,17 @@
             "example": 15
           },
           "mechanics": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "example": "Variable Player Powers"
-              },
-              "url": {
-                "type": "string",
-                "example": "https://www.boardgameatlas.com/mechanic/XM2FYZmBHH/variable-player-powers"
-              }
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Acting"
             }
           },
           "categories": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "example": "Animals"
-              },
-              "url": {
-                "type": "string",
-                "example": "https://www.boardgameatlas.com/category/MWoxgHrOJD/animals"
-              }
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Action"
             }
           }
         }
