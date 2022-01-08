@@ -134,5 +134,7 @@ form {
 }
 
 #game1URL{
+	font-family: "Lucida Console", monospace;
+	text-align:center;
 	color: #5FBDF4;
 }

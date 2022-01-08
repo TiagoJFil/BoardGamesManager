@@ -234,7 +234,7 @@ module.exports = function (services,defined_user) {
 				default:
 					res.status(500).render(
 						'popular_games_response',
-						{ header, code: 500,error: JSON.stringify(err) }
+						{ header, code: 500,error: 'No more than 100' }
 					);
 					break;	
 			}
@@ -247,12 +247,22 @@ module.exports = function (services,defined_user) {
 			const groupdetails = await services.getGroupInfo(getBearerToken(req),id);
 
 			const games = groupdetails.games;
+
 			const game1 = Object.values(games)[0];
 			const game2 = Object.values(games)[1];
-			delete games[game1.id];
-			delete games[game2.id];
 
-			res.render('group_render',{id,groupdetails,games,game1,game2});
+			if(game1 && game2){
+				delete games[game1.id];
+				delete games[game2.id];
+
+				res.render('group_render',{id,groupdetails,games,game1,game2});
+			}
+			else if (game1 && !game2){
+				delete games[game1.id]
+
+				res.render('group_render',{id,groupdetails,games,game1})
+			}
+			else res.render('group_render_no_games',{id,groupdetails});
 		}
 		catch(err){
 			switch(err.name){
@@ -410,9 +420,6 @@ Commented because its code for the 4th assignment
 
 	//Popular games result page
 	router.get('/popular/result', popularGames);
-/* 
-	//Searching groups response
-	router.get('groups/name', searchGroup) */
 
 	router.get('/groups/:id',renderGroup);
 

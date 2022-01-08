@@ -4,7 +4,7 @@
     <tr>
         {{#if game1}}
             <td>
-                <div style="width: 500px; height: 100px; border: 5px solid #000;">
+                <div style="width: 495px; height: 100px; border: 5px solid #000;">
                     <table>
                         <tr>
                             <td>
@@ -17,13 +17,15 @@
                    </table>
                 </div>
             </td>
+
+            <td>
+                <center><div style="width: 490px; height: 150px; border: 5px solid #000;"><element id='game1URL'>DESCRIPTION</element><br>{{groupdetails.description}}</div></center>
+            </td>
         {{/if}}
-        <td>
-            <div style="width: 490px; height: 100px; border: 1px solid #000;">{{groupdetails.description}}</div>
-        </td>
+
         {{#if game2}}
             <td>
-                <div style="width: 500px; height: 100px; border: 5px solid #000;">
+                <div style="width: 495px; height: 100px; border: 5px solid #000;">
                     <table>
                         <tr>
                             <td>
@@ -39,27 +41,27 @@
         {{/if}}
     </tr>
 </table>
-{{!-- <table>
-    <tr>
-        <td>Description:</td>
-        <td>{{groupdetails.description}}</td>
-    </tr>	
-    <h2></h2>
-    <tr>
-        <td>Games:</td>
-        <td>
-            {{#each games}}
-                <table>
-                    <tr>Name : {{name}}</tr>
-                    <h2></h2>
-                    <tr>URL : {{url}}</tr>
-                    <h2></h2>
-                    <tr>Price : {{price}}$</tr>
-                </table>
-            {{/each}}
-        </td>
-    </tr>
-</table> --}}
+
+{{#if games}}
+    {{#each games}}
+            <table>
+                <td>
+                    <div style="width: 495px; height: 100px; border: 5px solid #000;">
+                        <table>
+                            <tr>
+                                <td>
+                                    <element id='game1URL'>NAME</element> : {{name}} <element id='game1URL'>PUBLISHER</element> : {{publisher}}</br>
+                                    <element id='game1URL'>MIN_PLAYERS</element> : {{min_players}}<br>
+                                    <element id='game1URL'>PRICE</element> : {{price}}$<br>
+                                    <element id='game1URL'>URL</element> : <a href={{url}} target="_blank" rel="noopener noreferrer">{{url}}</a></br>
+                                </td>
+                            </tr>
+                    </table>
+                    </div>
+                </td>
+            </table>
+    {{/each}}
+{{/if}}
 
 {{#if error}}
     {{error}}
