@@ -8,30 +8,49 @@
 	<p>We found this result:</p>
 	<table>
 		<tr>
-			<td>Title:</td>
+			<td  class='gameInfoSearch'>Title:</td>
 			<td>{{game.name}}</td>
 		</tr>
 		<tr>
-			<td>Id:</td>
-			<td>{{game.id}}</td>
+			<td  class='gameInfoSearch'>Publisher:</td>
+			<td>{{game.publisher}}</td>
 		</tr>		
 		<tr>
-			<td>Price:</td>
+			<td  class='gameInfoSearch'>Min Age:</td>
+			<td>{{game.min_age}}</td>
+		</tr>	
+		<tr>
+			<td  class='gameInfoSearch'>Min Players:</td>
+			<td>{{game.min_players}}</td>
+		</tr>
+		<tr>
+			<td  class='gameInfoSearch'>Max Players:</td>
+			<td>{{game.max_players}}</td>
+		</tr>	
+		<tr>
+			<td  class='gameInfoSearch'>Rank:</td>
+			<td>#{{game.rank}}</td>
+		</tr>	
+		<tr>
+			<td  class='gameInfoSearch'>Price:</td>
 			<td>{{game.price}}$</td>
 		</tr>	
 		<tr>
-			<td>Url:</td>
+			<td  class='gameInfoSearch'>Url:</td>
 			<td><a href={{game.url}} target="_blank" rel="noopener noreferrer">{{game.url}}</a></td>
 		</tr>
 	</table>
 	
 	<h5>
-		
-		
+		<form action='/games/{{game.id}}' method = "GET">
+			<input type="submit" required value="Get more details">
+		</form>
+	
 		{{#if groups}}
+		
 			
 			<label >Choose a group to add to:</label>
-			<form action="/add_game_to_group" id= "group_form" method = "POST">
+			<form action="/groups/games" id= "group_form" method = "POST">
 				<input type='hidden' name='gameId' value={{game.id}}>
 			
 				<select required name="groupId", form ="group_form" >

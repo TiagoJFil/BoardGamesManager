@@ -7,22 +7,41 @@
 		{{#each games}}
 			<table>
 				<tr>
-					<td>Title:</td>
+					<td  class='gameInfoSearch'>Title:</td>
 					<td>{{name}}</td>
 				</tr>	
 				<h2></h2>
 				<tr>
-					<td>Price:</td>
+					<td  class='gameInfoSearch'>Publisher:</td>
+					<td>{{publisher}}</td>
+				</tr>		
+				<tr>
+					<td  class='gameInfoSearch'>Min Age:</td>
+					<td>{{min_age}}</td>
+				</tr>	
+				<tr>
+					<td  class='gameInfoSearch'>Min Players:</td>
+					<td>{{min_players}}</td>
+				</tr>
+				<tr>
+					<td  class='gameInfoSearch'>Max Players:</td>
+					<td>{{max_players}}</td>
+				</tr>
+				<tr>
+					<td  class='gameInfoSearch'>Price:</td>
 					<td>{{price}}$</td>
 				</tr>	
 				<tr>
-					<td>Url:</td>
+					<td  class='gameInfoSearch'>Url:</td>
 					<td><a href={{url}} target="_blank" rel="noopener noreferrer">{{url}}</a></td>
 				</tr>
 				<tr>
 				<td>
+					<form action='/games/{{id}}' method = "GET">
+						<input type="submit" required value="Get more details">
+					</form>
 						<label>Choose a group to add to:</label>
-						<form action="/add_game_to_group" id= "form_for_{{name}}" method = "POST">
+						<form action="/groups/games" id= "form_for_{{name}}" method = "POST">
 							<input type='hidden' name='gameId' value={{this.id}}>
 				
 							<select required name="groupId" form ="form_for_{{name}}" >

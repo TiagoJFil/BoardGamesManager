@@ -2,27 +2,24 @@
 
 <td>
     <div style="width: 500px; height: 150px; border: 5px solid #000;">
-        <element id='game1URL'>DESCRIPTION</element> :<br>{{groupdetails.description}}
+        <element class='gameURL'>DESCRIPTION</element> :<br>{{groupdetails.description}}
     </div>
 </td>
 
 {{#if games}}
     {{#each games}}
-        <div style="width: 500px; height: 100px; border: 5px solid #000;">
+		<div style="width: 500px; height: 100px; border: 5px solid #000;">
             <table>
                 <tr>
                     <td>
-                        <element id='game1URL'>NAME</element> : {{name}} <element id='game1URL'>PUBLISHER</element> : {{publisher}}</br>
-                        <element id='game1URL'>MIN_PLAYERS</element> : {{min_players}}<br>
-                        <element id='game1URL'>PRICE</element> : {{price}}$<br>
-                        <element id='game1URL'>URL</element> : <a href={{url}} target="_blank" rel="noopener noreferrer">{{url}}</a></br>
+                        <element class='gameURL'>NAME</element> : {{name}} <element class='gameURL'>PUBLISHER</element> : {{publisher}}</br>
+                        <element class='gameURL'>MIN_PLAYERS</element> : {{min_players}} <element class='gameURL'>MAX_PLAYERS</element> : {{min_players}}<br>
+						<element class='gameURL'>MIN_AGE</element> : {{min_age}}<br>
+                        <element class='gameURL'>PRICE</element> : {{price}}$<br>
+                        <element class='gameURL'>URL</element> : <a href={{url}} target="_blank" rel="noopener noreferrer">{{url}}</a></br>
                     </td>
                 </tr>
             </table>
         </div>
     {{/each}}
-{{/if}}
-
-{{#if error}}
-    {{error}}
 {{/if}}

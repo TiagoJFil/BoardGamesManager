@@ -133,8 +133,13 @@ form {
 	background-color: #eee; /* Add a hover effect to all links, except for headers */
 }
 
-#game1URL{
+.gameURL{
 	font-family: "Lucida Console", monospace;
 	text-align:center;
+	color: #5FBDF4;
+}
+
+.gameInfoSearch{
+	font-family: "Lucida Console", monospace;
 	color: #5FBDF4;
 }

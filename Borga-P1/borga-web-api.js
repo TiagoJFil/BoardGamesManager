@@ -40,11 +40,21 @@ module.exports = function (services) {
 			case 'MISSING_PARAMETER': 
 				res.status(400);
 				break;
+			case 'INVALID_PARAMETER':
+				res.status(400);
+				break;	
 			case 'UNAUTHENTICATED': 
 				res.status(401);
 				break;
-			case 'USER_ALREADY_EXISTS':
+			case 'GROUP_ALREADY_EXISTS':
 				res.status(409);
+				break;	
+			case 'GROUP_ALREADY_EXISTS':
+				res.status(409);
+				break;
+			case 'FAIL':
+				res.status(406);
+				break;			
 			default:
 				res.status(500);				
 		}

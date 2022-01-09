@@ -21,9 +21,8 @@ module.exports = function (services,defined_user) {
 		return null;
 */
 
-	}
+	};
 	
-
 	/**
 	 * Retrieves the home page
 	 * @param {Promise} req 
@@ -82,9 +81,9 @@ module.exports = function (services,defined_user) {
 					break;	
 				
 			}
-		}
+		};
 
-	}
+	};
 
 	/**
 	 *  Adds a game to the user's chosen group and redirects the user to the /groups page
@@ -104,15 +103,23 @@ module.exports = function (services,defined_user) {
 		}catch(err){
 			switch(err.name){
 				case 'MISSING_PARAMETER':
-					res.status(400).render(
-						'errors',
-						{ header, code: 400 , error: 'no game id or group id provided' }
-					);
+					if(!gameId){
+						res.status(400).render(
+							'errors',
+							{ header, code: 400 , error: 'no game id provided' }
+						);
+					}
+					if(!groupId){
+						res.status(400).render(
+							'errors',
+							{ header, code: 400 , error: 'no group id provided' }
+						);
 					break;
+					}
 				case 'FAIL':
-					res.status(400).render(
+					res.status(406).render(
 						'errors',
-						{ header, code: 500 , error: 'The game you are trying to add is already part of the group' }
+						{ header, code: 406 , error: 'The game you are trying to add is already part of the group' }
 					);
 					break;
 				default:
@@ -125,7 +132,7 @@ module.exports = function (services,defined_user) {
 			}
 		}
 
-	}
+	};
 
 	/**
 	 * Retrieves the popular page
@@ -134,7 +141,7 @@ module.exports = function (services,defined_user) {
 	 */
 	function getPopularPage(req, res) {
 		res.render('popular_games');
-	} 
+	};
 
 	/**
 	 * Retrieves the groups page
@@ -152,6 +159,13 @@ module.exports = function (services,defined_user) {
 			);
 		}catch(err){
 			switch(err.name){
+				/*
+				case 'NOT_FOUND':
+					res.status(404).render(
+						'groups',
+						{ header, code: 404 ,error: 'no groups found please create one' }
+					);
+				*/
 				default:
 					res.status(500).render(
 						'groups',
@@ -160,7 +174,7 @@ module.exports = function (services,defined_user) {
 					break;	
 			};
 		}
-	}
+	};
 
 	/**
 	 * Remders the create group page
@@ -169,7 +183,7 @@ module.exports = function (services,defined_user) {
 	 */ 
 	async function renderCreateGroups(req,res){
 		res.render('create_groups');
-	}
+	};
 
 	/**
 	 * Creates a group and if successful redirects the user to the /groups page 
@@ -187,30 +201,30 @@ module.exports = function (services,defined_user) {
 		}catch(err){
 			switch(err.name){
 				case 'MISSING_PARAMETER':
-					if(name == null){
+					if(!name){
 						res.status(400).render(
 								'create_groups',
-								{code: 400 , error:'no name provided'  }
+								{code: 400 , error:'no name was provided'}
 							);
 							break;
 					}
-					else if (desc == null){
+					else if (!desc){
 						res.status(400).render(
 						'create_groups',
-						{code: 400 , error:'no desc provided'  }
+						{code: 400 , error:'no description was provided'}
 						);
 						break;
 					}
 					
 				default:
 					res.status(500).render(
-						'create_groups',
-						{query: name, code: 500,error: JSON.stringify(err) }
+						'errors',
+						{query: name, code: 500,error: JSON.stringify(err)}
 					);
 					break;
 			}
 		}
-	}
+	};
 
 	/**
 	 * Retrieves the response page of the search query to search for popular games
@@ -239,9 +253,14 @@ module.exports = function (services,defined_user) {
 					break;	
 			}
 		}
-	}
+	};
 
-	async function renderGroup(req,res){
+	/**
+	 * Renders the page with the group information
+	 * @param {Promise} req
+	 * @param {Promise} res
+	 */ 
+	async function renderGroupInfo(req,res){
 		const id = req.params.id;
 		try{
 			const groupdetails = await services.getGroupInfo(getBearerToken(req),id);
@@ -260,11 +279,35 @@ module.exports = function (services,defined_user) {
 					break;
 			}
 		}
-	}
+	};
+
+	/**
+	 * Gets the group details and renders the group_render page
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
+	async function getGameDetails(req,res){
+		const id = req.params.id;
+		try{
+			const game = await services.getGameDetails(id);
+			res.render('game_details',game);
+		}
+		catch(err){
+			switch(err.name){
+				default:
+					res.status(500).render(
+						'errors',
+						{ code: 500,error: JSON.stringify(err) }
+					);
+					break;
+			}
+		};
+	};
+	
 
 	const router = express.Router();	
 	
-	router.use(express.urlencoded({ extended: true }));
+	router.use(express.urlencoded({ extended: true }));  //allows us to use req.body
 	
 	/*
 Commented because its code for the 4th assignment
@@ -284,14 +327,14 @@ Commented because its code for the 4th assignment
 		}catch(err){
 			switch(err.name){
 				case 'MISSING_PARAMETER':
-					if(name == null){
+					if(!name){
 						res.status(400).render(
 								'edit_group',
 								{code: 400 , error:'no name provided'}
 							);
 							break;
 					}
-					else if (desc == null){
+					else if (!desc){
 						res.status(400).render(
 						'edit_group',
 						{code: 400 , error:'no desc provided'}
@@ -357,19 +400,19 @@ Commented because its code for the 4th assignment
 	
 
 	// Edit a Group
-	router.post('/groups/edit/redirect', editGroup);
+	router.post('/groups/edit/', editGroup);
 
 	// Edit group page
 	router.get('/groups/edit/:id', renderEditGroupPage);
 
 	// Delete a game from a group
-	router.post('/groups/games/delete/redirect', deleteGameFromGroup);
+	router.post('/groups/games/delete', deleteGameFromGroup);
 
 	// Delete a game from a group page
 	router.get('/groups/games/delete/', renderDeleteGameFromGroupPage);
 
 	// Delete a group
-	router.post('/groups/delete/redirect', deleteAGroup);
+	router.post('/groups/delete', deleteAGroup);
 
 	// Delete group page
 	router.get('/groups/delete', renderDeleteGroupPage);
@@ -383,17 +426,20 @@ Commented because its code for the 4th assignment
 	// Homepage
 	router.get('/', getHomepage);
 
+	// Details of a game
+	router.get('/games/:id', getGameDetails);
+
 	// Search page
 	router.get('/search', getSearchPage);
 
 	// Search Result page
 	router.get('/search/result', findGame);
 	
-	//Popular games page
+	// Popular games page
 	router.get('/popular', getPopularPage);
 
-	//adds a game to a group
-	router.post('/add_game_to_group',addGameToGroup);
+	// Adds a game to a group
+	router.post('/groups/games',addGameToGroup);
 
 	// Groups page
 	router.get('/groups', getGroupsPage);
@@ -402,12 +448,13 @@ Commented because its code for the 4th assignment
 	router.get('/groups/create', renderCreateGroups);
 
 	//Groups filter response
-	router.post('/groups/create/redirect',createGroupAndRedirect);
+	router.post('/groups/create',createGroupAndRedirect);
 
 	//Popular games result page
 	router.get('/popular/result', popularGames);
 
-	router.get('/groups/:id',renderGroup);
+	//Group page
+	router.get('/groups/:id', renderGroupInfo);
 
 	return router;
 }

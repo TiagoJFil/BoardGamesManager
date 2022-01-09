@@ -145,13 +145,15 @@ module.exports = function (data_borga, data_mem) {
 	 * Lists all user's groups in a object 
 	 * @param {String} token user's token 
 	 * @returns {Object} all group
+	 * @throws {NOT_FOUND} error if there is no groups
 	 */
 	async function listGroups(token){
 		const username = await getUsername(token);
+		const groups = await data_mem.listGroups(username);
+		//if (groups == {}) throw(errors.NOT_FOUND(`There were no groups found`));
 
-		return data_mem.listGroups(username);
+		return groups;
 	}
-
 
 	/**
 	 * Gets a group information
@@ -182,8 +184,9 @@ module.exports = function (data_borga, data_mem) {
 	 * @returns {Object} updated group
 	 * @throws {MISSING_PARAMETER} error if the group id is missing
 	 * @throws {MISSING_PARAMETER} error if the game id is missing
-	 * @throws {NOT_FOUND} error if the group does not exist
-	 * @throws {FAIL} error if the game is already in the group or if the game was not found
+	 * @throws {NOT_FOUND} error if the group does not exist or if the game was not found
+	 * @throws {FAIL} error if the game is already in the group
+	 * 
 	 */
 	async function addGameToGroup(token,groupId,gameId){
 		const username = await getUsername(token);
