@@ -76,6 +76,76 @@
 			"response": []
 		},
 		{
+			"name": "get Details with a game id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"received a game\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const query = pm.request.url.getQueryString().slice(5);\r",
+							"    \r",
+							"    pm.expect(jsonData).to.be.an(\"object\");\r",
+							"     \r",
+							"});//falta tipo quando se recebe alguma coisa ver se contem\r",
+							"\r",
+							"\r",
+							"pm.test(\"when no query is sent receive a MISSING_PARAMETER error\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const query = pm.request.url.getQueryString().slice(5);\r",
+							"    if(query){\r",
+							"        pm.expect(true).to.eql(true) //pass the test\r",
+							"        \r",
+							"    } \r",
+							"    \r",
+							"    pm.response.to.have.status(400);\r",
+							"    pm.expect(jsonData).to.eql({ \"cause\": { \"code\": 1003, \"name\": \"MISSING_PARAMETER\", \"message\": \"A required parameter is missing\", \"info\": \"Name of the game to search\" } });\r",
+							"     \r",
+							"});\r",
+							"\r",
+							"pm.test(\"when no game was found returns NOT_FOUND error \", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    const query = pm.request.url.getQueryString().slice(5);\r",
+							"    if(query) pm.expect(true).to.eql(true) //pass the test\r",
+							"    \r",
+							"    pm.response.to.have.status(404);\r",
+							"    pm.expect(jsonData).to.eql({\"cause\":{\"code\":1001,\"name\":\"NOT_FOUND\",\"message\":\"The item does not exist\",\"info\":{\"name\":\"awdq\"}}});\r",
+							"     \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/api/all/games/details?id=fG5Ax8PA7n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"all",
+						"games",
+						"details"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "fG5Ax8PA7n"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "get-Ranks",
 			"event": [
 				{
@@ -236,13 +306,13 @@
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text",
-						"disabled": true
+						"type": "text"
 					},
 					{
 						"key": "Authorization",
 						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
-						"type": "text"
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"url": {
