@@ -4,6 +4,9 @@
  * All data-mem tests require a mock of data-mem located on mock folder
  */
 
+
+//TO BE UPDATED, FUNCTIONS LIKE HASGROUP AND EDITGROUP ARE DIFERENT
+
 const mock_data_int = require('../mock/mock_data_mem');
 
 describe('CreateGroup function tests',() => {
@@ -28,6 +31,7 @@ describe('CreateGroup function tests',() => {
         await mock_data_int.createGroup('manel','xpto','xptos'); 
         await mock_data_int.createGroup('manel','jogos','para jogar');
         await mock_data_int.createGroup('manel','lendas','sim');
+
 
         const cond = await mock_data_int.hasGroup('manel','jogos') &&
                         await mock_data_int.hasGroup('manel', 'lendas') &&

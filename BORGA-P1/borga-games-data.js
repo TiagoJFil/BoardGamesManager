@@ -34,22 +34,12 @@ function getStatusClass(statusCode) {
 	return ~~(statusCode / 100); //como nao ha tipos em js , utilizamos o not bit a bit duas vezes para converter em inteiro
 }
 
-/**
- * const with all games categories
- */
-const categories = require('./docs/categories.json')
-
-/**
- * const with all games mechanics
- */
-const mechanics = require('./docs/mechanics.json')
 
 
 /**
  * Map with all the categories names and id's as key
  */
 const mapCatMech = getMapCatMech()
-
 
 
 /**
@@ -107,36 +97,62 @@ async function makeGameDetailsObj(gameInfo){
         description: gameInfo.description,
         url: gameInfo.url,
         image_url: gameInfo.image_url,
-        mechanics: await getMechanics(gameInfo.mechanics),
-        categories: await getCategories(gameInfo.categories)
+        mechanics: await getNames(gameInfo.mechanics),
+        categories: await getNames(gameInfo.categories)
     }
 }
 
 
+/**
+ * get mehcanics or categories details
+ * @param {String} string  
+ * @returns return a json file with all the categories or mechanics
+ */
+function getDetails(string){
+	const search_uri = BOARD_ATLAS_BASE_GAME_URI + `${string}` + '?&client_id=' + CLIENT_ID;
+    return do_fetch(search_uri)
+    .then(answer => {
+        if(answer.length != 0 && answer.count != 0){
+            return answer;
+        } else {
+            throw errors.NOT_FOUND();
+        }
+    });	
+}
 
 /**
- * Gets the mechanics of a game
- * @param {Object} gameArray 
- * @returns an object with the mechanics now present in the game
+ * Adds all mechanics and categories pair id and name to a map
+ * @returns a map containing ids and names
  */
-async function getMechanics(gameArray) {
-    let array = new Array()
-	await gameArray.forEach(element => {
-		array.push(mapCatMech.get(element.id))
-	});
-	return array
+ async function getMapCatMech(){
+	let map = new Map()
+
+	const mechanics = await getDetails('mechanics');
+	const categories = await getDetails('categories');
+
+	for(let i = 0; i < mechanics.mechanics.length ; i++){
+		const element = mechanics.mechanics[i]
+		map.set(element.id,element.name)
+	}
+	
+	for(let i = 0; i < categories.categories.length ; i++){
+		const element = categories.categories[i]
+		map.set(element.id,element.name)
+	}
+	return map
 }
 
 
 /**
- * Gets the categories of a game
+ * Gets the name of a mechanic or categorie
  * @param {Object} gameArray 
- * @returns object with the categories now present in the game
+ * @returns an array with all the mechanics or categories names
  */
-async function getCategories(gameArray){
+async function getNames(gameArray) {
+	const newmap = await mapCatMech
     let array = new Array()
 	await gameArray.forEach(element => {
-		array.push(mapCatMech.get(element.id))
+		array.push(newmap.get(element.id))
 	});
 	return array
 }
@@ -158,6 +174,8 @@ function getGameDetails(id){
         }
     });
 }
+
+
 
 
 /**
@@ -185,8 +203,7 @@ function getGameByName(name) {
  * @returns {Object} a game or an error
  */
 function getGameById(id) {
-	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;
-	
+	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;	
 	return do_fetch(search_uri)
 		.then(answer => {
 			if(answer.length != 0 && answer.count != 0){
@@ -229,27 +246,6 @@ function getListPopularGames(count) {
 		it++
 	}
 	return gamesList
-}
-
-
-/**
- * Adds all mechanics and categories pair id and name to a map
- * @returns a map containing ids and names
- */
-function getMapCatMech(){
-	
-	let map = new Map()
-	
-	for(let i = 0; i < mechanics.mechanics.length ; i++){
-		const element = mechanics.mechanics[i]
-		map.set(element.id,element.name)
-	}
-	
-	for(let i = 0; i < categories.categories.length ; i++){
-		const element = categories.categories[i]
-		map.set(element.id,element.name)
-	}
-	return map
 }
 
 module.exports = {

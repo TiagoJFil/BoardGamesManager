@@ -84,7 +84,7 @@ module.exports = function(es_spec){
      * @returns {Object} a new group object with the information provided
      */
     async function createGroup(user,name,description){
-        const id = crypto.randomUUID()
+        const id = crypto.randomUUID();
         const groupId = id.replace(/-/g,'');
         var newGroup =  {
             name : name,

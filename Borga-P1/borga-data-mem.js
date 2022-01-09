@@ -2,7 +2,6 @@
 
 const crypto = require('crypto')
 
-let count = 0;
 
 /**
  * object with user token as key and its name as value
@@ -78,21 +77,21 @@ async function tokenToUsername(token) {
  * @returns {Object} a new group object with the information provided
  */
 async function createGroup(user,name,description){
+	const id = crypto.randomUUID().replace(/-/g,'');
+	
 	var newGroup =  {
 		name : name,
 		description : description,
 		games : []	
 	};
 
-	users[user][count] = newGroup;
+	users[user][id] = newGroup;
 
 	const displayableGroup =  {
 		name : name,
 		description : description,
 		games : {}	
 	};
-
-	count++
 
 	return displayableGroup;
 }
@@ -135,7 +134,6 @@ async function listGroups(user){
  * @returns {Object} user's groups updated
  */
 async function deleteGroup(user, groupId){
-
 	delete users[user][groupId];
 	return listGroups(user);
 
