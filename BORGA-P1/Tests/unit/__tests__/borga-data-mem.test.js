@@ -7,83 +7,83 @@
 
 //TO BE UPDATED, FUNCTIONS LIKE HASGROUP AND EDITGROUP ARE DIFERENT
 
-const mock_data_int = require('../mock/mock_data_mem');
+const mock_data_int = require('../__mock__/mock_data_mem');
 
 describe('CreateGroup function tests',() => {
 
     test('create group with existing user creates group', async () => {
 
-        await mock_data_int.createGroup('tiago','xpto','xptos');
-        const cond = await mock_data_int.hasGroup('tiago','xpto');
+        const group = await mock_data_int.createGroup('tiago','xpto','xptos');
+        const cond = await mock_data_int.hasGroup('tiago',group);
 
         expect(cond).toEqual(true);
 
-        expect(mock_data_int.mock_users['tiago']['xpto']).toStrictEqual( {
-			Name : 'xpto',
-			Description:'xptos',
+        expect(mock_data_int.mock_users['tiago'][group]).toStrictEqual( {
+			name : 'xpto',
+			description:'xptos',
 			games:[]
 	    });
 
     });
-
+    
     test('create multiple groups with different names', async () => {
 
-        await mock_data_int.createGroup('manel','xpto','xptos'); 
-        await mock_data_int.createGroup('manel','jogos','para jogar');
-        await mock_data_int.createGroup('manel','lendas','sim');
+        const manelGroupId1 = await mock_data_int.createGroup('manel','xpto','xptos'); 
+        const manelGroupId2 = await mock_data_int.createGroup('manel','jogos','para jogar');
+        const manelGroupId3 = await mock_data_int.createGroup('manel','lendas','sim');
 
 
-        const cond = await mock_data_int.hasGroup('manel','jogos') &&
-                        await mock_data_int.hasGroup('manel', 'lendas') &&
-                            await mock_data_int.hasGroup('manel', 'xpto');
+        const cond = await mock_data_int.hasGroup('manel',manelGroupId1) &&
+                        await mock_data_int.hasGroup('manel', manelGroupId2) &&
+                            await mock_data_int.hasGroup('manel', manelGroupId3);
         
         expect(cond).toEqual(true);
 
-        expect(mock_data_int.mock_users['manel']['xpto']).toStrictEqual( {
-			Name : 'xpto',
-			Description:'xptos',
+        expect(mock_data_int.mock_users['manel'][manelGroupId1]).toStrictEqual( {
+			name : 'xpto',
+			description:'xptos',
 			games:[]
 	    });
 
-        expect(mock_data_int.mock_users['manel']['jogos']).toStrictEqual( {
-			Name : 'jogos',
-			Description:'para jogar',
+        expect(mock_data_int.mock_users['manel'][manelGroupId2]).toStrictEqual( {
+			name : 'jogos',
+			description:'para jogar',
 			games:[]
 	    });
 
-        expect(mock_data_int.mock_users['manel']['lendas']).toStrictEqual( {
-			Name : 'lendas',
-			Description:'sim',
+        expect(mock_data_int.mock_users['manel'][manelGroupId3]).toStrictEqual( {
+			name : 'lendas',
+			description:'sim',
 			games:[]
 	    });
 
     });
 
     test('create multiple groups for different users', async () => {
-        await mock_data_int.createGroup('tiago','xpto','xptos'); 
-        await mock_data_int.createGroup('manel','jogos','para jogar');
-        await mock_data_int.createGroup('toni','lendas','sim');
+        const tiagoId = await mock_data_int.createGroup('tiago','xpto','xptos'); 
+        const manelId = await mock_data_int.createGroup('manel','jogos','para jogar');
+        const toniId  = await mock_data_int.createGroup('toni','lendas','sim');
 
-        const cond = await mock_data_int.hasGroup('manel','jogos') &&
-                        await mock_data_int.hasGroup('toni', 'lendas') &&
-                            await mock_data_int.hasGroup('tiago', 'xpto');
+        const cond = await mock_data_int.hasGroup('manel',manelId) &&
+                        await mock_data_int.hasGroup('toni', toniId) &&
+                            await mock_data_int.hasGroup('tiago', tiagoId);
         
         expect(cond).toEqual(true);
 
-        expect(mock_data_int.mock_users['tiago']['xpto']).toStrictEqual( {
-			Name : 'xpto',
-			Description:'xptos',
+        expect(mock_data_int.mock_users['tiago'][tiagoId]).toStrictEqual( {
+			name : 'xpto',
+			description:'xptos',
 			games:[]
 	    });
         
-        expect(mock_data_int.mock_users['manel']['jogos']).toStrictEqual( {
-			Name : 'jogos',
-			Description:'para jogar',
+        expect(mock_data_int.mock_users['manel'][manelId]).toStrictEqual( {
+			name : 'jogos',
+			description:'para jogar',
 			games:[]
 	    });
-        expect(mock_data_int.mock_users['toni']['lendas']).toStrictEqual( {
-			Name : 'lendas',
-			Description:'sim',
+        expect(mock_data_int.mock_users['toni'][toniId]).toStrictEqual( {
+			name : 'lendas',
+			description:'sim',
 			games:[]
 	    });
 
@@ -95,25 +95,26 @@ describe('editGroup function tests', () => {
 
     test('editing a user group works', async () =>{
 
-        const newDesc = await mock_data_int.editGroup('manel','test','jogatana','descrição banal');
+        const newDesc = await mock_data_int.editGroup('manel','39ff3d00f5fa4a1fb8389a41157ce094','jogatana','descrição banal');
 
         expect(mock_data_int.mock_users['manel'].test).toBe(undefined);
 
-        expect(mock_data_int.mock_users['manel']['jogatana'].Description).toBe("descrição banal");
-        expect(mock_data_int.mock_users['manel']['jogatana'].Name).toBe("jogatana");
+        expect(mock_data_int.mock_users['manel']['39ff3d00f5fa4a1fb8389a41157ce094'].description).toBe("descrição banal");
+        expect(mock_data_int.mock_users['manel']['39ff3d00f5fa4a1fb8389a41157ce094'].name).toBe("jogatana");
     });
 
     test('editing multiple groups of an user works', async () => {
-        await mock_data_int.createGroup('manel','testenome','teste');
+        const manelId = await mock_data_int.createGroup('manel','testenome','teste');
 
-        const desc1 = await mock_data_int.editGroup('manel','testenome','nometeste','nova descrição');
-        const desc2 = await mock_data_int.editGroup('manel','jogatana','novo','nova desc');
+        const desc1 = await mock_data_int.editGroup('manel',manelId,'nometeste','nova descrição');
+        const desc2 = await mock_data_int.editGroup('manel','39ff3d00f5fa4a1fb8389a41157ce094','novo','nova desc');
 
         expect(mock_data_int.mock_users['manel']['testenome']).toBe(undefined);
-        expect(mock_data_int.mock_users['manel']['nometeste'].Description).toBe("nova descrição");
+        expect(mock_data_int.mock_users['manel'][manelId].description).toBe("nova descrição");
 
         expect(mock_data_int.mock_users['manel']['jogatana']).toBe(undefined);
-        expect(mock_data_int.mock_users['manel']['novo'].Description).toBe("nova desc");
+        expect(mock_data_int.mock_users['manel']['39ff3d00f5fa4a1fb8389a41157ce094'].description).toBe("nova desc");
+
     });
 });
 
@@ -123,18 +124,9 @@ describe('editGroup function tests', () => {
 describe('deleteGroup function tests', () => {
 
     test('deleting user group', async () => {
-        expect(mock_data_int.mock_users['manel']['nometeste']).toStrictEqual({Name : 'nometeste', Description : 'nova descrição', games: []});
-        await mock_data_int.deleteGroup('manel','nometeste');
-        expect(mock_data_int.mock_users['manel']['nometeste']).toBe(undefined)
-    });
-
-    test('deleting all user groups', async () => {
-        await mock_data_int.deleteGroup('manel','nometeste');
-        await mock_data_int.deleteGroup('manel','novo');
-        await mock_data_int.deleteGroup('manel','xpto');
-        await mock_data_int.deleteGroup('manel','jogos');
-        await mock_data_int.deleteGroup('manel','lendas');
-        expect(mock_data_int.mock_users['manel']).toStrictEqual({});
+        expect(mock_data_int.mock_users['toni']['21dc3686c2244e919e9951dcc9c0691f']).toStrictEqual({name : 'test', description : 'Grupo de Teste', games: ['cyscZjjlse']});
+        await mock_data_int.deleteGroup('toni','21dc3686c2244e919e9951dcc9c0691f');
+        expect(mock_data_int.mock_users['toni']['21dc3686c2244e919e9951dcc9c0691f']).toBe(undefined)
     });
 
 });
@@ -143,16 +135,16 @@ describe('listGroups function tests', () => {
 
     test('listing all user groups', async () => {
 
-        expect(await mock_data_int.listGroups('toni')).toStrictEqual([
+        expect(await mock_data_int.listGroups('zezocas')).toStrictEqual( 
             {
-			    Name : 'test',
-			    Description:'Grupo de Teste',
-	        },
-            {
-                Name : 'lendas',
-                Description : 'sim'
+                "bffe984340b943f29eb384c2a1b95ac5": {
+                "name": "test", 
+                "description": "Grupo de Teste",
+                "games": {"cyscZjjlse": {"id": "cyscZjjlse", "max_players": 8, "min_age": 12, "min_players": 4, "name": "Telestrations", "price": "22.99", "publisher": "USAopoly", "rank": 252, "url": "https://www.boardgameatlas.com/game/cyscZjjlse/telestrations"}},
+                }
             }
-        ]);
+        
+        );
 
     });
 
@@ -162,9 +154,9 @@ describe('addGameToGroup function tests', () => {
 
     test('add games to user games list', async () => {
         
-        expect(mock_data_int.mock_users['tiago']['test'].games).toStrictEqual(['cyscZjjlse']);
+        expect(mock_data_int.mock_users['tiago']['55bb5b48125d4e79893197dd45dbdce1'].games).toStrictEqual(['cyscZjjlse']);
 
-        await mock_data_int.addGameToGroup('tiago','test',	
+        await mock_data_int.addGameToGroup('tiago','55bb5b48125d4e79893197dd45dbdce1',	
             {
                 id: 'TAAifFP590',
                 name: 'Root',
@@ -178,7 +170,7 @@ describe('addGameToGroup function tests', () => {
             }
         );
 
-        await mock_data_int.addGameToGroup('tiago','test',
+        await mock_data_int.addGameToGroup('tiago','55bb5b48125d4e79893197dd45dbdce1',
             {
                 id: 'yqR4PtpO8X',
                 name: 'Scythe',
@@ -192,29 +184,32 @@ describe('addGameToGroup function tests', () => {
             }
         );
 
-        expect(mock_data_int.mock_users['tiago']['test'].games).toStrictEqual(['cyscZjjlse','TAAifFP590','yqR4PtpO8X']);
+        expect(mock_data_int.mock_users['tiago']['55bb5b48125d4e79893197dd45dbdce1'].games).toStrictEqual(['cyscZjjlse','TAAifFP590','yqR4PtpO8X']);
 
     });
 
 });
+
+
 
 describe('RemoveGameFromGroup function tests', () => {
 
     test('remove game from user', async () => {
 
-        await mock_data_int.removeGameFromGroup('toni', 'test', 'cyscZjjlse');
-        expect(mock_data_int.mock_users['toni']['test'].games).toStrictEqual([]);
+        await mock_data_int.removeGameFromGroup('zezocas', 'bffe984340b943f29eb384c2a1b95ac5', 'cyscZjjlse');
+        expect(mock_data_int.mock_users['zezocas']['bffe984340b943f29eb384c2a1b95ac5'].games).toStrictEqual([]);
 
     });
 
     test('remove game from user that has no games', async () => {
         
-        await mock_data_int.removeGameFromGroup('toni', 'test', 'cyscZjjlse');
-        await mock_data_int.removeGameFromGroup('toni', 'test', 'cyscZjjlse');
-        expect(mock_data_int.mock_users['toni']['test'].games).toStrictEqual([]);
+        await mock_data_int.removeGameFromGroup('zezocas', 'bffe984340b943f29eb384c2a1b95ac5', 'cyscZjjlse');
+        await mock_data_int.removeGameFromGroup('zezocas', 'bffe984340b943f29eb384c2a1b95ac5', 'cyscZjjlse');
+        expect(mock_data_int.mock_users['zezocas']['bffe984340b943f29eb384c2a1b95ac5'].games).toStrictEqual([]);
 
     });
 
     
     
 });
+

@@ -87,7 +87,7 @@ describe('Integration tests', () => {
 			"id": "TAAifFP590",
 			"name": "Root",
 			"url": "https://www.boardgameatlas.com/game/TAAifFP590/root",
-			"price": "48.00",
+			"price": "47.99",
 			"publisher": "Leder Games",
 			"min_age": 10,
 			"min_players": 2,
@@ -99,7 +99,8 @@ describe('Integration tests', () => {
 	test('find game details by id',async() => {
 		
 		const response = await request(app)
-			.get('/api/all/games/TAAifFP590')
+			.get('/api/all/games/details')
+			.query({ id: 'TAAifFP590' })
 		
 		expect(response.statusCode).toBe(200);
 		expect(response.body).toEqual(
@@ -109,58 +110,22 @@ describe('Integration tests', () => {
 				"description": "<p>Find adventure in this marvelous asymmetric game. Root provides limitless replay value as you and your friends explore the unique factions all wanting to rule a fantastic forest kingdom. Play as the Marquise de Cat and dominate the woods, extracting its riches and policing its inhabitants, as the Woodland Alliance, gathering supporters and coordinate revolts against the ruling regime, the Eyrie Dynasties, regaining control of the woods while keeping your squabbling court at bay, or as the Vagabond, seeking fame and fortune as you forge alliances and rivalries with the other players. Each faction has its own play style and paths to victory, providing an immersive game experience you will want to play again and again.</p>",
 				"url": "https://www.boardgameatlas.com/game/TAAifFP590/root",
 				"image_url": "https://s3-us-west-1.amazonaws.com/5cc.images/games/uploaded/1629324760985.jpg",
-				"mechanics": {
-					"PGjmKGi26h": {
-						"name": "Action / Movement Programming",
-						"url": "https://www.boardgameatlas.com/mechanic/PGjmKGi26h/action--movement-programming"
-					},
-					"ckCp1oTVMy": {
-						"name": "Action Queue",
-						"url": "https://www.boardgameatlas.com/mechanic/ckCp1oTVMy/action-queue"
-					},
-					"05zCZoLvQJ": {
-						"name": "Area Control",
-						"url": "https://www.boardgameatlas.com/mechanic/05zCZoLvQJ/area-control"
-					},
-					"R0bGq4cAl4": {
-						"name": "Dice Rolling",
-						"url": "https://www.boardgameatlas.com/mechanic/R0bGq4cAl4/dice-rolling"
-					},
-					"yu3eas6v7A": {
-						"name": "Engine Building",
-						"url": "https://www.boardgameatlas.com/mechanic/yu3eas6v7A/engine-building"
-					},
-					"WPytek5P8l": {
-						"name": "Hand Management",
-						"url": "https://www.boardgameatlas.com/mechanic/WPytek5P8l/hand-management"
-					},
-					"MEAoOygZsA": {
-						"name": "Point to Point Movement",
-						"url": "https://www.boardgameatlas.com/mechanic/MEAoOygZsA/point-to-point-movement"
-					},
-					"qZx4PEzKKz": {
-						"name": "Race",
-						"url": "https://www.boardgameatlas.com/mechanic/qZx4PEzKKz/race"
-					},
-					"XM2FYZmBHH": {
-						"name": "Variable Player Powers",
-						"url": "https://www.boardgameatlas.com/mechanic/XM2FYZmBHH/variable-player-powers"
-					}
-				},
-				"categories": {
-					"KUBCKBkGxV": {
-						"name": "Adventure",
-						"url": "https://www.boardgameatlas.com/category/KUBCKBkGxV/adventure"
-					},
-					"MWoxgHrOJD": {
-						"name": "Animals",
-						"url": "https://www.boardgameatlas.com/category/MWoxgHrOJD/animals"
-					},
-					"Bq6M0TJyg7": {
-						"name": "Asymmetric",
-						"url": "https://www.boardgameatlas.com/category/Bq6M0TJyg7/asymmetric"
-					}
-				}
+				"mechanics": [
+					"Action / Movement Programming",
+					"Action Queue",
+					"Area Control",
+					"Dice Rolling",
+					"Engine Building",
+					"Hand Management",
+					"Point to Point Movement",
+					"Race",
+					"Variable Player Powers",
+				],
+				"categories": [
+					"Adventure",
+					"Animals",
+					"Asymmetric",
+				],
 			
 			});
 	});
