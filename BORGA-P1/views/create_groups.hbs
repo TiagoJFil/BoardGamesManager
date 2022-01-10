@@ -1,15 +1,23 @@
 <h1>Create a group</h1>
 
-<form action= "/groups/create" method = "POST">
-	<p><label >Name:</label></p>
-	<input required type="text" name="name"><br></br>
-	<p><label for="desc">Description (Max 100 characters):</label></p>
-	<input required type='text' name='desc' size='100'><br></br>
-	<input type="submit" value="Create">
-</form>
 
 {{#if error}}
 	{{#if code}}
-		<error><strong> ERROR {{code}}: {{error}}</strong></error>
+		<form action= "/groups/create" method = "POST">
+			<p><label >Name:</label></p>
+			<input type="text" name="name"><br></br>
+			<p><label for="desc">Description (Max 100 characters):</label></p>
+			<input type='text' name='desc' size='100'><br></br>
+			<errorOnCreateGroups><strong> {{!-- ERROR {{code}}:  --}}{{error}}</strong></errorOnCreateGroups><br>
+			<input type="submit" value="Create">
+		</form>
 	{{/if}}
+{{else}}
+	<form action= "/groups/create" method = "POST">
+		<p><label >Name:</label></p>
+		<input type="text" name="name"><br></br>
+		<p><label for="desc">Description (Max 100 characters):</label></p>
+		<input type='text' name='desc' size='100'><br></br>
+		<input type="submit" value="Create">
+	</form>
 {{/if}}

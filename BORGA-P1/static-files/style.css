@@ -62,17 +62,26 @@ h5 {
 	color: rgb(0, 0, 0);
 }
 
-error {
+errorAsterisk{
+	color: #c51244;
+}
+
+#errorCheck{
+	background-color: #fff0f4;
+	border-color: #c51244;
+}
+
+errorOnSearch {
 	background: #c51244 !important;
 	padding: 10px !important;
 	border-radius: 0 !important;
 	position: relative; 
 	display: inline-block !important;
 	box-shadow: 1px 1px 1px #aaaaaa;
-	margin-top: 10px; 
+	margin-top: 0.5px; 
 }
 
-error:before{
+errorOnSearch:before{
 	content: '';  
 	width: 0;  
 	height: 0;  
@@ -83,8 +92,25 @@ error:before{
 	top: -10px; 
 }
 
-error:after{
-	color: #c51244 !important;
+errorOnCreateGroups {
+	background: #c51244 !important;
+	padding: 10px !important;
+	border-radius: 0	 !important;
+	position: relative; 
+	display: inline-block !important;
+	box-shadow: 1px 1px 1px #aaaaaa;
+	margin-bottom: 10px;
+}
+
+errorOnCreateGroups:before{
+	content: '';  
+	width: 0;  
+	height: 0;  
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #c51244;
+	position: absolute;  
+	top: -10px; 
 }
 
 p {
@@ -106,19 +132,17 @@ form {
 	position: relative; 
 	display: inline-block !important;
 	box-shadow: 1px 1px 1px #aaaaaa;
-	margin-top: 10px; 
-	
+	margin-top: 10px;
 }
 
-  
-#myUL {
+#groups {
 	/* Remove default list styling */
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
 }
   
-#myUL li a {
+#groups li a {
 	border: 1px solid #ddd; /* Add a border to all links */
 	margin-top: -1px; /* Prevent double borders */
 	background-color: #f6f6f6; /* Grey background color */
@@ -129,7 +153,7 @@ form {
 	display: block; /* Make it into a block element to fill the whole list */
 }
   
-#myUL li a:hover:not(.header) {
+#groups li a:hover:not(.header) {
 	background-color: #eee; /* Add a hover effect to all links, except for headers */
 }
 
