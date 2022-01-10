@@ -64,13 +64,13 @@ module.exports = function (services,defined_user) {
 				case 'MISSING_PARAMETER':
 					res.status(400).render(
 						'search',
-						{ header, code: 400 , error: 'no query provided' }
+						{ header, code: 400 , error: 'Game is required' }
 					);
 					break;
 				case 'NOT_FOUND':
 					res.status(404).render(
 						'search',
-						{ header, code: 404 ,error: 'no game found for the query provided' }
+						{ header, code: 404 ,error: 'No game found' }
 					);
 					break;
 				default:
@@ -201,17 +201,24 @@ module.exports = function (services,defined_user) {
 		}catch(err){
 			switch(err.name){
 				case 'MISSING_PARAMETER':
-					if(!name){
+					if(!name && !desc){
+						res.status(400).render(
+							'create_groups',
+							{code: 400 , error:'No information was provided'}
+						);
+						break;
+					}
+					else if(!name ){
 						res.status(400).render(
 								'create_groups',
-								{code: 400 , error:'no name was provided'}
+								{code: 400 , error:'No name was provided'}
 							);
 							break;
 					}
 					else if (!desc){
 						res.status(400).render(
 						'create_groups',
-						{code: 400 , error:'no description was provided'}
+						{code: 400 , error:'No description was provided'}
 						);
 						break;
 					}
