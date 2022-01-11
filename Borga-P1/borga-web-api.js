@@ -59,7 +59,7 @@ module.exports = function (services) {
 				res.status(500);				
 		}
 		res.json({ cause: err });
-	}
+	};
 	
 	/**
 	 * Lists top x popular games
@@ -76,7 +76,7 @@ module.exports = function (services) {
 		}catch(err){
 			onError(req, res, err);
 		}
-	}
+	};
 	
 	/**
 	 * Searches a game
@@ -91,7 +91,7 @@ module.exports = function (services) {
 		} catch (err) {
 			onError(req, res, err);
 		}	
-	}
+	};
 
 	/**
 	 * Gets the details of a game using the game name
@@ -106,7 +106,7 @@ module.exports = function (services) {
 		} catch (err) {
 			onError(req, res, err);
 		}
-	}
+	};
 
 	/**
 	 * Creates a group
@@ -123,7 +123,7 @@ module.exports = function (services) {
 		}catch(err){
 			onError(req,res,err);
 		}
-	}
+	};
 
 	/**
 	 * Edits a group
@@ -141,7 +141,7 @@ module.exports = function (services) {
 		}catch(err){
 			onError(req,res,err);
 		}
-	}
+	};
 
 	/**
 	 * Lists all groups
@@ -156,7 +156,7 @@ module.exports = function (services) {
 		}catch(err){
 			onError(req,res,err);
 		}
-	}
+	};
 	
 
 	/**
@@ -172,8 +172,7 @@ module.exports = function (services) {
 		}catch(err){
 			onError(req,res,err);
 		}
-	}
-
+	};
 
 	/**
 	 * Adds a user
@@ -183,12 +182,13 @@ module.exports = function (services) {
 	async function addUser(req,res){
 		try {
 			const username = req.params.name;
-			const user = await services.addUser(username)
+			const password = req.query.password;
+			const user = await services.addUser(username,password);
 			res.json(user)
 		} catch (err) {
 			onError(req, res, err);
 		}
-	}
+	};
 	
 	/**
 	 * Adds a game to a group
@@ -204,7 +204,7 @@ module.exports = function (services) {
 		}catch(err){
 			onError(req,res,err)
 		}
-	}
+	};
 
 	/**
 	 * Deletes a group
@@ -212,7 +212,6 @@ module.exports = function (services) {
 	 * @param {Promise} res 
 	 */
 	async function deleteGroup(req,res){
-		
 		try{
 			const groupId = req.params.groupId;
 			const groups = await services.deleteAGroup(getBearerToken(req),groupId)
@@ -220,7 +219,7 @@ module.exports = function (services) {
 		}catch(err){
 			onError(req,res,err)
 		}
-	}
+	};
 
 	/**
 	 * Removes a game from a group
@@ -237,7 +236,7 @@ module.exports = function (services) {
 			
 			onError(req,res,err)
 		}
-	}
+	};
 
 
 

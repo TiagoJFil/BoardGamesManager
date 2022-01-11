@@ -137,15 +137,22 @@ paths:
       tags:
         - User
       summary: Creates an new user
-      description: creates a user and returns it with its associated bearer token
+      description: Creates a user and returns it with its associated bearer token
       parameters:
         - name: name
           in: path
-          description: Create a new user
+          description: Name of the user to create
           required: true
           schema:
             type: string
           example: Pedro
+        - name: password
+          in: query
+          description: Password to associate with the user
+          example: abc123
+          schema:
+            type: string
+          
       responses:
         '200':
           description: User added

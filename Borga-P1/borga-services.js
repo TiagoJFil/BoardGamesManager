@@ -19,7 +19,22 @@ module.exports = function (data_borga, data_mem) {
 			throw errors.UNAUTHENTICATED('bad token');
 		}
 		return username;
-	}
+	};
+
+	async function checkAndGetUser(username, password) {
+		if (!username) {
+			throw errors.MISSING_PARAMETER('missing username');
+		}
+		if (!password) {
+			throw errors.MISSING_PARAMETER('missing password');
+		}
+
+		const userInfo = await data_mem.getUser(username);
+		if (userInfo.password !== password) {
+			throw errors.BAD_CREDENTIALS();
+		}
+		return user;
+	};
 	
 	/**
  	* Gets the top x popular games
@@ -32,7 +47,7 @@ module.exports = function (data_borga, data_mem) {
 		if(count <=0) throw errors.INVALID_PARAMETER('the ranked count cant be 0 or bellow');
 		const list =  data_borga.getListPopularGames(count);
 		return list;
-	}
+	};
 
 	/**
  	* Searches a game by the name
@@ -46,7 +61,7 @@ module.exports = function (data_borga, data_mem) {
 		
 		const game = data_borga.getGameByName(name);
 		return game;
-	}
+	};
 
 	/**
 	* Gets the details of a game using the game id
@@ -61,7 +76,7 @@ module.exports = function (data_borga, data_mem) {
 
 		const game = data_borga.getGameDetails(id);
 		return game;
-	}
+	};
 
 	/**
 	 * Adds a user to the data base
@@ -69,15 +84,15 @@ module.exports = function (data_borga, data_mem) {
 	 * @returns {Object} new user
 	 * @throws {Object} error if the user already exists
 	 */
-	async function addUser(name){
+	async function addUser(name,password){
 		if(!name){
 			throw(errors.MISSING_PARAMETER('Name of the user is missing'));
 		}
 		if(await data_mem.hasUser(name))
 			throw errors.USER_ALREADY_EXISTS(name);
 
-		return data_mem.createUser(name);
-	}
+		return data_mem.createUser(name,password);
+	};
 	
 	/**
 	 * Creates a new user's group
@@ -105,8 +120,7 @@ module.exports = function (data_borga, data_mem) {
 		
 		return data_mem.createGroup(username,name,desc);
 	
-	}
-
+	};
 
 	/**
 	 * Edits a user's group 
@@ -138,8 +152,7 @@ module.exports = function (data_borga, data_mem) {
 		}
 
 		return data_mem.editGroup(username,groupId,newName,desc);
-	}
-
+	};
 
 	/**
 	 * Lists all user's groups in a object 
@@ -153,7 +166,7 @@ module.exports = function (data_borga, data_mem) {
 		//if (groups == {}) throw(errors.NOT_FOUND(`There were no groups found`));
 
 		return groups;
-	}
+	};
 
 	/**
 	 * Gets a group information
@@ -174,7 +187,7 @@ module.exports = function (data_borga, data_mem) {
 		}
 
 		return data_mem.getGroup(username,groupId);
-	}
+	};
 
 	/**
 	 * Adds a gameId to a group
@@ -211,8 +224,7 @@ module.exports = function (data_borga, data_mem) {
 		
 		return await data_mem.addGameToGroup(username,groupId,game);
 
-	}
-
+	};
 
 	/**
 	 * Deletes a user's group
@@ -235,7 +247,7 @@ module.exports = function (data_borga, data_mem) {
 
 		const groups = await data_mem.deleteGroup(username,groupId);
 		return groups;
-	}
+	};
 
 	/**
 	 * Removes a game from a user's group
@@ -271,7 +283,7 @@ module.exports = function (data_borga, data_mem) {
 
 		const group = await data_mem.removeGameFromGroup(username,groupId,gameID);
 		return group;
-	}
+	};
 
 	return {
 		getUsername,

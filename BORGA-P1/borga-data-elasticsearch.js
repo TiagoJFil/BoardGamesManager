@@ -119,7 +119,6 @@ module.exports = function(es_spec){
         }
     };
     
-
     /**
      * edits a user's group name and description
      * @param {String} user 
@@ -218,7 +217,7 @@ module.exports = function(es_spec){
        }catch(err){
            throw errors.DATABASE_ERROR(err);
        }
-   }; 
+    }; 
 
     /**
      * Deletes a group from a user
@@ -333,8 +332,9 @@ module.exports = function(es_spec){
                             {
                                 doc :{
                                     games : group.games
+                                }
                             }
-                        })
+                        )
                         
                     }
             );
@@ -370,18 +370,26 @@ module.exports = function(es_spec){
      * @param {String} Username user's name   
      * @returns {Object} an object with the id of the user and its name
      */
-    async function createUser(Username){
+    async function createUser(Username,Password){
 
         const id = crypto.randomUUID();
-        const newUser = {
-            AuthToken: id,
-            UserName: Username
+        const displayableUser = {
+            authtoken: id,
+            userName: Username 
         };
         const idToUser ={
             user: Username 
         }
+
+        const userContent = {
+            authtoken: id,
+        }
+
+        if(password){
+            userContent.password = Password;
+        }    
         try {
-            //add the token toe the token collection
+            //add the token to the token collection
             await fetch(
                 `${allTokensUrl}/_doc/${id}?refresh=wait_for`,
                     {
@@ -400,12 +408,10 @@ module.exports = function(es_spec){
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
-                            AuthToken: id
-                        })
+                        body: JSON.stringify(userContent)
                     }
             );
-            return newUser;
+            return displayableUser;
         
         }catch(err){
 			throw errors.DATABASE_ERROR(err);
@@ -413,6 +419,25 @@ module.exports = function(es_spec){
 
     };
 
+    /**
+     * Gets an object with the user's name and password
+     * @param {String} user 
+     * @returns {Object} with the user's name and password
+     */
+    async function getUser(user){
+        try{
+            const response = await fetch(`${allUsersUrl}/_doc/${user}`);
+            if(response.status === 404) return null;
+            
+            const data = await response.json();
+            return {
+                username: user,
+                password: data._source.password
+            };
+        }catch(err){
+            throw errors.DATABASE_ERROR(err);
+        }
+    };
 
     /**
      * Transforms an array of game ids into an object of games
@@ -444,6 +469,7 @@ module.exports = function(es_spec){
         getGroup,
         listGroups,
         hasUser,
-        createUser
+        createUser,
+        getUser
     }
 }
