@@ -157,6 +157,42 @@ form {
 	background-color: #eee; /* Add a hover effect to all links, except for headers */
 }
 
+.button_red {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #FF2D00;
+
+  
+}
+
+.button_red:hover {
+  background-color: #FF2D00;
+  color: white;
+}
+
+.button_yellow {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #FFB900;
+}
+
+.button_yellow:hover {
+  background-color: #FFB900;
+  color: white;
+}
+
+.button_green {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+}
+
+.button_green:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+
 .gameURL{
 	font-family: "Lucida Console", monospace;
 	text-align:center;

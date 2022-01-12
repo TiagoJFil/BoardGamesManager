@@ -1,5 +1,6 @@
 const express = require('express');
 
+
 module.exports = function (services,defined_user) {
 	
 	/**
@@ -28,18 +29,63 @@ module.exports = function (services,defined_user) {
 	 * @param {Promise} req 
 	 * @param {Promise} res 
 	 */
-	function getHomepage(req, res) {
+	function renderHomePage(req, res) {
 		res.render('home');
-	} 
+	};
 
 	/**
 	 * Retrieves the search page
 	 * @param {Promise} req 
 	 * @param {Promise} res 
 	 */
- 	function getSearchPage(req, res) {
+ 	function renderSearchPage(req, res) {
 		res.render('search');
-	}
+	};
+
+	/**
+	 * Retrieves the popular games page
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
+	function renderPopularGamesPage(req, res) {
+		res.render('popular_games');
+	};
+
+	/**
+	 * Remders the create group page
+	 * @param {Promise} req
+	 * @param {Promise} res
+	 */ 
+	async function renderCreateGroups(req,res){
+		res.render('create_groups');
+	};
+
+	/**
+	 * Renders the login page
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
+	 async function renderLoginPage(req,res){
+		res.render('login');
+	};
+	
+	/**
+	 * Renders the edit group page
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
+	async function renderEditGroupPage(req,res){
+		res.render('edit_group');
+	};
+
+	/**
+	 * Renders the delete group page
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
+	async function renderDeleteGroupPage(req,res){
+		res.render('delete_group');
+	};
 
 	/**
 	 * Finds a game by name and renders a page with the game info and the possibility to add the game to a group
@@ -135,15 +181,6 @@ module.exports = function (services,defined_user) {
 	};
 
 	/**
-	 * Retrieves the popular page
-	 * @param {Promise} req 
-	 * @param {Promise} res 
-	 */
-	function getPopularPage(req, res) {
-		res.render('popular_games');
-	};
-
-	/**
 	 * Retrieves the groups page
 	 * @param {Promise} req 
 	 * @param {Promise} res 
@@ -174,15 +211,6 @@ module.exports = function (services,defined_user) {
 					break;	
 			};
 		}
-	};
-
-	/**
-	 * Remders the create group page
-	 * @param {Promise} req
-	 * @param {Promise} res
-	 */ 
-	async function renderCreateGroups(req,res){
-		res.render('create_groups');
 	};
 
 	/**
@@ -310,20 +338,9 @@ module.exports = function (services,defined_user) {
 			}
 		};
 	};
-	
 
-	const router = express.Router();	
-	
-	router.use(express.urlencoded({ extended: true }));  //allows us to use req.body
-	
-	/*
-Commented because its code for the 4th assignment
 
-	async function renderLoginPage(req,res){
-		res.render('login');
-	};
-
-	async function EditGroup(req,res){
+	async function editGroup(req,res){
 		const groupId = req.body.id;
 		const name = req.body.name;
 		const desc = req.body.desc;
@@ -358,13 +375,6 @@ Commented because its code for the 4th assignment
 		};
 	};
 
-	async function renderEditGroupPage(req,res){
-		res.render('edit_group');
-	};
-
-	async function renderDeleteGroupPage(req,res){
-		res.render('delete_group');
-	};
 
 	async function deleteGroup(req,res){
 		const groupId = req.body.id;
@@ -384,7 +394,7 @@ Commented because its code for the 4th assignment
 	};
 
 	async function renderDeleteGameFromGroupPage(req,res){	
-		res.render('delete_game_from_group');
+		res.render('delete_game');
 	};
 
 	async function deleteGameFromGroup(req,res){
@@ -397,7 +407,7 @@ Commented because its code for the 4th assignment
 			switch(err.name){
 				default:
 					res.status(500).render(
-						'delete_game_from_group',
+						'delete_game',
 						{query: groupId, code: 500,error: JSON.stringify(err)}
 					);
 					break;
@@ -405,6 +415,13 @@ Commented because its code for the 4th assignment
 		};
 	};
 	
+	
+
+	const router = express.Router();	
+	
+	router.use(express.urlencoded({ extended: true }));  //allows us to use req.body
+	router
+
 
 	// Edit a Group
 	router.post('/groups/edit/', editGroup);
@@ -419,7 +436,7 @@ Commented because its code for the 4th assignment
 	router.get('/groups/games/delete/', renderDeleteGameFromGroupPage);
 
 	// Delete a group
-	router.post('/groups/delete', deleteAGroup);
+	router.post('/groups/delete', deleteGroup);
 
 	// Delete group page
 	router.get('/groups/delete', renderDeleteGroupPage);
@@ -428,22 +445,21 @@ Commented because its code for the 4th assignment
 	router.get('/login', renderLoginPage);
 
 	
-*/
 
 	// Homepage
-	router.get('/', getHomepage);
+	router.get('/', renderHomePage);
 
 	// Details of a game
 	router.get('/games/:id', getGameDetails);
 
 	// Search page
-	router.get('/search', getSearchPage);
+	router.get('/search', renderSearchPage);
 
 	// Search Result page
 	router.get('/search/result', findGame);
 	
 	// Popular games page
-	router.get('/popular', getPopularPage);
+	router.get('/popular', renderPopularGamesPage);
 
 	// Adds a game to a group
 	router.post('/groups/games',addGameToGroup);

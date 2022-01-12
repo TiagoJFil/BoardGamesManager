@@ -3,6 +3,10 @@
 <td>
     <div style="width: 500px; height: 150px; border: 5px solid #000;">
         <element class='gameURL'>DESCRIPTION</element> :<br>{{groupdetails.description}}
+		
+		<form action = "TODO" method = "GET">
+			<input class = "button_yellow" type = "submit" value = "Edit">
+		</form>
     </div>
 </td>
 
@@ -18,6 +22,11 @@
                         <element class='gameURL'>PRICE</element> : {{price}}$<br>
                         <element class='gameURL'>URL</element> : <a href={{url}} target="_blank" rel="noopener noreferrer">{{url}}</a></br>
                     </td>
+					<td>
+						<form action = "TODO" method = "GET">
+							<input class = "button_red" type = "submit" value = "Delete">
+						</form>
+					</td>
                 </tr>
             </table>
         </div>

@@ -1,8 +1,8 @@
 <h1>{{header}}</h1>
 
-<form action= "/groups/create" method = "GET">
+<form action = "/groups/create" method = "GET">
 	<label > Need a new group? </label>
-	<input type="submit" value="Create">
+	<input class = "button_green" type = "submit" value = "Create">
 </form>
 
 {{#if error}}
@@ -14,7 +14,12 @@
 {{#if groups}}
 	{{#each groups}}
 		<ul id="groups">
-		<li><a href="/groups/{{id}}">{{name}}</a></li>
+			<li>
+				<a href="/groups/{{id}}">{{name}}</a>
+				<form action = "TODO" method = "GET">
+					<input class = "button_red" type = "submit" value = "Delete">
+				</form>
+			</li>
 		</ul>
 	{{/each}}
 {{/if}}

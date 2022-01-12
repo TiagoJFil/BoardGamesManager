@@ -83,18 +83,10 @@ describe('Integration tests', () => {
 			.query({ name: 'Root' });
 
 		expect(response.statusCode).toBe(200);
-		expect(response.body).toEqual({
-			"id": "TAAifFP590",
-			"name": "Root",
-			"url": "https://www.boardgameatlas.com/game/TAAifFP590/root",
-			"price": "47.99",
-			"publisher": "Leder Games",
-			"min_age": 10,
-			"min_players": 2,
-			"max_players": 4,
-			"rank": 1
-			});
+		expect(response.body.length).toBe(1);
+		expect(response.body[0].name).toBe('Root');
 	});
+		
 
 	test('find game details by id',async() => {
 		
