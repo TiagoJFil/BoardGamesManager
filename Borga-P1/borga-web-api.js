@@ -6,9 +6,18 @@ const openApiSpec = require('./docs/borga-docs.json');
 module.exports = function (services) {
 	
 	/**
+	 * Gets the user token from the request 
+	 * @param {Promise} req 
+	 * @returns 
+	 */
+	function getUserToken(req) {
+		return  req.user && req.user.token;
+	}
+
+	/**
 	 * Get bearer token from autorization header
 	 * @param {Promise} req 
-	 * @returns {String}
+	 * @returns {String} or null if the bearer token was not found
 	 */
 	function getBearerToken(req) {
 		const auth = req.header('Authorization');
@@ -239,6 +248,16 @@ module.exports = function (services) {
 	};
 
 
+	/**
+	 * Middleware function to extract the bearer token from the request into the req.user object
+	 */
+	function extractToken(req, res, next) {
+		const bearerToken = getBearerToken(req);
+		if (bearerToken) {
+			req.user = { token: bearerToken };
+		}
+		next();
+	}
 
 
 	const router = express.Router();
@@ -247,8 +266,9 @@ module.exports = function (services) {
 	router.get('/docs', openApiUi.setup(openApiSpec));
 	
 	
-	router.use(express.json());
-	
+	router.use(express.json()); // for parsing application/json (recognize json body)
+	router.use(extractToken);
+
 	// Resource: /all/games/rank/
 	router.get('/all/games/rank/', listPopularGames);
 	// Resource: /all/games

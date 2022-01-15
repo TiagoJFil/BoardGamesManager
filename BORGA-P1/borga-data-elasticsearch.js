@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const errors = require('./borga-errors');
 
 const fetch = require('node-fetch');
+const res = require('express/lib/response');
 
 module.exports = function(es_spec){
 
@@ -123,8 +124,8 @@ module.exports = function(es_spec){
      * edits a user's group name and description
      * @param {String} user 
      * @param {String} groupId group's id
-     * @param {String} newName griups's new name
-     * @param {String} description 
+     * @param {String} newName group's new name
+     * @param {String} description group´s new description
      * @returns {Object} the new edited group
      */
     async function editGroup(user,groupId,newName,description){
@@ -382,10 +383,10 @@ module.exports = function(es_spec){
         }
 
         const userContent = {
-            authtoken: id,
+            token: id,
         }
 
-        if(password){
+        if(Password){
             userContent.password = Password;
         }    
         try {
@@ -427,12 +428,14 @@ module.exports = function(es_spec){
     async function getUser(user){
         try{
             const response = await fetch(`${allUsersUrl}/_doc/${user}`);
+          
             if(response.status === 404) return null;
             
             const data = await response.json();
             return {
                 username: user,
-                password: data._source.password
+                password: data._source.password,
+                token: data._source.token
             };
         }catch(err){
             throw errors.DATABASE_ERROR(err);

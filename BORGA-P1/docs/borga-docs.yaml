@@ -642,12 +642,12 @@ components:
       type: object
       description: User data
       required:
-        - UserName
-        - AuthToken
+        - username
+        - authtoken
       properties:
-        AuthToken:
+        authtoken:
           type: string
-        UserName:
+        username:
           type: string
     Group:
       type: object

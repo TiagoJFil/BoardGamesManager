@@ -22,18 +22,28 @@ module.exports = function (data_borga, data_mem) {
 	};
 
 	async function checkAndGetUser(username, password) {
+		
 		if (!username) {
 			throw errors.MISSING_PARAMETER('missing username');
 		}
 		if (!password) {
 			throw errors.MISSING_PARAMETER('missing password');
 		}
-
+		
+		if (!await data_mem.hasUser(username)) {
+			throw errors.NOT_FOUND('user not found');
+		}
+		
 		const userInfo = await data_mem.getUser(username);
+		if(!userInfo){
+			throw errors.DATABASE_ERROR('error getting user info');
+		}
 		if (userInfo.password !== password) {
+		
 			throw errors.BAD_CREDENTIALS();
 		}
-		return user;
+		
+		return userInfo;
 	};
 	
 	/**
@@ -297,6 +307,7 @@ module.exports = function (data_borga, data_mem) {
 		addGameToGroup,
 		deleteAGroup,
 		removeGameFromGroup,
-		getGameDetails
+		getGameDetails,
+		checkAndGetUser
 	};
 }

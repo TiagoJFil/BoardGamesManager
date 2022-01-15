@@ -157,15 +157,22 @@ form {
 	background-color: #eee; /* Add a hover effect to all links, except for headers */
 }
 
-.button_red {
-  background-color: white; 
-  color: black; 
-  border: 2px solid #FF2D00;
-
-  
+#authenticateButton {
+	float :right;
+	padding-right: 10px;
 }
 
-.button_red:hover {
+#username_proprieties{
+	color: white;
+}
+
+.button_delete {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #FF2D00; 
+}
+
+.button_delete:hover {
   background-color: #FF2D00;
   color: white;
 }

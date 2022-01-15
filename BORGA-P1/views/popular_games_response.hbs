@@ -1,9 +1,8 @@
 
-{{#if groups}}
-	<h1>{{header}}</h1>
-	{{#if games}}
-		<p>Here are the most popular games according to board game atlas website:</p>
-		
+<h1>{{header}}</h1>
+
+{{#if games}}
+	<p>Here are the most popular games according to board game atlas website:</p>
 		{{#each games}}
 			<table>
 				<tr>
@@ -40,7 +39,9 @@
 					<form action='/games/{{id}}' method = "GET">
 						<input type="submit" required value="Get more details">
 					</form>
+					{{#if ../groups}}
 						<label>Choose a group to add to:</label>
+						
 						<form action="/groups/games" id= "form_for_{{name}}" method = "POST">
 							<input type='hidden' name='gameId' value={{this.id}}>
 				
@@ -54,15 +55,15 @@
 							<input type="submit" required value="Add To Group">
 						</form>
 					</td>
-				
+					{{/if}}
+					
 				</tr>
 				
 			</table>	
 			
 		{{/each}}
-		
-	{{/if}}
 {{/if}}
+
 {{#if error}}
 	{{#if code}}
 		<h1>Search most popular games</h1>

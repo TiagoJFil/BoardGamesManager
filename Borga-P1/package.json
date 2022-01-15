@@ -12,6 +12,7 @@
   "dependencies": {
     "debug": "^4.3.3",
     "express": "^4.17.1",
+    "express-session": "^1.17.2",
     "fetch": "^1.1.0",
     "hbs": "^4.2.0",
     "jest": "^27.4.5",

@@ -11,8 +11,21 @@
 				<a class= "redirects" href="/search">Search</a>
 				<a class= "redirects" href="/groups">Groups</a>
 				<a class= "redirects" href="/popular">Popular Games</a>
+				
+				{{#if username}}
+					<form id = "authenticateButton"  action='/logout' method='POST'>
+						<input type='submit' value='Logout'>
+						<i id="username_proprieties">User: {{username}} </i>
+					</form>
+				{{else}}
+					<form id = "authenticateButton" action='/authenticate' method='GET'>
+						<input type='submit' value='Login'>
+					</form>
+				{{/if}}
 		</nav>
-		<hr>
+			<hr>
+
+		
 		{{{body}}}
 	</body>
 </html>

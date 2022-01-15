@@ -16,12 +16,19 @@
 		<ul id="groups">
 			<li>
 				<a href="/groups/{{id}}">{{name}}</a>
-				<form action = "TODO" method = "GET">
-					<input class = "button_red" type = "submit" value = "Delete">
-				</form>
+				
+				<input class = "button_delete" type = "button" value = "Delete" id='but_del_{{id}}' >
+				
 			</li>
 		</ul>
 	{{/each}}
 {{/if}}
 
+
+{{#if groups}}
+<script src="/public/client.js"></script>
+<script>
+	prepareGroupDeleteButtons();
+</script>
+{{/if}}
 

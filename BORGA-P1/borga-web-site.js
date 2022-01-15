@@ -1,16 +1,19 @@
 const express = require('express');
+const async = require('hbs/lib/async');
 
 
-module.exports = function (services,defined_user) {
+module.exports = function (services) {
 	
+	function getUsername(req) {
+		return req.user && req.user.username;
+	}
+
 	/**
-	 * Get bearer token from autorization header
+	 * Get bearer token from authorization header
 	 * @param {Promise} req 
 	 * @returns {String}
 	 */
 	function getBearerToken(req) {
-		return defined_user.token;
-		//Commented for now because we are not using bearer tokens now , but we will use it in the future, so we leave it here
 		/*
 		const auth = req.header('Authorization');
 		if (auth) {
@@ -20,8 +23,8 @@ module.exports = function (services,defined_user) {
 			}
 		}
 		return null;
-*/
-
+		*/
+		return req.user && req.user.token
 	};
 	
 	/**
@@ -30,7 +33,7 @@ module.exports = function (services,defined_user) {
 	 * @param {Promise} res 
 	 */
 	function renderHomePage(req, res) {
-		res.render('home');
+		res.render('home',{username : getUsername(req)});
 	};
 
 	/**
@@ -39,7 +42,7 @@ module.exports = function (services,defined_user) {
 	 * @param {Promise} res 
 	 */
  	function renderSearchPage(req, res) {
-		res.render('search');
+		res.render('search',{username : getUsername(req)} );
 	};
 
 	/**
@@ -48,7 +51,7 @@ module.exports = function (services,defined_user) {
 	 * @param {Promise} res 
 	 */
 	function renderPopularGamesPage(req, res) {
-		res.render('popular_games');
+		res.render('popular_games',{username : getUsername(req)} );
 	};
 
 	/**
@@ -57,7 +60,7 @@ module.exports = function (services,defined_user) {
 	 * @param {Promise} res
 	 */ 
 	async function renderCreateGroups(req,res){
-		res.render('create_groups');
+		res.render('create_groups',{username : getUsername(req)} );
 	};
 
 	/**
@@ -66,7 +69,7 @@ module.exports = function (services,defined_user) {
 	 * @param {Promise} res 
 	 */
 	 async function renderLoginPage(req,res){
-		res.render('login');
+		res.render('auth_page');
 	};
 	
 	/**
@@ -75,7 +78,7 @@ module.exports = function (services,defined_user) {
 	 * @param {Promise} res 
 	 */
 	async function renderEditGroupPage(req,res){
-		res.render('edit_group');
+		res.render('edit_group',{username : getUsername(req)} );
 	};
 
 	/**
@@ -84,7 +87,7 @@ module.exports = function (services,defined_user) {
 	 * @param {Promise} res 
 	 */
 	async function renderDeleteGroupPage(req,res){
-		res.render('delete_group');
+		res.render('delete_group',{username : getUsername(req)} );
 	};
 
 	/**
@@ -96,33 +99,45 @@ module.exports = function (services,defined_user) {
 		const header = 'Find Game Result';
 		const query_name = req.query.name;
 		const token = getBearerToken(req);
+		const username = getUsername(req);
 
 		try{
+			
 			const game = await services.searchGame(query_name);
-			const groups = await services.listGroups(token)
-
-			res.render(
-				'games_response',
-				{header,query: query_name,game, groups:  groups}
-			);
+			//Make the user able to add the game to a group if the user is logged in else we can just search without adding
+			if(username){
+				groups = await services.listGroups(token)
+				res.render(
+					'games_response',
+					{header,query: query_name,game, groups:  groups, username: username}
+				);
+			}else{
+				res.render(
+					'games_response',
+					{header,query: query_name,game, username: username}
+				);
+			}
+			
+			
+			
 		}catch(err){
 			switch(err.name){
 				case 'MISSING_PARAMETER':
 					res.status(400).render(
 						'search',
-						{ header, code: 400 , error: 'Game is required' }
+						{ header, code: 400 , error: 'Game is required' , username: username}
 					);
 					break;
 				case 'NOT_FOUND':
 					res.status(404).render(
 						'search',
-						{ header, code: 404 ,error: 'No game found' }
+						{ header, code: 404 ,error: 'No game found', username: username}
 					);
 					break;
 				default:
 					res.status(500).render(
 						'search',
-						{ header, query: query_name, code: 500,error: JSON.stringify(err) }
+						{ header, query: query_name, code: 500,error: JSON.stringify(err), username: username}
 					);
 					break;	
 				
@@ -141,6 +156,7 @@ module.exports = function (services,defined_user) {
 		const gameId = req.body.gameId;
 		const groupId = req.body.groupId;
 		const token = getBearerToken(req);
+		
 		try{
 			const game = await services.addGameToGroup(token,groupId,gameId);
 			res.redirect(
@@ -188,12 +204,19 @@ module.exports = function (services,defined_user) {
 	async function getGroupsPage(req,res){
 		try{
 			const header = 'Groups';
-			const groups = await services.listGroups(getBearerToken(req));
+			const username = getUsername(req);
+			
+			
+			if(!username)
+				res.redirect('/authenticate');
+			else{
+				const groups = await services.listGroups(getBearerToken(req));
+				res.render(
+					'groups',
+					{header,groups,username}
+				);
+			}
 
-			res.render(
-				'groups',
-				{header,groups}
-			);
 		}catch(err){
 			switch(err.name){
 				/*
@@ -206,7 +229,7 @@ module.exports = function (services,defined_user) {
 				default:
 					res.status(500).render(
 						'groups',
-						{code: 500,error: JSON.stringify(err) }
+						{code: 500,error: JSON.stringify(err),username }
 					);
 					break;	
 			};
@@ -223,6 +246,7 @@ module.exports = function (services,defined_user) {
 		const name = req.body.name;
 		const desc = req.body.desc;
 		const token = getBearerToken(req);
+		const username = getUsername(req);
 		try{
 			const group = await services.createGroup(token,name,desc);
 			res.redirect('/groups');
@@ -232,21 +256,21 @@ module.exports = function (services,defined_user) {
 					if(!name && !desc){
 						res.status(400).render(
 							'create_groups',
-							{code: 400 , error:'No information was provided'}
+							{code: 400 , error:'No information was provided', username: username}
 						);
 						break;
 					}
 					else if(!name ){
 						res.status(400).render(
 								'create_groups',
-								{code: 400 , error:'No name was provided'}
+								{code: 400 , error:'No name was provided', username: username}
 							);
 							break;
 					}
 					else if (!desc){
 						res.status(400).render(
 						'create_groups',
-						{code: 400 , error:'No description was provided'}
+						{code: 400 , error:'No description was provided', username: username}
 						);
 						break;
 					}
@@ -270,20 +294,31 @@ module.exports = function (services,defined_user) {
 		const header = 'Popular games Result';
 		const count = req.query.count;
 		const token = getBearerToken(req);
+		const username = getUsername(req);
 		try{
 			const games = await services.getPopularGames(count);
-			const groups = await services.listGroups(token)
 			
-			res.render(
-				'popular_games_response',
-				{header,games: games,count, groups}
-			);
+			//Make the user able to add the game to a group if the user is logged in else we can just search without adding
+			if(username){
+				const groups = await services.listGroups(token)
+				console.log(groups);
+				res.render(
+					'popular_games_response',
+					{header,games: games, groups : groups, username}
+				);
+			}else{
+				res.render(
+					'popular_games_response',
+					{header,games: games, username}
+				);
+			}
+
 		}catch(err){
 			switch(err.name){
 				default:
 					res.status(500).render(
 						'popular_games_response',
-						{ header, code: 500,error: 'No more than 100' }
+						{ header, code: 500,error: 'No more than 100' , username: username}
 					);
 					break;	
 			}
@@ -297,19 +332,20 @@ module.exports = function (services,defined_user) {
 	 */ 
 	async function renderGroupInfo(req,res){
 		const id = req.params.id;
+		const username = getUsername(req);
 		try{
 			const groupdetails = await services.getGroupInfo(getBearerToken(req),id);
 
 			const games = groupdetails.games;
 
-			res.render('group_render',{id,groupdetails,games});
+			res.render('group_render',{id,groupdetails,games,username});
 		}
 		catch(err){
 			switch(err.name){
 				default:
 					res.status(500).render(
 						'group_render',
-						{ code: 500,error: JSON.stringify(err) }
+						{ code: 500,error: JSON.stringify(err),username: username}
 					);
 					break;
 			}
@@ -323,9 +359,10 @@ module.exports = function (services,defined_user) {
 	 */
 	async function getGameDetails(req,res){
 		const id = req.params.id;
+		const username = getUsername(req);
 		try{
 			const game = await services.getGameDetails(id);
-			res.render('game_details',game);
+			res.render('game_details', {game,username} );
 		}
 		catch(err){
 			switch(err.name){
@@ -415,14 +452,71 @@ module.exports = function (services,defined_user) {
 		};
 	};
 	
-	
+	async function Dologin(req,res){
+		const username = req.body.username;
+		const password = req.body.password;
+		try{
+			const user = await services.checkAndGetUser(username,password)
+			req.login({ username: user.username, token: user.token }, err => {
+				if (err) {
+					console.log('LOGIN ERROR', err);
+				}
+				res.redirect('/');
+			});
+		}catch(err){
+			switch(err.name){
+				case 'BAD_CREDENTIALS':
+					res.status(401).render(
+						'auth_page',
+						{code: 401,error: 'Invalid credentials'}
+					);
+					break;
+				case 'MISSING_PARAMETER':
+					if(!username){
+						res.status(400).render(
+							'auth_page',
+							{code: 400,error: 'Missing username'}
+					);
+					}
+					else if(!password){
+						res.status(400).render(
+							'auth_page',
+							{code: 400,error: 'Missing password'}
+						);
+					}
+					break;
+				case 'NOT_FOUND':
+					res.status(404).render(
+						'auth_page',
+						{code: 404,error: 'User not found, please create a new account'}
+					);
+					break;
+				case 'BAD_CREDENTIALS':
+					res.status(401).render(
+						'auth_page',
+						{code: 401,error: 'Invalid credentials'}
+					);
+					break;
+				default:
+					res.status(500).render(
+						'auth_page',
+						{code: 500,error: JSON.stringify(err)}
+					);
+					break;
+			}
+		}
+	}
+	async function Dologout(req,res){
+		req.logout();
+		res.redirect('/');
+	}
 
 	const router = express.Router();	
 	
 	router.use(express.urlencoded({ extended: true }));  //allows us to use req.body
 	router
 
-
+/*
 	// Edit a Group
 	router.post('/groups/edit/', editGroup);
 
@@ -441,9 +535,16 @@ module.exports = function (services,defined_user) {
 	// Delete group page
 	router.get('/groups/delete', renderDeleteGroupPage);
 
-	// Login Page
-	router.get('/login', renderLoginPage);
+	*/
 
+	// Login Page
+	router.get('/authenticate', renderLoginPage);
+
+	// Login
+	router.post('/login', Dologin);
+
+	// Logout
+	router.post('/logout', Dologout);
 	
 
 	// Homepage
