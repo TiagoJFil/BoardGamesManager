@@ -375,8 +375,8 @@ module.exports = function(es_spec){
 
         const id = crypto.randomUUID();
         const displayableUser = {
-            authtoken: id,
-            userName: Username 
+            token: id,
+            username: Username 
         };
         const idToUser ={
             user: Username 

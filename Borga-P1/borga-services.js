@@ -103,6 +103,21 @@ module.exports = function (data_borga, data_mem) {
 
 		return data_mem.createUser(name,password);
 	};
+
+	/**
+	 * Adds a user that has a required password to the data base
+	 * @param {String} name 
+	 * @param {String} password 
+	 * @returns {Object} new user
+	 * @throws {Object} error if the user already exists
+	 */
+	async function addUserWithRequiredPassword(name,password){
+		if(!password){
+			throw(errors.MISSING_PARAMETER('Password of the user is missing'));
+		}
+		return await addUser(name,password);
+	};
+
 	
 	/**
 	 * Creates a new user's group
@@ -308,6 +323,7 @@ module.exports = function (data_borga, data_mem) {
 		deleteAGroup,
 		removeGameFromGroup,
 		getGameDetails,
-		checkAndGetUser
+		checkAndGetUser,
+		addUserWithRequiredPassword
 	};
 }

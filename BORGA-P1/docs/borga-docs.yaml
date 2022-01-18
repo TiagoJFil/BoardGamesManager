@@ -643,9 +643,9 @@ components:
       description: User data
       required:
         - username
-        - authtoken
+        - token
       properties:
-        authtoken:
+        token:
           type: string
         username:
           type: string

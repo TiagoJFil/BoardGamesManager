@@ -94,7 +94,7 @@ async function createGroup(user,name,description){
 		description : description,
 		games : {}	
 	};
-	console.log(users)	
+	
 	return displayableGroup;
 }
 
@@ -183,7 +183,7 @@ async function addGameToGroup(user,groupId,game){
 	games[gameId] = game;
 	
 	users[user].groups[groupId].games.push(gameId);
-	console.log(users)	
+		
 	return await getDisplayableGroupWithGameObjs(user,groupId);
 }
 
@@ -230,7 +230,7 @@ async function createUser(Username,Password){
 		users[Username]['password'] = Password
 	
 	return {
-		authtoken: id,
+		token: id,
 		username: Username
 	};
 }

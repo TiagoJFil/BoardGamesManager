@@ -491,12 +491,6 @@ module.exports = function (services) {
 						{code: 404,error: 'User not found, please create a new account'}
 					);
 					break;
-				case 'BAD_CREDENTIALS':
-					res.status(401).render(
-						'auth_page',
-						{code: 401,error: 'Invalid credentials'}
-					);
-					break;
 				default:
 					res.status(500).render(
 						'auth_page',
@@ -516,11 +510,18 @@ module.exports = function (services) {
 	}
 
 	async function registerUser(req,res){
-		const user = req.body.username;
+		const username = req.body.username;
 		const password = req.body.password;
 		try{
-			const userInfo = await services.addUser(user,password); 
-			res.redirect("home.hbs");
+			const user  = await services.addUserWithRequiredPassword(username,password); 
+			
+			req.login({ username: user.username, token: user.token }, err => {
+				if (err) {
+					console.log('LOGIN ERROR', err);
+				}
+				res.redirect('/');
+			});
+			
 		}
 		catch(err){
 			switch(err.name){
@@ -538,9 +539,22 @@ module.exports = function (services) {
 						);
 					}
 					break;
-				}
-		}
-	}
+				
+				case 'USER_ALREADY_EXISTS':
+					res.status(409).render(
+						'register.hbs',
+						{code: 409,error: 'User already exists'}
+					);
+					break;
+				default:
+					res.status(500).render(
+						'register.hbs',
+						{code: 500,error: JSON.stringify(err)}
+					);
+					break;
+		    }
+		};
+	};
 
 	const router = express.Router();	
 	
@@ -581,7 +595,7 @@ module.exports = function (services) {
 	router.get('/register', renderRegister);
 
 	//Add user
-	router.post('/',registerUser);
+	router.post('/register',registerUser);
 
 	// Homepage
 	router.get('/', renderHomePage);

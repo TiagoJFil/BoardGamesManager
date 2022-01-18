@@ -1,5 +1,6 @@
 'use strict';
 
+
 const express  = require('express');
 const session  = require('express-session');
 const passport = require('passport');
@@ -19,9 +20,9 @@ module.exports = function (es_spec,defined_user) {
 	const services = require('./borga-services')(data_borga, data_elastic);
 
 	const webapi = require('./borga-web-api')(services);
-	const webui = require('./borga-web-site')(services);
+	const webui = require('./borga-web-site')(services,defined_user);
 
-	const express = require('express');
+
 
 	const app = express();
 
@@ -34,6 +35,8 @@ module.exports = function (es_spec,defined_user) {
 	app.use(passport.session());
 
 
+
+
 	app.set('view engine', 'hbs');  
 
 	app.use('/favicon.ico',	express.static('static-files/favicon.ico'));
@@ -43,7 +46,7 @@ module.exports = function (es_spec,defined_user) {
 	app.use('/', webui);
 
 
+
 return app;
 
 }
-
