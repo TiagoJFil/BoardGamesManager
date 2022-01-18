@@ -511,6 +511,37 @@ module.exports = function (services) {
 		res.redirect('/');
 	}
 
+	async function renderRegister(req,res){
+		res.render('register.hbs');
+	}
+
+	async function registerUser(req,res){
+		const user = req.body.username;
+		const password = req.body.password;
+		try{
+			const userInfo = await services.addUser(user,password); 
+			res.redirect("home.hbs");
+		}
+		catch(err){
+			switch(err.name){
+				case 'MISSING_PARAMETER':
+					if(!username){
+						res.status(400).render(
+							'register.hbs',
+							{code: 400,error: 'Missing username'}
+					);
+					}
+					else if(!password){
+						res.status(400).render(
+							'register.hbs',
+							{code: 400,error: 'Missing password'}
+						);
+					}
+					break;
+				}
+		}
+	}
+
 	const router = express.Router();	
 	
 	router.use(express.urlencoded({ extended: true }));  //allows us to use req.body
@@ -546,6 +577,11 @@ module.exports = function (services) {
 	// Logout
 	router.post('/logout', Dologout);
 	
+	//Register page
+	router.get('/register', renderRegister);
+
+	//Add user
+	router.post('/',registerUser);
 
 	// Homepage
 	router.get('/', renderHomePage);
