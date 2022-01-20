@@ -153,6 +153,7 @@ async function getGroup(user,groupId){
 	users[user].groups[groupId].games.forEach( it => GamesObjFromIds[it] = games[it]);
 	
 	const groupToDisplayWithGameObjs = {
+		id : groupId,
 		name : users[user].groups[groupId].name,
 		description : users[user].groups[groupId].description,
 		games : GamesObjFromIds

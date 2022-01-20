@@ -23,12 +23,18 @@
                         <element class='gameURL'>URL</element> : <a href={{url}} target="_blank" rel="noopener noreferrer">{{url}}</a></br>
                     </td>
 					<td>
-						<form action = "TODO" method = "GET">
-							<input class = "button_red" type = "submit" value = "Delete">
-						</form>
+						
+						<input class = "button_game_delete" id="but-del-{{id}}" type = "submit" value = "Delete">
+						
 					</td>
                 </tr>
             </table>
         </div>
     {{/each}}
+{{/if}}
+{{#if games}}
+<script src="/public/client.js"></script>
+<script>
+	prepareGameDeleteButtons();
+</script>
 {{/if}}

@@ -213,7 +213,7 @@ module.exports = function (services) {
 				const groups = await services.listGroups(getBearerToken(req));
 				res.render(
 					'groups',
-					{header,groups,username}
+					{header,groups,username,token: getBearerToken(req)}
 				);
 			}
 

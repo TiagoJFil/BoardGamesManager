@@ -135,14 +135,14 @@ form {
 	margin-top: 10px;
 }
 
-#groups {
+.groups {
 	/* Remove default list styling */
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
 }
   
-#groups li a {
+.groups li a {
 	border: 1px solid #ddd; /* Add a border to all links */
 	margin-top: -1px; /* Prevent double borders */
 	background-color: #f6f6f6; /* Grey background color */
@@ -153,7 +153,7 @@ form {
 	display: block; /* Make it into a block element to fill the whole list */
 }
   
-#groups li a:hover:not(.header) {
+.groups li a:hover:not(.header) {
 	background-color: #eee; /* Add a hover effect to all links, except for headers */
 }
 
@@ -166,13 +166,23 @@ form {
 	color: white;
 }
 
-.button_delete {
+.button_group_delete {
   background-color: white; 
   color: black; 
   border: 2px solid #FF2D00; 
 }
 
-.button_delete:hover {
+.button_group_delete:hover {
+  background-color: #FF2D00;
+  color: white;
+}
+
+.button_game_delete {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #FF2D00; 
+}
+.button_game_delete:hover {
   background-color: #FF2D00;
   color: white;
 }
