@@ -13,11 +13,11 @@
 
 {{#if groups}}
 	{{#each groups}}
-		<ul id="groups">
+		<ul class="groups" id='entry_{{id}}'>
 			<li>
 				<a href="/groups/{{id}}">{{name}}</a>
 				
-				<input class = "button_delete" type = "button" value = "Delete" id='but_del_{{id}}' >
+				<input class = "button_group_delete" type = "button" value = "Delete" id='but_del_{{id}}_{{../token}}' >
 				
 			</li>
 		</ul>
