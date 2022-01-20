@@ -38,7 +38,6 @@ module.exports = function (services) {
 	 * @param {Promise} err 
 	 */
 	function onError(req, res, err) {
-		console.log('[ERROR]', err);
 		switch (err.name) {
 			case 'NOT_FOUND': 
 				res.status(404);
