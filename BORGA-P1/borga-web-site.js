@@ -332,13 +332,14 @@ module.exports = function (services) {
 	 */ 
 	async function renderGroupInfo(req,res){
 		const id = req.params.id;
+		const token = getBearerToken(req);
 		const username = getUsername(req);
 		try{
 			const groupdetails = await services.getGroupInfo(getBearerToken(req),id);
 
 			const games = groupdetails.games;
 
-			res.render('group_render',{id,groupdetails,games,username});
+			res.render('group_render',{id,groupdetails,games,username,token});
 		}
 		catch(err){
 			switch(err.name){
@@ -423,7 +424,7 @@ module.exports = function (services) {
 		const gameId = req.body.gameId;
 		try{
 			const group = await services.deleteGameFromGroup(getBearerToken(req),groupId,gameId);
-			res.redirect('/groups');
+			res.redirect('/groups/:id');
 		}catch(err){
 			switch(err.name){
 				default:
@@ -560,8 +561,7 @@ module.exports = function (services) {
 	// Edit group page
 	router.get('/groups/edit/:id', renderEditGroupPage);
 
-	// Delete a game from a group
-	router.post('/groups/games/delete', deleteGameFromGroup);
+
 
 	// Delete a game from a group page
 	router.get('/groups/games/delete/', renderDeleteGameFromGroupPage);
@@ -573,6 +573,9 @@ module.exports = function (services) {
 	router.get('/groups/delete', renderDeleteGroupPage);
 
 	*/
+
+	// Delete a game from a group
+	router.post('/groups/games/delete', deleteGameFromGroup);
 
 	// Login Page
 	router.get('/authenticate', renderLoginPage);

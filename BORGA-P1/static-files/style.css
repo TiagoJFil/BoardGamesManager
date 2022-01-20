@@ -157,6 +157,10 @@ form {
 	background-color: #eee; /* Add a hover effect to all links, except for headers */
 }
 
+.games{
+	padding-left: 0px;
+}
+
 #authenticateButton {
 	float :right;
 	padding-right: 10px;
@@ -208,7 +212,6 @@ form {
   background-color: #4CAF50;
   color: white;
 }
-
 
 .gameURL{
 	font-family: "Lucida Console", monospace;
