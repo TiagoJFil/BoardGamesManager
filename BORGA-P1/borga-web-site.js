@@ -301,7 +301,7 @@ module.exports = function (services) {
 			//Make the user able to add the game to a group if the user is logged in else we can just search without adding
 			if(username){
 				const groups = await services.listGroups(token)
-				console.log(groups);
+				
 				res.render(
 					'popular_games_response',
 					{header,games: games, groups : groups, username}
@@ -507,7 +507,7 @@ module.exports = function (services) {
 			
 			
 			const user  = await services.addUserWithRequiredPassword(username,password); 
-			console.log(user);
+			
 			req.login({ username: user.username, token: user.token }, err => {
 				if (err) {
 					console.log('LOGIN ERROR', err);
@@ -552,7 +552,7 @@ module.exports = function (services) {
 	const router = express.Router();	
 	
 	router.use(express.urlencoded({ extended: true }));  //allows us to use req.body
-	router.use(express.json()); // for parsing application/json (recognize json body)
+	
 
 /*
 	// Edit a Group
