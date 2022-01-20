@@ -12,24 +12,26 @@
 
 {{#if games}}
     {{#each games}}
-		<div style="width: 500px; height: 125px; border: 5px solid #000;">
-            <table>
-                <tr>
-                    <td>
-                        <element class='gameURL'>NAME</element> : {{name}} <element class='gameURL'>PUBLISHER</element> : {{publisher}}</br>
-                        <element class='gameURL'>MIN_PLAYERS</element> : {{min_players}} <element class='gameURL'>MAX_PLAYERS</element> : {{min_players}}<br>
-						<element class='gameURL'>MIN_AGE</element> : {{min_age}}<br>
-                        <element class='gameURL'>PRICE</element> : {{price}}$<br>
-                        <element class='gameURL'>URL</element> : <a href={{url}} target="_blank" rel="noopener noreferrer">{{url}}</a></br>
-                    </td>
-					<td>
-						
-						<input class = "button_game_delete" id="but-del-{{id}}" type = "submit" value = "Delete">
-						
-					</td>
-                </tr>
-            </table>
-        </div>
+        <ul class = 'games' id = 'entry_{{id}}'>
+            <div style="width: 500px; height: 125px; border: 5px solid #000;">
+                <table>
+                    <tr>
+                        <td >
+                            <element class='gameURL'>NAME</element> : {{name}} <element class='gameURL'>PUBLISHER</element> : {{publisher}}</br>
+                            <element class='gameURL'>MIN_PLAYERS</element> : {{min_players}} <element class='gameURL'>MAX_PLAYERS</element> : {{min_players}}<br>
+                            <element class='gameURL'>MIN_AGE</element> : {{min_age}}<br>
+                            <element class='gameURL'>PRICE</element> : {{price}}$<br>
+                            <element class='gameURL'>URL</element> : <a href={{url}} target="_blank" rel="noopener noreferrer">{{url}}</a></br>
+                        </td>
+                        <td>
+                            
+                            <input class = "button_game_delete" id="but_del__{{../id}}_{{id}}_{{../token}}" type = "submit" value = "Delete">
+                            
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </ul>
     {{/each}}
 {{/if}}
 {{#if games}}
