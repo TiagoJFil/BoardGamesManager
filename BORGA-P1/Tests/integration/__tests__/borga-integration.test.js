@@ -81,10 +81,9 @@ describe('Integration tests', () => {
 		const response = await request(app)
 			.get('/api/all/games')
 			.query({ name: 'Root' });
-
+	
 		expect(response.statusCode).toBe(200);
-		expect(response.body.length).toBe(1);
-		expect(response.body[0].name).toBe('Root');
+		expect(response.body.name).toBe('Root');
 	});
 		
 
@@ -137,9 +136,8 @@ describe('Integration tests', () => {
 			.post('/api/users/miguel')
 			.expect(200);
 		
-
 		expect(response.body).toBeTruthy();
-		expect(response.body.UserName).toEqual("miguel");
+		expect(response.body.username).toEqual("miguel");
 	});
 
 	test('trying to create a user with the same name throws an error', async () => {
@@ -292,7 +290,9 @@ describe('Integration tests', () => {
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
-			.expect(200); 
+			.expect(200);
+
+
 	
 
 		expect(response.body).toBeTruthy();
@@ -321,7 +321,7 @@ describe('Integration tests', () => {
 			});
 	});
 
-	test('delete second group created  works',async () => {
+	test('delete second group created works',async () => {
 		
 		const groupList = await request(app)
 			.get('/api/my/group')
@@ -340,17 +340,14 @@ describe('Integration tests', () => {
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
 			.expect(200); 
-
-
+			
 		expect(response.body).toBeTruthy();
-		expect(response.body).toEqual({
-			[groupIdThatStays]: {
-				"id": groupIdThatStays,
-				"name": "test",
-				"description": "este é um grupo de teste",
-				"games": {}
-			}
-		})	
+		expect(response.body).toEqual({[groupIdThatStays] : {
+			"name": "test",
+			"description": "este é um grupo de teste",
+			"games": {},
+
+		}})	
 	});
 
 	test('delete second group doesnt work because it doesnt exist',async () => {
@@ -514,10 +511,14 @@ describe('Integration tests', () => {
 			.post(`/api/users/${userToBeAddedGroups}`)
 			.expect(200);
 	
+		
+
+		console.log(`Bearer ${user.body.token}`)
+		console.log(user)
 
 		const groupCreation = await request(app)
 			.post('/api/my/group')
-			.set('Authorization', `Bearer ${user.body.AuthToken}`)
+			.set('Authorization', `Bearer ${user.body.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
 			.send({
@@ -525,12 +526,16 @@ describe('Integration tests', () => {
 				"desc": `descriçao do grupo A do ${userToBeAddedGroups}`
 			  })
 			.expect(200); 
+		
+
 
 		const groupId = groupCreation.body.id;	
 
+
+
 		const groupList = await request(app)
 			.get('/api/my/group')
-			.set('Authorization', `Bearer ${user.body.AuthToken}`)
+			.set('Authorization', `Bearer ${user.body.token}`)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
 			.expect(200);
@@ -539,7 +544,6 @@ describe('Integration tests', () => {
 		expect(groupList.body).toEqual( {[groupId]:{
 			"description": "descriçao do grupo A do joao",
 		  	"games": {},
-		   	"id": groupId,
 		    "name": "grupo A"}
 		});
 	});

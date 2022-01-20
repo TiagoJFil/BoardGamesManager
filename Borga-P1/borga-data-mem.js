@@ -117,7 +117,7 @@ async function editGroup(user,groupId,newName,description){
 	delete users[user].groups[groupId];
 	users[user].groups[groupId] = updatedGroup;
 	
-	return getDisplayableGroupWithGameObjs(user,groupId);
+	return getGroup(user,groupId);
 }
 
 /**
@@ -147,7 +147,7 @@ async function deleteGroup(user, groupId){
  * @param {String} groupId 
  * @returns {Object} the same group but with all the information of its games
  */
-async function getDisplayableGroupWithGameObjs(user,groupId){
+async function getGroup(user,groupId){
 	let GamesObjFromIds = new Object();
 	
 	users[user].groups[groupId].games.forEach( it => GamesObjFromIds[it] = games[it]);
@@ -166,7 +166,7 @@ async function getDisplayableGroupsWithGameObjs(user){
 	let obj = new Object()
 	for(const key in users[user].groups){
 		
-		obj[key] = await getDisplayableGroupWithGameObjs(user,key) 
+		obj[key] = await getGroup(user,key) 
 	
 	}
 	return obj
@@ -185,7 +185,7 @@ async function addGameToGroup(user,groupId,game){
 	
 	users[user].groups[groupId].games.push(gameId);
 		
-	return await getDisplayableGroupWithGameObjs(user,groupId);
+	return await getGroup(user,groupId);
 }
 
 /**
@@ -198,7 +198,7 @@ async function addGameToGroup(user,groupId,game){
 async function removeGameFromGroup(user,groupId,gameId){
 	users[user].groups[groupId].games = users[user].groups[groupId].games.filter(it => it != gameId);
 	
-	return await getDisplayableGroupWithGameObjs(user,groupId);
+	return await getGroup(user,groupId);
 }
 
 /**
@@ -246,7 +246,7 @@ module.exports = {
 	editGroup,
 	listGroups,
 	deleteGroup,
-	getDisplayableGroupWithGameObjs,
+	getGroup,
 	addGameToGroup,
 	removeGameFromGroup,
 	getUser
