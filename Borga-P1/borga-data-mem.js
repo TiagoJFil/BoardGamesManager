@@ -208,7 +208,7 @@ async function removeGameFromGroup(user,groupId,gameId){
  */
   async function getUser(user){
 	  return {
-		  name : user,
+		  username : user,
 		  password : users[user].password,
 		  token : users[user].token
 	  };
@@ -236,6 +236,8 @@ async function createUser(Username,Password){
 	};
 }
 
+
+
 module.exports = {
 	hasGame,
 	hasGroup,
@@ -249,5 +251,5 @@ module.exports = {
 	getDisplayableGroupWithGameObjs,
 	addGameToGroup,
 	removeGameFromGroup,
-	getUser
+	getUser,
 }

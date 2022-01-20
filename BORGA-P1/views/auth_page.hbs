@@ -3,21 +3,41 @@
 <form action="/login" method="POST">
 	<label>Username:</label>
 	<br>
-	<input type="text" name="username">
+	<input id="username" type="text" name="username">
 	<br><br>
 	<label>Password:</label>
 	<br>
-	<input type="password" name="password">
+	<input id="password" type="password" name="password">
 	<br><br>
 	<input type="submit" value="Login">
 </form>
 
-<form action="/register" method="GET">
-	<input type="submit" value="Register">
+
+<input type="button" value="Register" onclick='onRegisterClick()'>
+
+<form id="register_form" action="/register" method="POST">
+	<input type="hidden" id="password_r" name="password">
+	<input type="hidden" id="username_r" name="username">
 </form>
+
 
 {{#if error}}
 	{{#if code}}
 		<error><strong> ERROR {{code}}: {{error}}</strong></error>
 	{{/if}}
 {{/if}}
+
+<script>
+	function onRegisterClick(){
+		const username = document.querySelector('#username').value;
+		const password = document.querySelector('#password').value;
+		const form = document.querySelector('#register_form');
+		const hidden_username = document.querySelector('#username_r');
+		const hidden_password = document.querySelector('#password_r');
+		hidden_username.value = username;
+		hidden_password.value = password;
+		
+		form.submit()
+	}
+ 
+</script>

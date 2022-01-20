@@ -317,8 +317,8 @@ module.exports = function (services) {
 			switch(err.name){
 				default:
 					res.status(500).render(
-						'popular_games_response',
-						{ header, code: 500,error: 'No more than 100' , username: username}
+						'popular_games',
+						{ header, code: 500,error: 'can only search 1-100 games' , username: username}
 					);
 					break;	
 			}
@@ -412,23 +412,7 @@ module.exports = function (services) {
 		};
 	};
 
-
-	async function deleteGroup(req,res){
-		const groupId = req.body.id;
-		try{
-			const group = await services.deleteGroup(getBearerToken(req),groupId);
-			res.redirect('/groups');
-		}catch(err){
-			switch(err.name){
-				default:
-					res.status(500).render(
-						'delete_group',
-						{query: groupId, code: 500,error: JSON.stringify(err)}
-					);
-					break;
-			}
-		};
-	};
+	
 
 	async function renderDeleteGameFromGroupPage(req,res){	
 		res.render('delete_game');
@@ -452,6 +436,12 @@ module.exports = function (services) {
 		};
 	};
 	
+	/**
+	 * Logs in the user if the username and password are correct and redirects to the home page
+	 * (Stores on cookies the session info)
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function Dologin(req,res){
 		const username = req.body.username;
 		const password = req.body.password;
@@ -513,8 +503,10 @@ module.exports = function (services) {
 		const username = req.body.username;
 		const password = req.body.password;
 		try{
-			const user  = await services.addUserWithRequiredPassword(username,password); 
 			
+			
+			const user  = await services.addUserWithRequiredPassword(username,password); 
+			console.log(user);
 			req.login({ username: user.username, token: user.token }, err => {
 				if (err) {
 					console.log('LOGIN ERROR', err);
@@ -528,13 +520,13 @@ module.exports = function (services) {
 				case 'MISSING_PARAMETER':
 					if(!username){
 						res.status(400).render(
-							'register.hbs',
+							'auth_page.hbs',
 							{code: 400,error: 'Missing username'}
 					);
 					}
 					else if(!password){
 						res.status(400).render(
-							'register.hbs',
+							'auth_page.hbs',
 							{code: 400,error: 'Missing password'}
 						);
 					}
@@ -542,13 +534,13 @@ module.exports = function (services) {
 				
 				case 'USER_ALREADY_EXISTS':
 					res.status(409).render(
-						'register.hbs',
+						'auth_page.hbs',
 						{code: 409,error: 'User already exists'}
 					);
 					break;
 				default:
 					res.status(500).render(
-						'register.hbs',
+						'auth_page.hbs',
 						{code: 500,error: JSON.stringify(err)}
 					);
 					break;
@@ -559,7 +551,7 @@ module.exports = function (services) {
 	const router = express.Router();	
 	
 	router.use(express.urlencoded({ extended: true }));  //allows us to use req.body
-	router
+	router.use(express.json()); // for parsing application/json (recognize json body)
 
 /*
 	// Edit a Group
@@ -590,12 +582,9 @@ module.exports = function (services) {
 
 	// Logout
 	router.post('/logout', Dologout);
-	
-	//Register page
-	router.get('/register', renderRegister);
 
 	//Add user
-	router.post('/register',registerUser);
+	router.post('/register', registerUser);
 
 	// Homepage
 	router.get('/', renderHomePage);
