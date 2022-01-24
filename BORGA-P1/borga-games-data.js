@@ -112,7 +112,7 @@ function getDetails(string){
 	const search_uri = BOARD_ATLAS_BASE_GAME_URI + `${string}` + '?&client_id=' + CLIENT_ID;
     return do_fetch(search_uri)
     .then(answer => {
-        if(answer.length != 0 && answer.count != 0){
+        if(answer.length !== 0 && answer.count !== 0){
             return answer;
         } else {
             throw errors.NOT_FOUND();
@@ -150,7 +150,7 @@ function getDetails(string){
  */
 async function getNames(gameArray) {
 	const newmap = await mapCatMech
-    let array = new Array()
+    let array = []
 	await gameArray.forEach(element => {
 		array.push(newmap.get(element.id))
 	});
@@ -167,7 +167,7 @@ function getGameDetails(id){
     const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;
     return do_fetch(search_uri)
     .then(answer => {
-        if(answer.length != 0 && answer.count != 0){
+        if(answer.length !== 0 && answer.count !== 0){
             return makeGameDetailsObj(answer.games[0]);
         } else {
             throw errors.NOT_FOUND({ id });
@@ -188,7 +188,7 @@ function getGameByName(name) {
 
 	return do_fetch(search_uri)
 		.then(answer => {
-			if(answer.length != 0 && answer.count != 0){
+			if(answer.length !== 0 && answer.count !== 0){
 				return makeGameObj(answer.games[0]);
 			} else {
 				throw errors.NOT_FOUND({ name });
@@ -206,7 +206,7 @@ function getGameById(id) {
 	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;	
 	return do_fetch(search_uri)
 		.then(answer => {
-			if(answer.length != 0 && answer.count != 0){
+			if(answer.length !== 0 && answer.count !== 0){
 				return makeGameObj(answer.games[0]);
 			} else {
 				throw errors.NOT_FOUND({ id });
@@ -223,7 +223,7 @@ function getListPopularGames(count) {
 	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&order_by=rank&limit=' + count  +'&client_id=' + CLIENT_ID;
 	return do_fetch(search_uri)
 		.then(answer => {
-			if (answer.length != 0 && answer.count != 0) {
+			if (answer.length !== 0 && answer.count !== 0) {
 				return makeListObj(answer.games);
 			} else {
 				throw errors.FAIL();

@@ -87,10 +87,10 @@ module.exports = function(es_spec){
     async function createGroup(user,name,description){
         const id = crypto.randomUUID();
         const groupId = id.replace(/-/g,'');
-        var newGroup =  {
-            name : name,
-            description : description,
-            games : []	
+        const newGroup = {
+            name: name,
+            description: description,
+            games: []
         };
 
         const displayableGroup =  {
@@ -242,14 +242,14 @@ module.exports = function(es_spec){
 
     /**
      * Checks wheter a Game exists in the db or not
-     * @param {String} gameId
      * @returns {Boolean} true if the game exists
      * @throws {Error} if the game doesn't exist
+     * @param gameID
      */
     async function dbHasGame(gameID){
         try{
             const response = await fetch(`${allGamesUrl}/_doc/${gameID}`);
-            return response.status === 404 ? false : true;
+            return response.status !== 404;
         }catch(err){
             throw errors.DATABASE_ERROR(err);
         }
@@ -352,10 +352,10 @@ module.exports = function(es_spec){
     };
 
     /**
-    * checks if username is already in use
-    * @param {String}} Username 
-    * @returns {Boolean} true if users object has certain user
-    */
+     * checks if username is already in use
+     * @returns {Boolean} true if users object has certain user
+     * @param Username
+     */
     async function hasUser(Username){
         try {
 			const response = await fetch(`${allUsersUrl}/_doc/${Username}`);
@@ -367,8 +367,9 @@ module.exports = function(es_spec){
     };
 
     /**
-     * Creates a new user 
-     * @param {String} Username user's name   
+     * Creates a new user
+     * @param {String} Username user's name
+     * @param Password User password
      * @returns {Object} an object with the id of the user and its name
      */
     async function createUser(Username,Password){

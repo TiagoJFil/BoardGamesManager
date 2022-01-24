@@ -55,8 +55,7 @@ module.exports = function (data_borga, data_mem) {
 	async function getPopularGames(count){
 		if(!count) count = 10
 		if(count <=0) throw errors.INVALID_PARAMETER('the ranked count cant be 0 or bellow');
-		const list =  data_borga.getListPopularGames(count);
-		return list;
+		return data_borga.getListPopularGames(count);
 	};
 
 	/**
@@ -68,9 +67,8 @@ module.exports = function (data_borga, data_mem) {
 		if(!name){
 			throw(errors.MISSING_PARAMETER('Name of the game to search'));
 		}
-		
-		const game = data_borga.getGameByName(name);
-		return game;
+
+		return data_borga.getGameByName(name);
 	};
 
 	/**
@@ -84,8 +82,7 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.MISSING_PARAMETER('Id of the game to get the details'));
 		}
 
-		const game = data_borga.getGameDetails(id);
-		return game;
+		return data_borga.getGameDetails(id);
 	};
 
 	/**
@@ -187,10 +184,9 @@ module.exports = function (data_borga, data_mem) {
 	 */
 	async function listGroups(token){
 		const username = await getUsername(token);
-		const groups = await data_mem.listGroups(username);
 		//if (groups == {}) throw(errors.NOT_FOUND(`There were no groups found`));
 
-		return groups;
+		return await data_mem.listGroups(username);
 	};
 
 	/**
@@ -270,8 +266,7 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.NOT_FOUND(`The group you were trying to delete does not exist`));
 		}
 
-		const groups = await data_mem.deleteGroup(username,groupId);
-		return groups;
+		return await data_mem.deleteGroup(username, groupId);
 	};
 
 	/**
@@ -306,8 +301,7 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.NOT_FOUND(`The Game you are trying to remove was not found`));
 		}
 
-		const group = await data_mem.removeGameFromGroup(username,groupId,gameID);
-		return group;
+		return await data_mem.removeGameFromGroup(username, groupId, gameID);
 	};
 
 	return {
