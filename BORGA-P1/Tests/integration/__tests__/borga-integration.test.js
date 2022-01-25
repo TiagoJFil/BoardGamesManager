@@ -13,6 +13,7 @@ const es_spec = {
 	url: config.devl_es_url,
 	prefix: 'test'
 };
+const baseUrl = es_spec.url + '/';
 
 test('Confirm database is running', async () => {
 	const response = await fetch(`${baseUrl}_cat/health`);
@@ -23,7 +24,7 @@ const userToBeAddedGroups = "joao"
 describe('Integration tests', () => {
 
 	const app = server(es_spec, config.guest);
-	const baseUrl = es_spec.url + '/';
+	
 	const userGroupsUrl = username =>
 		`${baseUrl}${es_spec.prefix}_${username}_groups`;
 
@@ -89,7 +90,7 @@ describe('Integration tests', () => {
 	
 		const response = await request(app)
 			.get('/api/all/games')
-			.query({ name: 'Root' });
+			.query({ name: "Root" });
 	
 		expect(response.statusCode).toBe(200);
 		expect(response.body.name).toBe('Root');
