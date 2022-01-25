@@ -201,7 +201,7 @@ module.exports = function (services) {
 	 * @param {Promise} req 
 	 * @param {Promise} res 
 	 */
-	async function getGroupsPage(req,res){
+	async function getGroupsAndRender(req,res){
 		try{
 			const header = 'Groups';
 			const username = getUsername(req);
@@ -378,64 +378,6 @@ module.exports = function (services) {
 	};
 
 
-	async function editGroup(req,res){
-		const groupId = req.body.id;
-		const name = req.body.name;
-		const desc = req.body.desc;
-
-		try{
-			const group = await services.editGroup(getBearerToken(req),groupId,name,desc);
-			res.redirect('/groups');
-		}catch(err){
-			switch(err.name){
-				case 'MISSING_PARAMETER':
-					if(!name){
-						res.status(400).render(
-								'edit_group',
-								{code: 400 , error:'no name provided'}
-							);
-							break;
-					}
-					else if (!desc){
-						res.status(400).render(
-						'edit_group',
-						{code: 400 , error:'no desc provided'}
-						);
-						break;
-					}
-				default:
-					res.status(500).render(
-						'edit_group',
-						{query: name, code: 500,error: JSON.stringify(err)}
-					);
-					break;
-			}
-		};
-	};
-
-	
-
-	async function renderDeleteGameFromGroupPage(req,res){	
-		res.render('delete_game');
-	};
-
-	async function deleteGameFromGroup(req,res){
-		const groupId = req.body.id;
-		const gameId = req.body.gameId;
-		try{
-			const group = await services.deleteGameFromGroup(getBearerToken(req),groupId,gameId);
-			res.redirect('/groups/:id');
-		}catch(err){
-			switch(err.name){
-				default:
-					res.status(500).render(
-						'delete_game',
-						{query: groupId, code: 500,error: JSON.stringify(err)}
-					);
-					break;
-			}
-		};
-	};
 	
 	/**
 	 * Logs in the user if the username and password are correct and redirects to the home page
@@ -448,6 +390,7 @@ module.exports = function (services) {
 		const password = req.body.password;
 		try{
 			const user = await services.checkAndGetUser(username,password)
+
 			req.login({ username: user.username, token: user.token }, err => {
 				if (err) {
 					console.log('LOGIN ERROR', err);
@@ -490,21 +433,16 @@ module.exports = function (services) {
 					break;
 			}
 		}
-	}
+	};
 	async function Dologout(req,res){
 		req.logout();
 		res.redirect('/');
-	}
-
-	async function renderRegister(req,res){
-		res.render('register.hbs');
-	}
+	};
 
 	async function registerUser(req,res){
 		const username = req.body.username;
 		const password = req.body.password;
 		try{
-			
 			
 			const user  = await services.addUserWithRequiredPassword(username,password); 
 			
@@ -554,28 +492,6 @@ module.exports = function (services) {
 	router.use(express.urlencoded({ extended: true }));  //allows us to use req.body
 	
 
-/*
-	// Edit a Group
-	router.post('/groups/edit/', editGroup);
-
-	// Edit group page
-	router.get('/groups/edit/:id', renderEditGroupPage);
-
-
-
-	// Delete a game from a group page
-	router.get('/groups/games/delete/', renderDeleteGameFromGroupPage);
-
-	// Delete a group
-	router.post('/groups/delete', deleteGroup);
-
-	// Delete group page
-	router.get('/groups/delete', renderDeleteGroupPage);
-
-	*/
-
-	// Delete a game from a group
-	router.post('/groups/games/delete', deleteGameFromGroup);
 
 	// Login Page
 	router.get('/authenticate', renderLoginPage);
@@ -601,26 +517,29 @@ module.exports = function (services) {
 	// Search Result page
 	router.get('/search/result', findGame);
 	
+
 	// Popular games page
 	router.get('/popular', renderPopularGamesPage);
+
+	//Popular games result page
+	router.get('/popular/result', popularGames);
+
 
 	// Adds a game to a group
 	router.post('/groups/games',addGameToGroup);
 
 	// Groups page
-	router.get('/groups', getGroupsPage);
+	router.get('/groups', getGroupsAndRender);
 
-	// group creation
+
+	// Page to create a new group , must be above /groups/:id otherwise create will be seen as an id and will get us other page
 	router.get('/groups/create', renderCreateGroups);
 
-	//Groups filter response
-	router.post('/groups/create',createGroupAndRedirect);
-
-	//Popular games result page
-	router.get('/popular/result', popularGames);
-
-	//Group page
+	// A Group page
 	router.get('/groups/:id', renderGroupInfo);
+	
+	// Group creation
+	router.post('/groups',createGroupAndRedirect);
 
 	return router;
 }

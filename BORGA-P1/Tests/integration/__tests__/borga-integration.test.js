@@ -15,7 +15,7 @@ const es_spec = {
 };
 
 test('Confirm database is running', async () => {
-	const response = await fetch(`${es_spec.url}_cat/health`);
+	const response = await fetch(`${baseUrl}_cat/health`);
 	expect(response.status).toBe(200);
 });
 const userToBeAddedGroups = "joao"
@@ -23,10 +23,19 @@ const userToBeAddedGroups = "joao"
 describe('Integration tests', () => {
 
 	const app = server(es_spec, config.guest);
+	const baseUrl = es_spec.url + '/';
+	const userGroupsUrl = username =>
+		`${baseUrl}${es_spec.prefix}_${username}_groups`;
+
+	const allUsersUrl = `${baseUrl}data_${es_spec.prefix}_users`
 	
+	const allGamesUrl = `${baseUrl}data_${es_spec.prefix}_games`
+
+	const allTokensUrl = `${baseUrl}data_${es_spec.prefix}_tokens`
+
 	beforeAll(async () => {
 		const StoreTokens = await fetch(
-			`${es_spec.url}data_${es_spec.prefix}_tokens/_doc/${config.guest.token}`,
+			`${allTokensUrl}/_doc/${config.guest.token}`,
 				{
 					method: 'POST',
 					headers: {
@@ -39,7 +48,7 @@ describe('Integration tests', () => {
 		);
 
 		const StoreUser = await fetch(
-			`${es_spec.url}data_${es_spec.prefix}_users/_doc/${config.guest.user}`,
+			`${allUsersUrl}/_doc/${config.guest.user}`,
 				{
 					method: 'POST',
 					headers: {
@@ -54,23 +63,23 @@ describe('Integration tests', () => {
 	
 	afterAll(async () => {
 		await fetch(
-			`${es_spec.url}${es_spec.prefix}_${config.guest.user}_groups`,
+			`${baseUrl}${es_spec.prefix}_${config.guest.user}_groups`,
 			{ method: 'DELETE' }
 		);
 		await fetch(
-			`${es_spec.url}${es_spec.prefix}_${userToBeAddedGroups}_groups`,
+			`${baseUrl}${es_spec.prefix}_${userToBeAddedGroups}_groups`,
 			{ method: 'DELETE' }
 		);
 		await fetch(
-			`${es_spec.url}data_${es_spec.prefix}_games`,
+			`${baseUrl}data_${es_spec.prefix}_games`,
 			{ method: 'DELETE' }
 		);
 		await fetch(
-			`${es_spec.url}data_${es_spec.prefix}_users`,
+			`${baseUrl}data_${es_spec.prefix}_users`,
 			{ method: 'DELETE' }
 		);
 		await fetch(
-			`${es_spec.url}data_${es_spec.prefix}_tokens`,
+			`${baseUrl}data_${es_spec.prefix}_tokens`,
 			{ method: 'DELETE' }
 		);
 	});
@@ -506,7 +515,7 @@ describe('Integration tests', () => {
 	
 	});
 
-	test('Create a new user add a group and list of groups will be different from other user',async() =>{
+	test('Create a new user and add a group ,list of groups will be different from other user',async() =>{
 
 		const user = await request(app)
 			.post(`/api/users/${userToBeAddedGroups}`)

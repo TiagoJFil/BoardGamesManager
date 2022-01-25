@@ -132,27 +132,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExtSrvFail'
-  /api/users/{name}:
+  /api/users/:
     post:
       tags:
         - User
       summary: Creates an new user
-      description: Creates a user and returns it with its associated bearer token
-      parameters:
-        - name: name
-          in: path
-          description: Name of the user to create
-          required: true
-          schema:
-            type: string
-          example: Pedro
-        - name: password
-          in: query
-          description: Password to associate with the user
-          example: abc123
-          schema:
-            type: string
-          
+      description: Creates a user and returns it with its associated bearer token.
+      requestBody:
+        description: New groups name and description, the password is optional
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUserBody'
+      
       responses:
         '200':
           description: User added
@@ -265,6 +258,60 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExtSrvFail'
+    put:
+      tags:
+        - MyGroups
+      summary: Edit a group's name and description
+      description: Edit a group by changing its name and description, returns the updated group.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: groupId
+          in: path
+          description: Id of the group to Edit
+          required: true
+          schema:
+            type: string
+          example: 0    
+      requestBody:
+        description: Group's Id, new name and new description
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditGroupHeader'
+      responses:
+        '200':
+          description: Group edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '400':
+          description: No query indicated in the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissingParameter'
+        '401':
+          description: Missing API token. The user is not authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthenticated'
+        '404':
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '502':
+          description: API is not responding,
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtSrvFail'            
+                
   /api/my/group:
     get:
       tags:
@@ -342,52 +389,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExtSrvFail'
-    put:
-      tags:
-        - MyGroups
-      summary: Edit group name and description
-      description: Edit group by changing its name and description, returns the updated group.
-      security:
-        - bearerAuth: []
-      requestBody:
-        description: Group's Id, new name and new description
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EditGroupHeader'
-      responses:
-        '200':
-          description: Group edited
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Group'
-        '400':
-          description: No query indicated in the request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MissingParameter'
-        '401':
-          description: Missing API token. The user is not authenticated.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthenticated'
-        '404':
-          description: Group not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NotFound'
-        '502':
-          description: API is not responding,
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExtSrvFail'
-  /api/my/group/games:
+                
+    
+  /api/my/group/{groupId}/games:
     post:
       tags:
         - MyGroups
@@ -395,8 +399,16 @@ paths:
       description: Adds a game to the group at your choice
       security:
         - bearerAuth: []
+      parameters:
+        - name: groupId
+          in: path
+          description: Id of the group where the game to delete is
+          required: true
+          schema:
+            type: string
+          example: 0  
       requestBody:
-        description: Group's name and new gameid
+        description: Group's new gameId to add
         required: true
         content:
           application/json:
@@ -433,7 +445,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExtSrvFail'
-  /api/my/group/games/{groupId}/{gameId}:
     delete:
       tags:
         - MyGroups
@@ -449,20 +460,13 @@ paths:
           schema:
             type: string
           example: 0
-        - name: gameId
-          in: path
-          description: Game id to remove
-          required: true
-          schema:
-            type: string
-          example: TDBWC34HVY
       responses:
         '200':
           description: Game removed
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Group'
+                $ref: '#/components/schemas/AddGame'
         '400':
           description: No query indicated in the request
           content:
@@ -486,7 +490,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExtSrvFail'
+                $ref: '#/components/schemas/ExtSrvFail'            
+ 
 components:
   securitySchemes:
     bearerAuth:
@@ -642,8 +647,8 @@ components:
       type: object
       description: User data
       required:
-        - username
         - token
+        - username
       properties:
         token:
           type: string
@@ -683,8 +688,6 @@ components:
         - Name
         - Description
       properties:
-        groupId:
-          type: string
         name:
           type: string
         desc:
@@ -707,6 +710,17 @@ components:
       properties:
         groupId:
           $ref: '#/components/schemas/ListedGroup'
+          
+    AddUserBody:
+      type: object
+      description: User data, password may be optional
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        password:
+          type: string
     AddGame:
       type: object
       description: Group data
@@ -714,8 +728,6 @@ components:
         - Name
         - Description
       properties:
-        groupId:
-          type: string
         gameId:
           type: string
     GameDetails:

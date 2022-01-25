@@ -140,7 +140,7 @@ module.exports = function (services) {
 	 */
 	async function editAGroup(req,res){
 		try{
-		const groupId = req.body.groupId;
+		const groupId = req.params.groupId;
 		const groupNewName = req.body.name;
 		const groupNewDesc = req.body.desc;
 		const newGroup = await services.editGroup(getBearerToken(req),groupId,groupNewName,groupNewDesc)
@@ -189,8 +189,8 @@ module.exports = function (services) {
 	 */
 	async function addUser(req,res){
 		try {
-			const username = req.params.name;
-			const password = req.query.password;
+			const username = req.body.name;
+			const password = req.body.password;
 			const user = await services.addUser(username,password);
 			res.json(user)
 		} catch (err) {
@@ -205,7 +205,7 @@ module.exports = function (services) {
 	 */
 	async function addGameToGroup(req,res){
 		try{
-			const groupId = req.body.groupId;
+			const groupId = req.params.groupId;
 			const gameId = req.body.gameId;
 			const info = await services.addGameToGroup(getBearerToken(req),groupId,gameId)
 			res.json(info)
@@ -237,7 +237,7 @@ module.exports = function (services) {
 	async function removeGameFromGroup(req,res){
 		try{
 			const groupName = req.params.groupId;
-			const gameID = req.params.gameId;
+			const gameID = req.body.gameId;
 			const groups = await services.removeGameFromGroup(getBearerToken(req),groupName,gameID)
 			res.json(groups)
 		}catch(err){
@@ -275,23 +275,25 @@ module.exports = function (services) {
 	// Resource: /all/games/details
 	router.get('/all/games/details', getGameDetails);
 
-	// Resource: /users/<name>
-	router.post('/users/:name', addUser);	
+	// Resource: /users/
+	router.post('/users/', addUser);	
 
 	// Resource: /my/group/<groupId>
 	router.get('/my/group/:groupId',getGroupDetails)
+	// Resource: /my/group/<groupId>
+	router.delete('/my/group/:groupId', deleteGroup)
+	// Resource: /my/group/<groupId>
+	router.put( '/my/group/:groupId', editAGroup);
+
 	// Resource: /my/group/
 	router.get('/my/group', listGroups);
 	// Resource: /my/group
 	router.post('/my/group', createAGroup);
-	// Resource: /my/group/<groupId>
-	router.delete('/my/group/:groupId', deleteGroup)
-	// Resource: /my/group
-	router.put('/my/group', editAGroup);
-	// Resource: /my/group/games
-	router.post('/my/group/games', addGameToGroup);
-	// Resource: /my/group/games/<groupId>/<gameId>
-	router.delete('/my/group/games/:groupId/:gameId', removeGameFromGroup);
+
+	// Resource: /my/group/<groupId>/games
+	router.post('/my/group/{groupId}/games', addGameToGroup);
+	// Resource: /my/group/<groupId>/games/
+	router.delete('/my/group/:groupId/games/', removeGameFromGroup);
 	
 	
 	

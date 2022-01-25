@@ -10,7 +10,7 @@ const res = require('express/lib/response');
 module.exports = function(es_spec){
 
 
-    const baseUrl = es_spec.url;
+    const baseUrl = es_spec.url + '/';
 
 	const userGroupsUrl = username =>
 		`${baseUrl}${es_spec.prefix}_${username}_groups`;
@@ -47,7 +47,7 @@ module.exports = function(es_spec){
      * @param {String} gameId 
      * @returns {Boolean} true if certain group of a user has the same game identified by the gameId
      */
-    async function hasGame(user,groupId,gameId){
+    async function doesGroupHaveGame(user,groupId,gameId){
         try {
             const response =await fetch(
                  `${userGroupsUrl(user)}/_doc/${groupId}`);
@@ -84,9 +84,8 @@ module.exports = function(es_spec){
      * @param {String} description 
      * @returns {Object} a new group object with the information provided
      */
-    async function createGroup(user,name,description){
-        const id = crypto.randomUUID();
-        const groupId = id.replace(/-/g,'');
+    async function createGroup(user,name,description,groupId){
+        
         const newGroup = {
             name: name,
             description: description,
@@ -100,7 +99,6 @@ module.exports = function(es_spec){
             games : {}	
         };
         
-
 
         try {
 			 await fetch(
@@ -243,17 +241,38 @@ module.exports = function(es_spec){
     /**
      * Checks wheter a Game exists in the db or not
      * @returns {Boolean} true if the game exists
-     * @throws {Error} if the game doesn't exist
-     * @param gameID
+     * @param gameId the id of the game to be checked
+     * @throws {Error} if there was an error in the database
      */
-    async function dbHasGame(gameID){
+    async function isGameInStorage(gameId){
         try{
-            const response = await fetch(`${allGamesUrl}/_doc/${gameID}`);
+            const response = await fetch(`${allGamesUrl}/_doc/${gameId}`);
             return response.status !== 404;
         }catch(err){
             throw errors.DATABASE_ERROR(err);
         }
     };
+
+    /**
+     * Adds a game received from the services to the Database
+     * @param {Object} game  the game to add to the Database
+     */
+    async function addGameToStorage(game){
+        const id = game.id;
+        try{
+            await fetch(`${allGamesUrl}/_doc/${id}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(game)
+            });
+        }catch(err){
+            throw errors.DATABASE_ERROR(err);
+        }
+    };
+
     
     /**
      * Adds a game to a user's group 
@@ -262,25 +281,12 @@ module.exports = function(es_spec){
      * @param {Object} game 
      * @returns {Object} group with games updated
      */
-    async function addGameToGroup(user,groupId,game){
+    async function addGameToGroup(user,groupId,gameId){
         try{
-            const response = await fetch(`${userGroupsUrl(user)}/_doc/${groupId}` );    
+            const response = await fetch(`${userGroupsUrl(user)}/_doc/${groupId}`);    
             const group = (await response.json())._source;
            
-
-            if(!(await dbHasGame(game.id))){
-                 await fetch(
-                    `${allGamesUrl}/_doc/${game.id}?refresh=wait_for`,
-                        {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(game)
-                        }
-                );
-            };
-            group.games.push(game.id);
+            group.games.push(gameId);
 
             await fetch(
                 `${userGroupsUrl(user)}/_update/${groupId}?refresh=wait_for`,
@@ -462,18 +468,20 @@ module.exports = function(es_spec){
     };
 
     return{
+        doesGroupHaveGame,
         hasGroup,
-        hasGame,
+        hasUser,
+        isGameInStorage,
+        addGameToStorage,
+        createUser,
         tokenToUsername,
         createGroup,
+        editGroup,
+        listGroups,
+        deleteGroup,
+        getGroup,
         addGameToGroup,
         removeGameFromGroup,
-        deleteGroup,
-        editGroup,
-        getGroup,
-        listGroups,
-        hasUser,
-        createUser,
         getUser
     }
 }

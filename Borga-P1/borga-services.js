@@ -2,7 +2,17 @@
 
 const errors = require('./borga-errors.js');
 
-module.exports = function (data_borga, data_mem) {
+module.exports = function (data_borga, data_storage) {
+
+
+	/**
+	 * Generates a new token for a group
+	 * @returns the new groupId
+	 */
+	function generateGroupId() {
+		return crypto.randomUUID().replace(/-/g,'');
+	}
+
 
 	/**
 	 * Get's username using a token
@@ -14,7 +24,7 @@ module.exports = function (data_borga, data_mem) {
 		if (!token) {
 			throw errors.UNAUTHENTICATED('no token');
 		}
-		const username = await data_mem.tokenToUsername(token);
+		const username = await data_storage.tokenToUsername(token);
 		if(!username) {
 			throw errors.UNAUTHENTICATED('bad token');
 		}
@@ -30,11 +40,11 @@ module.exports = function (data_borga, data_mem) {
 			throw errors.MISSING_PARAMETER('missing password');
 		}
 		
-		if (!await data_mem.hasUser(username)) {
+		if (!await data_storage.hasUser(username)) {
 			throw errors.NOT_FOUND('user not found');
 		}
 		
-		const userInfo = await data_mem.getUser(username);
+		const userInfo = await data_storage.getUser(username);
 		if(!userInfo){
 			throw errors.DATABASE_ERROR('error getting user info');
 		}
@@ -95,10 +105,10 @@ module.exports = function (data_borga, data_mem) {
 		if(!name){
 			throw(errors.MISSING_PARAMETER('Name of the user is missing'));
 		}
-		if(await data_mem.hasUser(name))
+		if(await data_storage.hasUser(name))
 			throw errors.USER_ALREADY_EXISTS(name);
 
-		return data_mem.createUser(name,password);
+		return data_storage.createUser(name,password);
 	};
 
 	/**
@@ -136,11 +146,13 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.MISSING_PARAMETER('Group description missing'));	
 		}
 		
-		if( await data_mem.hasGroup(username, name) ){
+		if( await data_storage.hasGroup(username, name) ){
 			throw(errors.GROUP_ALREADY_EXISTS(`The group you were trying to add already exists`));
 		}
 		
-		return data_mem.createGroup(username,name,desc);
+		const id = generateGroupId();
+
+		return data_storage.createGroup(username,name,desc,id);
 	
 	};
 
@@ -169,11 +181,11 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.MISSING_PARAMETER('Group description missing'));	
 		}
 		
-		if(!await data_mem.hasGroup(username, groupId) ){
+		if(!await data_storage.hasGroup(username, groupId) ){
 			throw(errors.NOT_FOUND(`The group you were trying to edit does not exist`));
 		}
 
-		return data_mem.editGroup(username,groupId,newName,desc);
+		return data_storage.editGroup(username,groupId,newName,desc);
 	};
 
 	/**
@@ -184,9 +196,8 @@ module.exports = function (data_borga, data_mem) {
 	 */
 	async function listGroups(token){
 		const username = await getUsername(token);
-		//if (groups == {}) throw(errors.NOT_FOUND(`There were no groups found`));
 
-		return await data_mem.listGroups(username);
+		return await data_storage.listGroups(username);
 	};
 
 	/**
@@ -203,11 +214,11 @@ module.exports = function (data_borga, data_mem) {
 		if(!groupId){
 			throw(errors.MISSING_PARAMETER('Group id is missing'));
 		}
-		if(!await data_mem.hasGroup(username, groupId) ){
+		if(!await data_storage.hasGroup(username, groupId) ){
 			throw(errors.NOT_FOUND(`The group you were trying to get the info does not exist`));
 		}
 
-		return data_mem.getGroup(username,groupId);
+		return data_storage.getGroup(username,groupId);
 	};
 
 	/**
@@ -233,17 +244,22 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.MISSING_PARAMETER('Game Id is missing'));
 		}
 
-		if( !await data_mem.hasGroup(username, groupId) ){
+		if( !await data_storage.hasGroup(username, groupId) ){
 			throw(errors.NOT_FOUND(`The group you are trying to add the game to does not exist`));
 		}
 
-		if( await data_mem.hasGame(username,groupId,gameId) ){
+		if( await data_storage.doesGroupHaveGame(username,groupId,gameId) ){
 			throw(errors.FAIL('The game you are trying to add is already part of the group'))
 		}
 		
-		const game = await data_borga.getGameById(gameId);
+		if( !await data_storage.isGameInStorage(gameId) ){
+			const game = await data_borga.getGameById(gameId);
+			await data_storage.addGameToStorage(game);
+		}
+
 		
-		return await data_mem.addGameToGroup(username,groupId,game);
+		
+		return await data_storage.addGameToGroup(username,groupId,gameId);
 
 	};
 
@@ -262,11 +278,11 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.MISSING_PARAMETER('Group id is missing'));
 		}
 
-		if( !await data_mem.hasGroup(username, groupId) ){
+		if( !await data_storage.hasGroup(username, groupId) ){
 			throw(errors.NOT_FOUND(`The group you were trying to delete does not exist`));
 		}
 
-		return await data_mem.deleteGroup(username, groupId);
+		return await data_storage.deleteGroup(username, groupId);
 	};
 
 	/**
@@ -293,15 +309,15 @@ module.exports = function (data_borga, data_mem) {
 			throw(errors.MISSING_PARAMETER('Game Id is missing'));
 		}
 
-		if( !await data_mem.hasGroup(username, groupId) ){
+		if( !await data_storage.hasGroup(username, groupId) ){
 			throw(errors.NOT_FOUND(`The group you were trying to delete the game from does not exist`));
 		}
 
-		if( !await data_mem.hasGame(username, groupId, gameID) ){
+		if( !await data_storage.doesGroupHaveGame(username, groupId, gameID) ){
 			throw(errors.NOT_FOUND(`The Game you are trying to remove was not found`));
 		}
 
-		return await data_mem.removeGameFromGroup(username, groupId, gameID);
+		return await data_storage.removeGameFromGroup(username, groupId, gameID);
 	};
 
 	return {

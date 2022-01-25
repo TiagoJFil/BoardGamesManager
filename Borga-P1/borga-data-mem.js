@@ -51,7 +51,7 @@ const hasGroup = async (user,groupId) => users[user].groups.hasOwnProperty(group
  * @param {String} gameId 
  * @returns {Boolean} true if certain group of a user has the same game identified by the gameId
  */
-const hasGame = async (user,groupId,gameId) => users[user].groups[groupId].games.includes(gameId);
+const doesGroupHaveGame = async (user,groupId,gameId) => users[user].groups[groupId].games.includes(gameId);
 
 /**
  * checks if username is already in use
@@ -69,16 +69,32 @@ async function tokenToUsername(token) {
 	return tokens[token];
 }
 
+/**
+ * Verifies if the storage contains a certain game
+ * @param {String} gameId the id of the game to be checked
+ */
+async function isGameInStorage(gameId){
+	return games.hasOwnProperty(gameId);
+}
+
+/**
+ * Adds a game received from the services to the storage
+ * @param {Object} game  the game to add to the storage
+ */
+async function addGameToStorage(game){
+	const gameId = game.id;
+	games[gameId] = game;
+}
 
 /**
  * Creates a new user group with the provided name and description
  * @param {String} user 
  * @param {String} name 
  * @param {String} description 
+ * @param {String} id the id given from the services
  * @returns {Object} a new group object with the information provided
  */
-async function createGroup(user,name,description){
-	const id = crypto.randomUUID().replace(/-/g,'');
+async function createGroup(user,name,description,id){
 
 	users[user].groups[id] = {
 		name: name,
@@ -173,9 +189,8 @@ async function getDisplayableGroupsWithGameObjs(user){
  * @param {Object} game 
  * @returns {Object} group with games updated
  */
-async function addGameToGroup(user,groupId,game){
-	const gameId = game.id;
-	games[gameId] = game;
+async function addGameToGroup(user,groupId,gameId){
+
 	
 	users[user].groups[groupId].games.push(gameId);
 		
@@ -234,9 +249,11 @@ async function createUser(Username,Password){
 
 
 module.exports = {
-	hasGame,
+	doesGroupHaveGame,
 	hasGroup,
 	hasUser,
+	isGameInStorage,
+	addGameToStorage,
 	createUser,
 	tokenToUsername,
 	createGroup,

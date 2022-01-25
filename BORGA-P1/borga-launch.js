@@ -7,10 +7,10 @@ const config = require('./borga-config')
  * default port of the server
  */
 const default_host = "localhost";
-const default_port = 8888;
+const port = process.env['PORT'] || 8888;
 
 const es_spec = {
-	url: config.devl_es_url,
+	url:  process.env['BONSAI_URL'] || config.devl_es_url,   //env from heroku to db
 	prefix: 'prod'
 };
 const app = require('./borga-server')(es_spec,config.guest);
@@ -19,7 +19,7 @@ const app = require('./borga-server')(es_spec,config.guest);
 /**
  * starts a server and listens on port for connections.
  */
-app.listen(default_port);
+app.listen(port);
 
 
 
