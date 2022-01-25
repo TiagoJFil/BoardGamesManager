@@ -4,69 +4,88 @@
 	<h4>The name searched for was: {{query}}</h4>
 {{/if}}
 
-{{#if game}}
-	<p>We found this result:</p>
-	<table>
-		<tr>
-			<td  class='gameInfoSearch'>Title:</td>
-			<td>{{game.name}}</td>
-		</tr>
-		<tr>
-			<td  class='gameInfoSearch'>Publisher:</td>
-			<td>{{game.publisher}}</td>
-		</tr>		
-		<tr>
-			<td  class='gameInfoSearch'>Min Age:</td>
-			<td>{{game.min_age}}</td>
-		</tr>	
-		<tr>
-			<td  class='gameInfoSearch'>Min Players:</td>
-			<td>{{game.min_players}}</td>
-		</tr>
-		<tr>
-			<td  class='gameInfoSearch'>Max Players:</td>
-			<td>{{game.max_players}}</td>
-		</tr>	
-		<tr>
-			<td  class='gameInfoSearch'>Rank:</td>
-			<td>#{{game.rank}}</td>
-		</tr>	
-		<tr>
-			<td  class='gameInfoSearch'>Price:</td>
-			<td>{{game.price}}$</td>
-		</tr>	
-		<tr>
-			<td  class='gameInfoSearch'>Url:</td>
-			<td><a href={{game.url}} target="_blank" rel="noopener noreferrer">{{game.url}}</a></td>
-		</tr>
-	</table>
-	
-	<h5>
-		<form action='/games/{{game.id}}' method = "GET">
-			<input type="submit" required value="Get more details">
-		</form>
-	
-		{{#if groups}}
-		
-			
-			<label >Choose a group to add to:</label>
-			<form action="/groups/games" id= "group_form" method = "POST">
-				<input type='hidden' name='gameId' value={{game.id}}>
+{{#if games}}
+    <p>Here is the result:</p>
+    {{#each games}}
+        <table>
+            <tr>
+                <td  class='gameInfoSearch'>Title:</td>
+                <td>{{this.name}}</td>
+            </tr>
+            <h2></h2>
 
-                <label>
-                    <select required name="groupId", form ="group_form" >
-                        <option selected ></option>
-                        {{#each groups}}
-                            <option value={{this.id}} >{{this.name}}</option>
-                        {{/each}}
-                    </select>
-                </label>
+        {{#if this.publisher}} <tr>
+                <td  class='gameInfoSearch'>Publisher:</td>
+                <td>{{this.publisher}}</td>
+            </tr>
+            {{/if}}
 
-                <input type="submit" required value="Add To Group">
-			</form>
-		
-		{{/if}}
+        {{#if this.min_age}} <tr>
+                <td  class='gameInfoSearch'>Min Age:</td>
+                <td>{{this.min_age}}</td>
+            </tr>
+        {{/if}}
 
-	
-	</h5>
+        {{#if this.min_players}}<tr>
+                <td  class='gameInfoSearch'>Min Players:</td>
+                <td>{{this.min_players}}</td>
+            </tr>
+        {{/if}}
+
+        {{#if this.max_players}}
+            <tr>
+                <td  class='gameInfoSearch'>Max Players:</td>
+                <td>{{this.max_players}}</td>
+            </tr>
+        {{/if}}
+
+        {{#if this.price}}
+            <tr>
+                <td  class='gameInfoSearch'>Price:</td>
+                <td>{{this.price}}$</td>
+            </tr>
+        {{/if}}
+
+        {{#if this.price}}
+            <tr>
+                <td  class='gameInfoSearch'>Url:</td>
+                <td><a href={{this.url}} target="_blank" rel="noopener noreferrer">{{this.url}}</a></td>
+            </tr>
+        {{/if}}
+            
+            <tr>
+            <td>
+                <form action='/games/{{this.id}}' method = "GET">
+                    <input type="submit" required value="Get more details">
+                </form>
+                {{#if ../groups}}
+                    <label>Choose a group to add to:</label>
+
+                    <form action="/groups/games" id= "form_for_{{this.name}}" method = "POST">
+                        <input type='hidden' name='gameId' value={{this.id}}>
+
+                        <select required name="groupId" form ="form_for_{{this.name}}" >
+                            <option selected></option>
+                            {{#each ../groups}}
+                                <option value={{this.id}} >{{this.name}}</option>
+                            {{/each}}
+                        </select>
+
+                        <input type="submit" required value="Add To Group">
+                    </form>
+                </td>
+                {{/if}}
+
+            </tr>
+
+        </table>
+
+    {{/each}}
+{{/if}}
+
+{{#if error}}
+    {{#if code}}
+
+        <error><strong> ERROR {{code}}: {{error}}</strong></error>
+    {{/if}}
 {{/if}}

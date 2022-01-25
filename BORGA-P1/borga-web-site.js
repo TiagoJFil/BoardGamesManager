@@ -103,18 +103,18 @@ module.exports = function (services) {
 
 		try{
 			
-			const game = await services.searchGame(query_name);
+			const games = await services.searchGame(query_name);
 			//Make the user able to add the game to a group if the user is logged in else we can just search without adding
 			if(username){
 				groups = await services.listGroups(token)
 				res.render(
 					'games_response',
-					{header,query: query_name,game, groups:  groups, username: username}
+					{header,query: query_name,games: games, groups:  groups, username: username}
 				);
 			}else{
 				res.render(
 					'games_response',
-					{header,query: query_name,game, username: username}
+					{header,query: query_name,games: games, username: username}
 				);
 			}
 			
@@ -248,7 +248,7 @@ module.exports = function (services) {
 		const token = getBearerToken(req);
 		const username = getUsername(req);
 		try{
-			const group = await services.createGroup(token,name,desc);
+			await services.createGroup(token,name,desc);
 			res.redirect('/groups');
 		}catch(err){
 			switch(err.name){
@@ -303,12 +303,12 @@ module.exports = function (services) {
 				const groups = await services.listGroups(token)
 				
 				res.render(
-					'popular_games_response',
+					'games_response',
 					{header,games: games, groups : groups, username}
 				);
 			}else{
 				res.render(
-					'popular_games_response',
+					'games_response',
 					{header,games: games, username}
 				);
 			}

@@ -35,7 +35,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Game'
+                $ref: '#/components/schemas/GameListResponse'
         '400':
           description: No query indicated in the request
           content:
@@ -611,7 +611,6 @@ components:
       required:
         - id
         - name
-        - publisher
       properties:
         id:
           type: string

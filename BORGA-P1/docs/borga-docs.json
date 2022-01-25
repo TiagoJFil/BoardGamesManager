@@ -50,7 +50,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Game"
+                  "$ref": "#/components/schemas/GameListResponse"
                 }
               }
             }
@@ -964,8 +964,7 @@
         "description": "Game data",
         "required": [
           "id",
-          "name",
-          "publisher"
+          "name"
         ],
         "properties": {
           "id": {
