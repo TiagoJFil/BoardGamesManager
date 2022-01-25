@@ -24,7 +24,7 @@ describe('getUsername function tests', () => {
 
     test('provided token with no username returns ERROR', async () => {
         try{
-            await default_services.getUsername('8b85d489-bcd3-477b-9563-5155af9f0c8a')
+            await default_services.getUsername(test_token)
         } catch(err){
             expect(err.name).toEqual('UNAUTHENTICATED');
         }
@@ -82,7 +82,7 @@ describe('createGroup function tests', () => {
     });
     test('trying to create a group that already exists throws ERROR', async () => {
         try{
-            await default_services.createGroup(test_token,'teste','pao');
+            console.log(await default_services.createGroup(test_token,'teste','pao'));
         } catch(err){
             expect(err.name).toEqual('GROUP_ALREADY_EXISTS');
         }

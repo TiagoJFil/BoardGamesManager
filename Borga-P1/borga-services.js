@@ -1,6 +1,7 @@
 'use strict';
 
 const errors = require('./borga-errors.js');
+const crypto = require('crypto');
 
 module.exports = function (data_borga, data_storage) {
 

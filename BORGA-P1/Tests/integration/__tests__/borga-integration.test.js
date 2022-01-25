@@ -14,16 +14,21 @@ const es_spec = {
 	prefix: 'test'
 };
 
+
+
 test('Confirm database is running', async () => {
-	const response = await fetch(`${baseUrl}_cat/health`);
+	const response = await fetch(`${es_spec.url}/_cat/health`);
 	expect(response.status).toBe(200);
 });
+
 const userToBeAddedGroups = "joao"
 
 describe('Integration tests', () => {
 
 	const app = server(es_spec, config.guest);
+
 	const baseUrl = es_spec.url + '/';
+
 	const userGroupsUrl = username =>
 		`${baseUrl}${es_spec.prefix}_${username}_groups`;
 

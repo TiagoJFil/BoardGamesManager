@@ -199,21 +199,21 @@ function getGameByName(name) {
  * @returns {Object} with 10 games
  */
 function makeOneGameObj(gameInfo) {
+	let publisherName = null;
+	if(gameInfo.primary_publisher != null) publisherName = gameInfo.primary_publisher.name
+
 	return {
 		id: gameInfo.id,
 		name: gameInfo.name,
 		url: gameInfo.url,
 		price: gameInfo.price,
-		publisher: gameInfo.primary_publisher.name,
+		publisher: publisherName,
 		min_age: gameInfo.min_age,
 		min_players: gameInfo.min_players,
 		max_players: gameInfo.max_players,
 		rank: gameInfo.rank,
 	};
 }
-
-
-
 
 
 /**
@@ -249,6 +249,8 @@ function getListPopularGames(count) {
 			}
 		});
 }
+
+
 
 module.exports = {
 	getGameByName,
