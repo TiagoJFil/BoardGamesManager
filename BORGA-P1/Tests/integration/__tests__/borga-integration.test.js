@@ -345,6 +345,7 @@ describe('Integration tests', () => {
 		expect(response.body).toEqual({[groupIdThatStays] : {
 			"name": "test",
 			"description": "este é um grupo de teste",
+			"id" : groupIdThatStays,
 			"games": {},
 
 		}})	
@@ -544,6 +545,7 @@ describe('Integration tests', () => {
 		expect(groupList.body).toEqual( {[groupId]:{
 			"description": "descriçao do grupo A do joao",
 		  	"games": {},
+			"id": groupId,
 		    "name": "grupo A"}
 		});
 	});
