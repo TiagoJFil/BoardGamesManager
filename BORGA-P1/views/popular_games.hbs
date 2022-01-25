@@ -2,8 +2,10 @@
 <form action= "/popular/result" method = "GET">
 	<h2><label >How many games do you want?</label></h2>
 	<p><label >Count:</label></p>
-	<input type="number" placeholder='10 items default..' min='1' max='100' size ='20' name="count">
-	<input type="submit" value="Click me for the most popular games">
+    <label>
+        <input type="number" placeholder='10 items default..' min='1' max='100' size ='20' name="count">
+    </label>
+    <input type="submit" value="Click me for the most popular games">
 </form>	
 {{#if error}}
 	{{#if code}}

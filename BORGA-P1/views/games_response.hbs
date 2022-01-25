@@ -52,15 +52,17 @@
 			<label >Choose a group to add to:</label>
 			<form action="/groups/games" id= "group_form" method = "POST">
 				<input type='hidden' name='gameId' value={{game.id}}>
-			
-				<select required name="groupId", form ="group_form" >
-					<option selected ></option>
-					{{#each groups}}
-						<option value={{this.id}} >{{this.name}}</option>
-					{{/each}}
-				</select>	
-			
-			<input type="submit" required value="Add To Group">
+
+                <label>
+                    <select required name="groupId", form ="group_form" >
+                        <option selected ></option>
+                        {{#each groups}}
+                            <option value={{this.id}} >{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </label>
+
+                <input type="submit" required value="Add To Group">
 			</form>
 		
 		{{/if}}

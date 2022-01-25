@@ -129,8 +129,7 @@ form {
 	background: #c51244 !important;
 	padding: 20px !important;
 	border-radius: 0 !important;
-	position: relative; 
-	display: inline-block !important;
+	position: relative;
 	box-shadow: 1px 1px 1px #aaaaaa;
 	margin-top: 10px;
 }
@@ -158,7 +157,7 @@ form {
 }
 
 .games{
-	padding-left: 0px;
+	padding-left: 0;
 }
 
 #authenticateButton {
