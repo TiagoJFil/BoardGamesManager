@@ -35,7 +35,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Game'
+                $ref: '#/components/schemas/GameListResponse'
         '400':
           description: No query indicated in the request
           content:
@@ -152,7 +152,6 @@ paths:
           example: abc123
           schema:
             type: string
-          
       responses:
         '200':
           description: User added
@@ -606,7 +605,6 @@ components:
       required:
         - id
         - name
-        - publisher
       properties:
         id:
           type: string
@@ -642,8 +640,8 @@ components:
       type: object
       description: User data
       required:
-        - username
         - token
+        - username
       properties:
         token:
           type: string

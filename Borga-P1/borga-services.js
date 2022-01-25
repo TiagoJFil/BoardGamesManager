@@ -129,6 +129,7 @@ module.exports = function (data_borga, data_mem) {
 	async function createGroup(token,name,desc){
 		const username = await getUsername(token);
 
+
 		if(!name){
 			throw(errors.MISSING_PARAMETER('Group name missing'));
 		}

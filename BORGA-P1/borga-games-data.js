@@ -68,22 +68,19 @@ function do_fetch(uri) {
 /**
  * Transforms the game object response to a more simplified object
  * @param {Object} gameInfo 
- * @returns {Object}
+ * @returns {Object} with 10 games
  */
-function makeGameObj(gameInfo) {
-	return {
-		id: gameInfo.id,
-		name: gameInfo.name,
-		url: gameInfo.url,
-		price: gameInfo.price,
-		publisher: gameInfo.primary_publisher.name,
-		min_age: gameInfo.min_age,
-		min_players: gameInfo.min_players,
-		max_players: gameInfo.max_players,
-		rank: gameInfo.rank,
-	};
-	
+function makeGamesObj(gameInfo) {
+	let i = 0;
+	const obj = {};
+	while(i !== gameInfo.length) {
+		obj[i] = makeOneGameObj(gameInfo[i])
+		i++
+	}
+	return obj
 }
+
+
 /**
  * Transforms the game object response to a more simplified object
  * This function gets the game mechanichs and categories
@@ -150,11 +147,9 @@ function getDetails(string){
  */
 async function getNames(gameArray) {
 	const newmap = await mapCatMech
-    let array = []
-	await gameArray.forEach(element => {
-		array.push(newmap.get(element.id))
-	});
-	return array
+	return await gameArray.map(element => {
+		newmap.get(element.id)
+	})
 }
 
 
@@ -184,17 +179,41 @@ function getGameDetails(id){
  * @returns {Object} game or error
  */
 function getGameByName(name) {
-	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&name=' + name + '&client_id=' + CLIENT_ID;
+	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&name=' + name + '&limit=20' + '&client_id=' + CLIENT_ID;
 
 	return do_fetch(search_uri)
 		.then(answer => {
 			if(answer.length !== 0 && answer.count !== 0){
-				return makeGameObj(answer.games[0]);
+				return makeGamesObj(answer.games);
 			} else {
 				throw errors.NOT_FOUND({ name });
 			}
 		});
 }
+
+
+
+/**
+ * Transforms one game object response to a more simplified object
+ * @param {Object} gameInfo
+ * @returns {Object} with 10 games
+ */
+function makeOneGameObj(gameInfo) {
+	return {
+		id: gameInfo.id,
+		name: gameInfo.name,
+		url: gameInfo.url,
+		price: gameInfo.price,
+		publisher: gameInfo.primary_publisher.name,
+		min_age: gameInfo.min_age,
+		min_players: gameInfo.min_players,
+		max_players: gameInfo.max_players,
+		rank: gameInfo.rank,
+	};
+}
+
+
+
 
 
 /**
@@ -207,7 +226,7 @@ function getGameById(id) {
 	return do_fetch(search_uri)
 		.then(answer => {
 			if(answer.length !== 0 && answer.count !== 0){
-				return makeGameObj(answer.games[0]);
+				return makeGamesObj(answer.games[0]);
 			} else {
 				throw errors.NOT_FOUND({ id });
 			}
@@ -224,28 +243,11 @@ function getListPopularGames(count) {
 	return do_fetch(search_uri)
 		.then(answer => {
 			if (answer.length !== 0 && answer.count !== 0) {
-				return makeListObj(answer.games);
+				return makeGamesObj(answer.games);
 			} else {
 				throw errors.FAIL();
 			}
 		});
-}
-
-
-/**
- * Adds all games to an object
- * @param {Object} answer 
- * @returns {Object} gamesList
- */
- function makeListObj(answer){
-	const gamesList = {}
-	let it = 0
-	const size = answer.length
-	while(it < size){
-		gamesList[it + 1] = makeGameObj(answer[it])
-		it++
-	}
-	return gamesList
 }
 
 module.exports = {
