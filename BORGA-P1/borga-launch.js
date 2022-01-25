@@ -13,7 +13,7 @@ const es_spec = {
 	url:  process.env['BONSAI_URL'] || config.devl_es_url,   //env from heroku to db
 	prefix: 'prod'
 };
-const app = require('./borga-server')(es_spec,config.guest);
+const app = require('./borga-server')(es_spec);
 
 		
 /**

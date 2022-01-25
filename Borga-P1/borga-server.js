@@ -8,7 +8,7 @@ const passport = require('passport');
 passport.serializeUser((userInfo, done) => { done(null, userInfo); });
 passport.deserializeUser((userInfo, done) => { done(null, userInfo); });
 
-module.exports = function (es_spec,defined_user) {
+module.exports = function (es_spec) {
 
 
 	const data_borga = require('./borga-games-data');
@@ -20,7 +20,7 @@ module.exports = function (es_spec,defined_user) {
 	const services = require('./borga-services')(data_borga, data_elastic);
 
 	const webapi = require('./borga-web-api')(services);
-	const webui = require('./borga-web-site')(services,defined_user);
+	const webui = require('./borga-web-site')(services);
 
 
 
