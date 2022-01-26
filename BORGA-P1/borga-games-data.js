@@ -200,7 +200,9 @@ function getGameByName(name) {
  */
 function makeOneGameObj(gameInfo) {
 	let publisherName = null;
+
 	if(gameInfo.primary_publisher != null) publisherName = gameInfo.primary_publisher.name
+	if(!publisherName) publisherName = null
 
 	return {
 		id: gameInfo.id,
@@ -232,6 +234,9 @@ function getGameById(id) {
 			}
 		});
 }
+
+
+getGameByName('Root').then(console.log)
 
 /**
  * transforms a rank query from the api in a object 
