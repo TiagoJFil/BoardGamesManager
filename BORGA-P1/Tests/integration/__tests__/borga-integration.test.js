@@ -24,6 +24,7 @@ test('Confirm database is running', async () => {
 
 const userToBeAddedGroups = "joao"
 
+
 describe('Integration tests', () => {
 
 	const app = server(es_spec, config.guest);
@@ -147,16 +148,25 @@ describe('Integration tests', () => {
 
 	test('Create a new User', async () => {
 		const response = await request(app)
-			.post('/api/users/miguel')
+			.post('/api/users/')
+			.send({
+				"name": "Ze",
+				"password": "Ze"
+			})
 			.expect(200);
+
 		
 		expect(response.body).toBeTruthy();
-		expect(response.body.username).toEqual("miguel");
+		expect(response.body.username).toEqual("Ze");
 	});
 
 	test('trying to create a user with the same name throws an error', async () => {
 		const response = await request(app)
-			.post('/api/users/miguel')
+			.post('/api/users/')
+			.send({
+				"name": "Ze",
+				"password": "Ze"
+			})
 			.expect(500); 
 		
 
@@ -166,7 +176,7 @@ describe('Integration tests', () => {
 				"code": 1004,
 				"name": "USER_ALREADY_EXISTS",
 				"message": "The user you wanted to add already exists",
-				"info": "miguel"
+				"info": "Ze"
 			}
 		});
 	});
@@ -398,7 +408,7 @@ describe('Integration tests', () => {
 	});
 
 	test('edit first group works', async () => {
-		
+
 		const groupList = await request(app)
 			.get('/api/my/group')
 			.set('Authorization', `Bearer ${config.guest.token}`)
@@ -409,11 +419,10 @@ describe('Integration tests', () => {
 		const groupId = Object.keys(groupList.body)[0];
 
 		const response = await request(app)
-			.put('/api/my/group/')
+			.put(`/api/my/group/${groupId}`)
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.send({
-				"groupId": `${groupId}`,
 				"name": "changedName",
 				"desc": "changedDescription"
 			})
@@ -432,7 +441,7 @@ describe('Integration tests', () => {
 	});
 
 	test('edit second group doesnt work because it doesnt exists', async () => {
-		
+
 		const groupList = await request(app)
 		.get('/api/my/group')
 		.set('Authorization', `Bearer ${config.guest.token}`)
@@ -443,11 +452,10 @@ describe('Integration tests', () => {
 		const groupId = Object.keys(groupList.body)[1];
 
 		const response = await request(app)
-			.put('/api/my/group/')
+			.put(`/api/my/group/${groupId}`)
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.send({
-				"groupId": `${groupId}`,
 				"name": "changedName",
 				"desc": "changedDescription"
 			})
@@ -478,11 +486,10 @@ describe('Integration tests', () => {
 		const groupId = Object.keys(groupList.body)[0];
 
 		const response = await request(app)
-			.post('/api/my/group/games')
+			.post(`/api/my/group/${groupId}/games`)
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
 			.send({
-				"groupId": `${groupId}`,
 				"gameId": "dFC1lnGINr"
 			})
 			.expect('Content-Type', /json/)
@@ -504,9 +511,12 @@ describe('Integration tests', () => {
 		const groupId = Object.keys(groupList.body)[0];
 
 		const response = await request(app)
-			.delete(`/api/my/group/games/${groupId}/dFC1lnGINr`)
+			.delete(`/api/my/group/${groupId}/games/`)
 			.set('Authorization', `Bearer ${config.guest.token}`)
 			.set('Accept', 'application/json')
+			.send({
+				"gameId": "dFC1lnGINr"
+			})
 			.expect('Content-Type', /json/)
 			.expect(200);
 
@@ -523,10 +533,12 @@ describe('Integration tests', () => {
 	test('Create a new user and add a group ,list of groups will be different from other user',async() =>{
 
 		const user = await request(app)
-			.post(`/api/users/${userToBeAddedGroups}`)
+			.post('/api/users/')
+			.send({
+				"name":`${userToBeAddedGroups}`,
+				"password":`${userToBeAddedGroups}`
+			})
 			.expect(200);
-	
-		
 
 		console.log(`Bearer ${user.body.token}`)
 		console.log(user)
@@ -545,7 +557,6 @@ describe('Integration tests', () => {
 
 
 		const groupId = groupCreation.body.id;	
-
 
 
 		const groupList = await request(app)

@@ -56,9 +56,6 @@ module.exports = function (services) {
 				break;
 			case 'GROUP_ALREADY_EXISTS':
 				res.status(409);
-				break;	
-			case 'GROUP_ALREADY_EXISTS':
-				res.status(409);
 				break;
 			case 'FAIL':
 				res.status(406);
@@ -291,7 +288,7 @@ module.exports = function (services) {
 	router.post('/my/group', createAGroup);
 
 	// Resource: /my/group/<groupId>/games
-	router.post('/my/group/{groupId}/games', addGameToGroup);
+	router.post('/my/group/:groupId/games', addGameToGroup);
 	// Resource: /my/group/<groupId>/games/
 	router.delete('/my/group/:groupId/games/', removeGameFromGroup);
 	

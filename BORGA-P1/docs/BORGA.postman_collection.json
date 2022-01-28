@@ -53,7 +53,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8888/api/all/games/?name=cards_against_humanity",
+					"raw": "http://localhost:8888/api/all/games/?name=monopoly",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -68,7 +68,7 @@
 					"query": [
 						{
 							"key": "name",
-							"value": "cards_against_humanity"
+							"value": "monopoly"
 						}
 					]
 				}
@@ -202,8 +202,17 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"name\": \"abcdvw\",\r\n    \"password\": \"ada\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8888/api/users/abc",
+					"raw": "http://localhost:8888/api/users",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -211,8 +220,7 @@
 					"port": "8888",
 					"path": [
 						"api",
-						"users",
-						"abc"
+						"users"
 					]
 				}
 			},
@@ -226,8 +234,7 @@
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text",
-						"disabled": true
+						"type": "text"
 					},
 					{
 						"key": "Authorization",
@@ -237,12 +244,13 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "bearer 47c6a426-c51d-4cd2-b6b4-cf97fe05966c",
-						"type": "text"
+						"value": "bearer 0c59ea54-1037-410e-945c-af38c9dfb034",
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8888/api/my/group/0",
+					"raw": "http://localhost:8888/api/my/group/d496388471c64b838f542d6f3cd48654",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -252,7 +260,7 @@
 						"api",
 						"my",
 						"group",
-						"0"
+						"d496388471c64b838f542d6f3cd48654"
 					]
 				}
 			},
@@ -266,8 +274,7 @@
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text",
-						"disabled": true
+						"type": "text"
 					},
 					{
 						"key": "Authorization",
@@ -277,12 +284,13 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
-						"type": "text"
+						"value": "bearer 0c59ea54-1037-410e-945c-af38c9dfb034",
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8888/api/my/group/2",
+					"raw": "http://localhost:8888/api/my/group/d496388471c64b838f542d6f3cd48654",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -292,7 +300,7 @@
 						"api",
 						"my",
 						"group",
-						"2"
+						"d496388471c64b838f542d6f3cd48654"
 					]
 				}
 			},
@@ -310,7 +318,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
+						"value": "bearer 27c602cf-17ee-4019-a197-fcd9ce977bbd",
 						"type": "text",
 						"disabled": true
 					}
@@ -339,14 +347,14 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
-						"type": "text"
+						"value": "bearer 27c602cf-17ee-4019-a197-fcd9ce977bbd",
+						"type": "text",
+						"disabled": true
 					},
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text",
-						"disabled": true
+						"type": "text"
 					}
 				],
 				"body": {
@@ -381,19 +389,19 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
-						"type": "text"
+						"value": "bearer abc",
+						"type": "text",
+						"disabled": true
 					},
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text",
-						"disabled": true
+						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"groupId\": \"1\",\r\n  \"name\": \"renom3eado\",\r\n  \"desc\": \"novadescriçao\"\r\n}",
+					"raw": "{\r\n  \"name\": \"renomeado\",\r\n  \"desc\": \"novadescriçao\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -401,7 +409,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8888/api/my/group",
+					"raw": "http://localhost:8888/api/my/group/3c9c86a00ec9430fac17b6294e03cb30",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -410,7 +418,8 @@
 					"path": [
 						"api",
 						"my",
-						"group"
+						"group",
+						"3c9c86a00ec9430fac17b6294e03cb30"
 					]
 				}
 			},
@@ -424,18 +433,18 @@
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text",
-						"disabled": true
+						"type": "text"
 					},
 					{
 						"key": "Authorization",
-						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
-						"type": "text"
+						"value": "bearer abc",
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"groupId\": \"3\",\r\n  \"gameId\": \"dFC1lnGINr\"\r\n}",
+					"raw": "{\r\n  \"gameId\": \"dFC1lnGINr\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -443,7 +452,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8888/api/my/group/games",
+					"raw": "http://localhost:8888/api/my/group/3c9c86a00ec9430fac17b6294e03cb30/games",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -453,6 +462,7 @@
 						"api",
 						"my",
 						"group",
+						"3c9c86a00ec9430fac17b6294e03cb30",
 						"games"
 					]
 				}
@@ -460,30 +470,33 @@
 			"response": []
 		},
 		{
-			"name": "delete a game from group",
+			"name": "delete a game from a group",
 			"request": {
 				"method": "DELETE",
 				"header": [
 					{
 						"key": "Authorization",
 						"value": "bearer 8b85d489-bcd3-477b-9563-5155af9f08ca",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "Authorization",
-						"value": "bearer abc",
-						"type": "text",
-						"disabled": true
+						"type": "text"
 					},
 					{
 						"key": "Authorization",
 						"value": "bearer 2deb36d0-ea36-45c9-8210-b1f52168b97d",
-						"type": "text"
+						"type": "text",
+						"disabled": true
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"gameId\": \"dFC1lnGINr\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8888/api/my/group/games/3/dFC1lnGINr",
+					"raw": "http://localhost:8888/api/my/group/3c9c86a00ec9430fac17b6294e03cb30/games",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -493,9 +506,8 @@
 						"api",
 						"my",
 						"group",
-						"games",
-						"3",
-						"dFC1lnGINr"
+						"3c9c86a00ec9430fac17b6294e03cb30",
+						"games"
 					]
 				}
 			},
