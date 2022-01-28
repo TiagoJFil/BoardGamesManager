@@ -253,13 +253,13 @@ module.exports = function (data_borga, data_storage) {
 		if( await data_storage.doesGroupHaveGame(username,groupId,gameId) ){
 			throw(errors.FAIL('The game you are trying to add is already part of the group'))
 		}
-		
-		if( !await data_storage.isGameInStorage(gameId) ){
-			const game = await data_borga.getGameById(gameId);
+
+		if(!await data_storage.isGameInStorage(gameId) ){
+			const game = await data_borga.getGameById(gameId.toString());
 			await data_storage.addGameToStorage(game);
 		}
 
-		
+
 		
 		return await data_storage.addGameToGroup(username,groupId,gameId);
 

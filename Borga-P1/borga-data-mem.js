@@ -183,10 +183,10 @@ async function getDisplayableGroupsWithGameObjs(user){
 }
 
 /**
- * Adds a game to a user's group 
- * @param {String} user 
- * @param {String} groupId 
- * @param {Object} game 
+ * Adds a game to a user's group
+ * @param {String} user
+ * @param {String} groupId
+ * @param {String} gameId the id of the game
  * @returns {Object} group with games updated
  */
 async function addGameToGroup(user,groupId,gameId){

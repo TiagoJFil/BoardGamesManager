@@ -79,9 +79,10 @@ module.exports = function(es_spec){
 
     /**
      * Creates a new user group with the provided name and description
-     * @param {String} user 
-     * @param {String} name 
-     * @param {String} description 
+     * @param {String} user
+     * @param {String} name
+     * @param {String} description
+     * @param groupId
      * @returns {Object} a new group object with the information provided
      */
     async function createGroup(user,name,description,groupId){
@@ -275,10 +276,10 @@ module.exports = function(es_spec){
 
     
     /**
-     * Adds a game to a user's group 
-     * @param {String} user 
-     * @param {String} groupId 
-     * @param {Object} game 
+     * Adds a game to a user's group
+     * @param {String} user
+     * @param {String} groupId
+     * @param gameId
      * @returns {Object} group with games updated
      */
     async function addGameToGroup(user,groupId,gameId){

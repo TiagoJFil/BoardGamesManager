@@ -141,16 +141,19 @@ function getDetails(string){
 
 
 /**
- * Gets the name of a mechanic or categorie
+ * Gets the name of a mechanic or category
  * @param {Object} gameArray 
  * @returns an array with all the mechanics or categories names
  */
 async function getNames(gameArray) {
 	const newmap = await mapCatMech
-	return await gameArray.map(element => {
-		newmap.get(element.id)
+	const a = [];
+	await gameArray.forEach(element => {
+		a.push(newmap.get(element.id))
 	})
-}
+	return a
+} //to be improved mapping the gamearray is returning an array of undefined
+
 
 
 /**
@@ -169,9 +172,6 @@ function getGameDetails(id){
         }
     });
 }
-
-
-
 
 /**
  * returns a game from the api searching by name
@@ -200,15 +200,16 @@ function getGameByName(name) {
  */
 function makeOneGameObj(gameInfo) {
 	let publisherName = null;
-
+	let price = null;
 	if(gameInfo.primary_publisher != null) publisherName = gameInfo.primary_publisher.name
 	if(!publisherName) publisherName = null
+	if(gameInfo.price !== '0.00')  price = gameInfo.price
 
 	return {
 		id: gameInfo.id,
 		name: gameInfo.name,
 		url: gameInfo.url,
-		price: gameInfo.price,
+		price: price,
 		publisher: publisherName,
 		min_age: gameInfo.min_age,
 		min_players: gameInfo.min_players,
@@ -224,11 +225,11 @@ function makeOneGameObj(gameInfo) {
  * @returns {Object} a game or an error
  */
 function getGameById(id) {
-	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;	
+	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;
 	return do_fetch(search_uri)
 		.then(answer => {
 			if(answer.length !== 0 && answer.count !== 0){
-				return makeGamesObj(answer.games[0]);
+				return makeOneGameObj(answer.games[0]);
 			} else {
 				throw errors.NOT_FOUND({ id });
 			}
@@ -236,7 +237,7 @@ function getGameById(id) {
 }
 
 
-getGameByName('Root').then(console.log)
+
 
 /**
  * transforms a rank query from the api in a object 
@@ -254,7 +255,6 @@ function getListPopularGames(count) {
 			}
 		});
 }
-
 
 
 module.exports = {

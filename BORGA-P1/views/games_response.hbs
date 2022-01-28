@@ -46,7 +46,7 @@
             </tr>
         {{/if}}
 
-        {{#if this.price}}
+        {{#if this.url}}
             <tr>
                 <td  class='gameInfoSearch'>Url:</td>
                 <td><a href={{this.url}} target="_blank" rel="noopener noreferrer">{{this.url}}</a></td>
@@ -60,16 +60,17 @@
                 </form>
                 {{#if ../groups}}
                     <label>Choose a group to add to:</label>
-
                     <form action="/groups/games" id= "form_for_{{this.name}}" method = "POST">
                         <input type='hidden' name='gameId' value={{this.id}}>
 
-                        <select required name="groupId" form ="form_for_{{this.name}}" >
-                            <option selected></option>
-                            {{#each ../groups}}
-                                <option value={{this.id}} >{{this.name}}</option>
-                            {{/each}}
-                        </select>
+                        <label>
+                            <select required name="groupId" form ="form_for_{{this.name}}" >
+                                <option selected></option>
+                                {{#each ../groups}}
+                                    <option value={{this.id}}>{{this.name}}</option>
+                                {{/each}}
+                            </select>
+                        </label>
 
                         <input type="submit" required value="Add To Group">
                     </form>
@@ -85,7 +86,6 @@
 
 {{#if error}}
     {{#if code}}
-
         <error><strong> ERROR {{code}}: {{error}}</strong></error>
     {{/if}}
 {{/if}}
