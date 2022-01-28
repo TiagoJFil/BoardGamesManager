@@ -74,13 +74,17 @@ function prepareGameDeleteButtons() {
 	async function deleteGameOnApi(groupId,gameId,token) {
 		
 		const delReqRes = await fetch(
-			'/api/my/group/games/' + groupId + '/' + gameId,
+			'/api/my/group/' + groupId + '/games',
 			{
 				method: 'DELETE',
 				headers: {
-                            'Authorization': 'bearer ' + token
-                         }	
-			});
+                            'Authorization': 'bearer ' + token,
+							 'Content-Type': 'application/json'
+                         },
+				body: JSON.stringify({
+					"gameId" : gameId
+				})
+						 });
 		
 		 
 		if (delReqRes.status === 200) {
