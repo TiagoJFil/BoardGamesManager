@@ -225,7 +225,7 @@ function makeOneGameObj(gameInfo) {
  * @returns {Object} a game or an error
  */
 function getGameById(id) {
-	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&ids=' + id + '&client_id=' + CLIENT_ID;
+	const search_uri =BOARD_ATLAS_BASE_SEARCH_URI + '&ids=' + `${id}` + '&client_id=' + CLIENT_ID;
 	return do_fetch(search_uri)
 		.then(answer => {
 			if(answer.length !== 0 && answer.count !== 0){

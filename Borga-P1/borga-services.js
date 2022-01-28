@@ -98,7 +98,8 @@ module.exports = function (data_borga, data_storage) {
 
 	/**
 	 * Adds a user to the data base
-	 * @param {String} name 
+	 * @param {String} name
+	 * @param password
 	 * @returns {Object} new user
 	 * @throws {Object} error if the user already exists
 	 */
@@ -255,7 +256,7 @@ module.exports = function (data_borga, data_storage) {
 		}
 
 		if(!await data_storage.isGameInStorage(gameId) ){
-			const game = await data_borga.getGameById(gameId.toString());
+			const game = await data_borga.getGameById(gameId);
 			await data_storage.addGameToStorage(game);
 		}
 
