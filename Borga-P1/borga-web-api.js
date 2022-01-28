@@ -56,9 +56,6 @@ module.exports = function (services) {
 				break;
 			case 'GROUP_ALREADY_EXISTS':
 				res.status(409);
-				break;	
-			case 'GROUP_ALREADY_EXISTS':
-				res.status(409);
 				break;
 			case 'FAIL':
 				res.status(406);
