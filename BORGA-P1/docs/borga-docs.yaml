@@ -19,7 +19,7 @@ paths:
     get:
       tags:
         - Games
-      summary: Find a game by name
+      summary: Find games by name query
       description: Uses boardgameatlas API to find a game corresponding to the name.
       parameters:
         - name: name
@@ -67,7 +67,7 @@ paths:
           required: false
           schema:
             type: string
-          example: 5
+          example: 10
       responses:
         '200':
           description: List has been retrieved
@@ -126,7 +126,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
-        '502':
+        '500':
           description: Boardgameatlas API is not responding
           content:
             application/json:
@@ -154,12 +154,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         '400':
-          description: No query indicated in the request
+          description: Missing parameter
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/MissingParameter'
-        '502':
+        '500':
           description: API is not responding
           content:
             application/json:
@@ -206,7 +206,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
-        '502':
+        '500':
           description: API is not responding,
           content:
             application/json:
@@ -252,7 +252,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
-        '502':
+        '500':
           description: API is not responding,
           content:
             application/json:
@@ -678,8 +678,10 @@ components:
       properties:
         name:
           type: string
+          example: "Test"
         desc:
           type: string
+          example: "Test"
     EditGroupHeader:
       type: object
       description: Group data
@@ -718,8 +720,10 @@ components:
       properties:
         name:
           type: string
+          example: "Bruno"
         password:
           type: string
+          example: "Brocas"
     AddGame:
       type: object
       description: Group data
@@ -729,6 +733,7 @@ components:
       properties:
         gameId:
           type: string
+          example: "TAAifFP590"
     GameDetails:
       type: object
       description: game details

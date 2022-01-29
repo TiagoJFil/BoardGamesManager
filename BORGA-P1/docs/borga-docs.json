@@ -30,7 +30,7 @@
         "tags": [
           "Games"
         ],
-        "summary": "Find a game by name",
+        "summary": "Find games by name query",
         "description": "Uses boardgameatlas API to find a game corresponding to the name.",
         "parameters": [
           {
@@ -104,7 +104,7 @@
             "schema": {
               "type": "string"
             },
-            "example": 5
+            "example": 10
           }
         ],
         "responses": {
@@ -201,7 +201,7 @@
               }
             }
           },
-          "502": {
+          "500": {
             "description": "Boardgameatlas API is not responding",
             "content": {
               "application/json": {
@@ -244,7 +244,7 @@
             }
           },
           "400": {
-            "description": "No query indicated in the request",
+            "description": "Missing parameter",
             "content": {
               "application/json": {
                 "schema": {
@@ -253,7 +253,7 @@
               }
             }
           },
-          "502": {
+          "500": {
             "description": "API is not responding",
             "content": {
               "application/json": {
@@ -331,7 +331,7 @@
               }
             }
           },
-          "502": {
+          "500": {
             "description": "API is not responding,",
             "content": {
               "application/json": {
@@ -407,7 +407,7 @@
               }
             }
           },
-          "502": {
+          "500": {
             "description": "API is not responding,",
             "content": {
               "application/json": {
@@ -1055,10 +1055,12 @@
         ],
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "example": "Test"
           },
           "desc": {
-            "type": "string"
+            "type": "string",
+            "example": "Test"
           }
         }
       },
@@ -1113,10 +1115,12 @@
         ],
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "example": "Bruno"
           },
           "password": {
-            "type": "string"
+            "type": "string",
+            "example": "Brocas"
           }
         }
       },
@@ -1129,7 +1133,8 @@
         ],
         "properties": {
           "gameId": {
-            "type": "string"
+            "type": "string",
+            "example": "TAAifFP590"
           }
         }
       },

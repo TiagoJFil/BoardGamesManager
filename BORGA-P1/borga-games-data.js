@@ -142,17 +142,17 @@ function getDetails(string){
 
 /**
  * Gets the name of a mechanic or category
- * @param {Object} gameArray 
+ * @param {Array} gameArray
  * @returns an array with all the mechanics or categories names
  */
 async function getNames(gameArray) {
 	const newmap = await mapCatMech
-	const a = [];
-	await gameArray.forEach(element => {
-		a.push(newmap.get(element.id))
-	})
-	return a
-} //to be improved mapping the gamearray is returning an array of undefined
+	return gameArray.map(function(id){
+		return newmap.get(id.id)
+		}
+	)
+}
+
 
 
 

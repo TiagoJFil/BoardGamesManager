@@ -386,7 +386,7 @@ module.exports = function(es_spec){
             token: id,
             username: Username 
         };
-        const idToUser ={
+        const tokenToUser ={
             user: Username 
         }
 
@@ -406,7 +406,7 @@ module.exports = function(es_spec){
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(idToUser)
+                        body: JSON.stringify(tokenToUser)
                     }
             );
             //add the user to the users collection

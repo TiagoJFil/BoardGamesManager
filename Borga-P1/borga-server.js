@@ -17,7 +17,7 @@ module.exports = function (es_spec) {
 
 	const data_elastic = require('./borga-data-elasticsearch')(es_spec);
 
-	const services = require('./borga-services')(data_borga, data_elastic);
+	const services = require('./borga-services')(data_borga, data_mem);
 
 	const webapi = require('./borga-web-api')(services);
 

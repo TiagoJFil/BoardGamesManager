@@ -2,12 +2,13 @@
 
 const crypto = require('crypto')
 
+const guest = require('./borga-config').guest
 
 /**
  * object with user token as key and its name as value
  */
 const tokens = {
-	'8b85d489-bcd3-477b-9563-5155af9f08ca': 'tiago',
+	[guest.token] : guest.user
 };
 
 /**
@@ -31,8 +32,9 @@ const games = {
  * object with all users with their respective information such as its groups
  */
 const users = {
-	'tiago': {
-		groups : {}
+	[guest.user]: {
+		groups : {},
+		token: guest.token
 	}
 };
 
@@ -231,7 +233,9 @@ async function removeGameFromGroup(user,groupId,gameId){
  */
 async function createUser(Username,Password){
 	const id = crypto.randomUUID()
+
 	tokens[id] = Username
+
 	users[Username] = {
 		groups : {},
 		token : id
@@ -239,11 +243,14 @@ async function createUser(Username,Password){
 	
 	if(Password)
 		users[Username]['password'] = Password
-	
+
+	console.log(users)
+
 	return {
 		token: id,
 		username: Username
 	};
+
 }
 
 
