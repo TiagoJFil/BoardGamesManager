@@ -56,10 +56,10 @@ function prepareGameDeleteButtons() {
 	return;
 	
 	async function onDeleteGame(){
-
-		const groupId = this.id.slice(9,41);
-		const gameId = this.id.slice(42,52);
-		const token = this.id.substr(53); //32 is the size of a token, then we add 1 for the -
+		//32 is the size of a token
+		const groupId = this.id.slice(8,40);
+		const gameId = this.id.slice(41,51);
+		const token = this.id.substr(52); 
 
 
 		
@@ -104,18 +104,84 @@ function prepareGameDeleteButtons() {
 
 }
 
-function prepareGroupEditButtons() {
+function prepareGroupEditButton() {
 
-	const editButtons =
-		document.querySelectorAll('.button_group_edit'); 
-	editButtons.forEach(butEdit => {
-		butEdit.onclick = onEditGroup;
-	});
+	const butEdit = document.querySelector('.button_group_edit'); 
+	
+	butEdit.onclick = openEditForm;
+
 	return;
 	
-	async function onEditGroup(){
-		
+	async function onEditGroup(token,groupId,name,desc){
+		try{
+			editDescOnView(name,desc)
+			await editDescOnApi(token,groupId,name,desc);
+		}catch(error){
+			alert(error);
+		}
 	}
 	
+	async function editDescOnApi(token,groupId,newName,newDesc) {
+		
+		const editResRes = await fetch(
+			`/api/my/group/${groupId}`,
+			{
+				method: 'PUT',
+				headers: {
+                            'Authorization': 'bearer ' + token,
+							'Content-Type': 'application/json'
+                         },
+				body: JSON.stringify
+				({
+					"name" : newName,
+					"desc" : newDesc
+				})
+			});
+		
+		 
+		if (editResRes.status === 200) {
+			return;
+		}
+		throw new Error(
+			'Failed to edit group description with id ' + groupId +" "+ token+" " + groupId+" " + newName+" " + newDesc+" "+ '\n' +
+			editResRes.status + ' ' + editResRes.statusText 
+		);
+	}
+
+	function editDescOnView(name,desc) {
+		const group_desc = '#group_desc';
+		const group_name = '#group_name';
+		const page_group_desc = document.querySelector(group_desc);
+		const page_group_name = document.querySelector(group_name);
+		page_group_desc.innerHTML = `${desc}`;
+		page_group_name.innerHTML = `${name}`;
+	}
 	
+	function openEditForm(){
+		const editButton = document.querySelector("#enable_edit_button")
+		editButton.innerHTML = "";
+		const groupId = this.id.slice(9,41);
+		const token = this.id.substr(42);
+		const form_id = '#new_form';
+		const form = document.querySelector(form_id);
+		form.innerHTML = 
+						"<p><label >Name:</label></p>"+ 
+						"<input type='text' id='form_group_name'></input>"+
+						"<p><label>Description (Max 100 characters):</label></p>"+
+						"<input type='text' id='form_group_desc'size='70'></input>" +
+						"<input id = 'button_change_group_info' type='submit' value='Edit'>";
+						
+
+
+		const but_change = document.querySelector('#button_change_group_info'); 
+		but_change.onclick = function() {
+			const name = document.querySelector('#form_group_name').value;
+			const desc = document.querySelector('#form_group_desc').value;
+			onEditGroup(token,groupId,name,desc);
+			editButton.innerHTML = `<input class = button_group_edit id = but_edit_${groupId}_${token} type = submit value = Edit>`;
+			form.innerHTML = "";
+			prepareGroupEditButton();
+		}
+	}
 }
+

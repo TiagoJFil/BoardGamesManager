@@ -190,13 +190,13 @@ form {
   color: white;
 }
 
-.button_yellow {
+.button_group_edit {
   background-color: white; 
   color: black; 
   border: 2px solid #FFB900;
 }
 
-.button_yellow:hover {
+.button_group_edit:hover {
   background-color: #FFB900;
   color: white;
 }
@@ -221,4 +221,15 @@ form {
 .gameInfoSearch{
 	font-family: "Lucida Console", monospace;
 	color: #5FBDF4;
+}
+
+#button_change_group_info{
+	background-color: white; 
+	color: black; 
+	border: 2px solid #4CAF50;
+}
+
+#button_change_group_info:hover{
+	background-color: #4CAF50;
+	color: white;
 }

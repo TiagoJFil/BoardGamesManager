@@ -1,13 +1,15 @@
-<h1>{{groupdetails.name}}</h1>
+<h1><span id ='group_name'>{{groupdetails.name}}</span></h1>
 
 <td>
     <div style="width: 500px; height: 150px; border: 5px solid #000;">
-        <element class='gameURL'>DESCRIPTION</element> :<br>{{groupdetails.description}}
-		
-		<form action = "TODO" method = "GET">
-			<input class = "button_yellow" type = "submit" value = "Edit">
-		</form>
+        <element class='gameURL'>DESCRIPTION</element> :<br><span id='group_desc'>{{groupdetails.description}}</span>
+
+        <span id='enable_edit_button'>
+            <input class = "button_group_edit" id = 'but_edit_{{id}}_{{token}}' type = "submit" value = "Edit">
+        </span>
+         <span id ='new_form'></span>
     </div>
+   
 </td>
 
 {{#if games}}
@@ -25,7 +27,7 @@
                         </td>
                         <td>
                             
-                            <input class = "button_game_delete" id="but_del__{{../id}}_{{id}}_{{../token}}" type = "submit" value = "Delete">
+                            <input class = "button_game_delete" id="but_del_{{../id}}_{{id}}_{{../token}}" type = "submit" value = "Delete">
                             
                         </td>
                     </tr>
@@ -39,4 +41,10 @@
 <script>
 	prepareGameDeleteButtons();
 </script>
+{{/if}}
+{{#if groupdetails.description}}
+    <script src="/public/client.js"></script>
+    <script>
+        prepareGroupEditButton();
+    </script>
 {{/if}}
