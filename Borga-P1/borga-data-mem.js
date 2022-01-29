@@ -192,7 +192,6 @@ async function getDisplayableGroupsWithGameObjs(user){
  * @returns {Object} group with games updated
  */
 async function addGameToGroup(user,groupId,gameId){
-
 	
 	users[user].groups[groupId].games.push(gameId);
 		

@@ -68,7 +68,7 @@ module.exports = function (services) {
 	 * @param {Promise} req 
 	 * @param {Promise} res 
 	 */
-	 async function renderLoginPage(req,res){
+	 async function renderAuthPage(req,res){
 		res.render('auth_page');
 	};
 	
@@ -490,53 +490,41 @@ module.exports = function (services) {
 	
 	router.use(express.urlencoded({ extended: true }));  //allows us to use req.body
 	
-
-
-	// Login Page
-	router.get('/authenticate', renderLoginPage);
-
-	// Login
-	router.post('/login', Dologin);
-
-	// Logout
-	router.post('/logout', Dologout);
-
-	//Add user
-	router.post('/register', registerUser);
-
 	// Homepage
 	router.get('/', renderHomePage);
 
-	// Details of a game
-	router.get('/games/:id', getGameDetails);
+	// Login Page
+	router.get('/authenticate', renderAuthPage);
+	// Login
+	router.post('/login', Dologin);
+	// Logout
+	router.post('/logout', Dologout);
+	//Add user
+	router.post('/register', registerUser);
 
+	
 	// Search page
 	router.get('/search', renderSearchPage);
-
 	// Search Result page
 	router.get('/search/result', findGame);
+	// Details of a game
+	router.get('/games/:id', getGameDetails);
 	
 
 	// Popular games page
 	router.get('/popular', renderPopularGamesPage);
-
 	//Popular games result page
 	router.get('/popular/result', popularGames);
 
-
+	
+	// Groups list page
+	router.get('/groups', getGroupsAndRender);
 	// Adds a game to a group
 	router.post('/groups/games',addGameToGroup);
-
-	// Groups page
-	router.get('/groups', getGroupsAndRender);
-
-
 	// Page to create a new group , must be above /groups/:id otherwise create will be seen as an id and will get us other page
 	router.get('/groups/create', renderCreateGroups);
-
 	// A Group page
 	router.get('/groups/:id', renderGroupInfo);
-	
 	// Group creation
 	router.post('/groups',createGroupAndRedirect);
 
