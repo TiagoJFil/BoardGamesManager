@@ -104,13 +104,16 @@ module.exports = function (data_borga, data_storage) {
 	 * @throws {Object} error if the user already exists
 	 */
 	async function addUser(name,password){
+
+		const id = crypto.randomUUID();
+
 		if(!name){
 			throw(errors.MISSING_PARAMETER('Name of the user is missing'));
 		}
 		if(await data_storage.hasUser(name))
 			throw errors.USER_ALREADY_EXISTS(name);
 
-		return data_storage.createUser(name,password);
+		return data_storage.createUser(name,password,id);
 	};
 
 	/**

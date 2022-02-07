@@ -377,13 +377,12 @@ module.exports = function(es_spec){
      * Creates a new user
      * @param {String} Username user's name
      * @param Password User password
+     * @param Id user's token
      * @returns {Object} an object with the id of the user and its name
      */
-    async function createUser(Username,Password){
-
-        const id = crypto.randomUUID();
+    async function createUser(Username,Password, Id){
         const displayableUser = {
-            token: id,
+            token: Id,
             username: Username 
         };
         const tokenToUser ={
@@ -391,7 +390,7 @@ module.exports = function(es_spec){
         }
 
         const userContent = {
-            token: id,
+            token: Id,
         }
 
         if(Password){
@@ -400,7 +399,7 @@ module.exports = function(es_spec){
         try {
             //add the token to the token collection
             await fetch(
-                `${allTokensUrl}/_doc/${id}?refresh=wait_for`,
+                `${allTokensUrl}/_doc/${Id}?refresh=wait_for`,
                     {
                         method: 'POST',
                         headers: {

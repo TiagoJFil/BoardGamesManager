@@ -228,16 +228,15 @@ async function removeGameFromGroup(user,groupId,gameId){
  * Creates a new user
  * @param {String} Username user's name
  * @param Password user's password
+ * @param Id user's token
  * @returns {Object} an object with the id of the user and its name
  */
-async function createUser(Username,Password){
-	const id = crypto.randomUUID()
-
-	tokens[id] = Username
+async function createUser(Username,Password, Id){
+	tokens[Id] = Username
 
 	users[Username] = {
 		groups : {},
-		token : id
+		token : Id
 	}
 	
 	if(Password)
@@ -246,7 +245,7 @@ async function createUser(Username,Password){
 	console.log(users)
 
 	return {
-		token: id,
+		token: Id,
 		username: Username
 	};
 

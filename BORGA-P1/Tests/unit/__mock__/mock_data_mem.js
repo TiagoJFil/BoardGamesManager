@@ -65,14 +65,12 @@ async function tokenToUsername(token) {
 
 async function createGroup(user,name,description){
 	const id = crypto.randomUUID().replace(/-/g,'');
-	
-	var newGroup =  {
-		name : name,
-		description : description,
-		games : []	
-	};
 
-	mock_users[user][id] = newGroup;
+	mock_users[user][id] = {
+		name: name,
+		description: description,
+		games: []
+	};
 
 	const displayableGroup =  {
 		name : name,
@@ -108,21 +106,19 @@ async function deleteGroup(user, groupId){
 }
 
 async function getDisplayableGroupWithGameObjs(user,groupId){
-	let GamesObjFromIds = new Object();
+	let GamesObjFromIds = {};
 	mock_users[user][groupId].games.forEach( it => GamesObjFromIds[it] = mock_games[it]);
-    
-	const groupToDisplayWithGameObjs = {
-		name : mock_users[user][groupId].name,
-		description : mock_users[user][groupId].description,
-		games : GamesObjFromIds
-	};
 
-	return groupToDisplayWithGameObjs;
+	return {
+		name: mock_users[user][groupId].name,
+		description: mock_users[user][groupId].description,
+		games: GamesObjFromIds
+	};
 }
 
 
 async function getDisplayableGroupsWithGameObjs(user){
-	let obj = new Object()
+	let obj = {}
 	for(const key in mock_users[user]){
 		
 		obj[key] = await getDisplayableGroupWithGameObjs(user,key) 
@@ -143,7 +139,7 @@ async function addGameToGroup(user,groupId,game){
 }
 
 async function removeGameFromGroup(user,groupId,gameId){
-	mock_users[user][groupId].games = mock_users[user][groupId].games.filter(it => it != gameId);
+	mock_users[user][groupId].games = mock_users[user][groupId].games.filter(it => it !== gameId);
 
 	return await getDisplayableGroupWithGameObjs(user,groupId);
 }
@@ -151,7 +147,7 @@ async function removeGameFromGroup(user,groupId,gameId){
 async function createUser(Username){ //adds user
 	const id = crypto.randomUUID()
 	mock_tokens[id] = Username
-	mock_users[Username] = new Array()
+	mock_users[Username] = []
 	return {
 		AuthToken: id,
 		UserName: Username
