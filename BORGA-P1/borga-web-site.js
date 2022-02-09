@@ -291,7 +291,7 @@ module.exports = function (services) {
 	 */ 
 	async function popularGames(req,res){
 		const header = 'Popular games Result';
-		const count = req.query.count;
+		const count = req.query.count? req.query.count : 10;
 		const token = getBearerToken(req);
 		const username = getUsername(req);
 		try{
@@ -303,12 +303,12 @@ module.exports = function (services) {
 				
 				res.render(
 					'games_response',
-					{header,games: games, groups : groups, username}
+					{header,games: games, groups : groups, username,count:count}
 				);
 			}else{
 				res.render(
 					'games_response',
-					{header,games: games, username}
+					{header,games: games, username,count:count}
 				);
 			}
 

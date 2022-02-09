@@ -214,7 +214,8 @@ function makeOneGameObj(gameInfo) {
 		min_age: gameInfo.min_age,
 		min_players: gameInfo.min_players,
 		max_players: gameInfo.max_players,
-		rank: gameInfo.rank,
+		image: gameInfo.image_url,
+		rank: gameInfo.rank,	
 	};
 }
 
