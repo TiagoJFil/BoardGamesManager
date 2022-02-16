@@ -109,12 +109,12 @@ module.exports = function (services) {
 				const groups = await services.listGroups(token)
 				res.render(
 					'games_response',
-					{header,query: query_name,games: games, groups: groups, username: username}
+					{header,query: query_name,games: JSON.stringify(games), groups: JSON.stringify(groups), username: JSON.stringify(username)}
 				);
 			}else{
 				res.render(
 					'games_response',
-					{header,query: query_name,games: games, username: username}
+					{header,query: query_name,games: JSON.stringify(games), username: JSON.stringify(username)}
 				);
 			}
 
@@ -291,26 +291,23 @@ module.exports = function (services) {
 	 */ 
 	async function popularGames(req,res){
 		const header = 'Popular games Result';
-		const count = req.query.count? req.query.count : 10;
+		const count = req.query.count ? req.query.count : 10;
+
 		const token = getBearerToken(req);
 		const username = getUsername(req);
 		try{
-			const games = await services.getPopularGames(count);
-			
-			//Make the user able to add the game to a group if the user is logged in else we can just search without adding
+			const games = await services.getPopularGames(count);	
+			let objToRender = {header:JSON.stringify(header),games:JSON.stringify(games),username:JSON.stringify(username),count:count};
+			//Make the user able to add the game to a group if the user is logged in
 			if(username){
 				const groups = await services.listGroups(token)
-				
-				res.render(
-					'games_response',
-					{header,games: games, groups : groups, username,count:count}
-				);
-			}else{
-				res.render(
-					'games_response',
-					{header,games: games, username,count:count}
-				);
+				objToRender.groups = JSON.stringify(groups);
 			}
+
+			res.render(
+				'games_response',
+				objToRender,
+			);
 
 		}catch(err){
 			switch(err.name){

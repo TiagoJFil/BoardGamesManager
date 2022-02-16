@@ -70,16 +70,17 @@ function do_fetch(uri) {
  * @param {Object} gameInfo 
  * @returns {Object} with 10 games
  */
-function makeGamesObj(gameInfo) {
-	let i = 0;
-	const obj = {};
-	while(i !== gameInfo.length) {
-		obj[i] = makeOneGameObj(gameInfo[i])
-		i++
+ function makeGamesObj(gameInfo) {
+	let gameIndex = 0;
+	let arr = [];
+	let indexForPage = 0;
+	while(gameIndex !== gameInfo.length) {
+		arr[indexForPage] = makeOneGameObj(gameInfo[gameIndex]);
+		indexForPage++;
+		gameIndex++;
 	}
-	return obj
+	return arr
 }
-
 
 /**
  * Transforms the game object response to a more simplified object
@@ -152,8 +153,6 @@ async function getNames(gameArray) {
 		}
 	)
 }
-
-
 
 
 /**

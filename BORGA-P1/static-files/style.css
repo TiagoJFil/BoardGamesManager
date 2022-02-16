@@ -218,7 +218,7 @@ form {
 	color: #5FBDF4;
 }
 
-.gameInfoSearch{
+.item{
 	font-family: "Lucida Console", monospace;
 	color: #5FBDF4;
 }
@@ -237,4 +237,30 @@ form {
 .images{
 	width: 100px;
 	height: 100px;
+}
+
+.pagination {
+	display: inline-block;
+  }
+  
+.pagination button {
+color: black;
+float: left;
+padding: 8px 16px;
+text-decoration: none;
+}
+
+.pagination button.active {
+background-color: #4CAF50;
+color: white;
+border-radius: 5px;
+}
+
+.pagination button:hover:not(.active) {
+background-color: #ddd;
+border-radius: 5px;
+}
+
+.center{
+	text-align: center;
 }

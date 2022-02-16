@@ -5,10 +5,10 @@
 {{/if}}
 
 {{#if games}}
-    <p>Here is the result for the top {{#if count}} {{count}} {{/if}} {{#else}} 10 {{/else}}games:</p>
+    <p>Here are the results for the top {{#if count}} {{count}} {{/if}} {{#else}} 10 {{/else}}games:</p>
     {{#each games}}
         <table>
-            <td><img src="{{this.image}}" class="images"></td>
+            <td><img src='{{this.image}}' class='images'></td>
             <tr>
                 <td  class='gameInfoSearch'>Title:</td>
                 <td>{{this.name}}</td>
@@ -16,19 +16,22 @@
             </tr>
             <h2></h2>
 
-        {{#if this.publisher}} <tr>
+        {{#if this.publisher}}
+            <tr>
                 <td  class='gameInfoSearch'>Publisher:</td>
                 <td>{{this.publisher}}</td>
             </tr>
             {{/if}}
 
-        {{#if this.min_age}} <tr>
+        {{#if this.min_age}} 
+            <tr>
                 <td  class='gameInfoSearch'>Min Age:</td>
                 <td>{{this.min_age}}</td>
             </tr>
         {{/if}}
 
-        {{#if this.min_players}}<tr>
+        {{#if this.min_players}}
+        <tr>
                 <td  class='gameInfoSearch'>Min Players:</td>
                 <td>{{this.min_players}}</td>
             </tr>
@@ -84,11 +87,22 @@
 
         </table>
 
+
     {{/each}}
+
 {{/if}}
+
+{{!-- <div class="center"><div class="pagination" id="pagination"></div></div> --}}
+<div class="list" id="list"></div>
+<div class="center"><div class="pagination" id="pagination"></div></div>
 
 {{#if error}}
     {{#if code}}
         <error><strong> ERROR {{code}}: {{error}}</strong></error>
     {{/if}}
 {{/if}}
+
+<script src="/public/client.js"></script>
+<script>
+    pagination({{{games}}},{{{groups}}})
+</script>

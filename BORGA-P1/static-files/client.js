@@ -185,3 +185,84 @@ function prepareGroupEditButton() {
 	}
 }
 
+function pagination(gamesArr,groups){
+	const list_element = document.getElementById('list');
+	const pagination_element = document.getElementById('pagination');
+
+	let current_page = 1;
+	let rows = 5;
+
+	function displayList (items, wrapper, rows_per_page, page){
+		wrapper.innerHTML = "";
+		page--;
+
+		let start = rows_per_page * page;
+		let end = start+rows_per_page;
+
+		let paginatedItems = items.slice(start,end);
+
+		for(let i = 0; i < paginatedItems.length; i++){
+			let items = paginatedItems[i];
+
+			let item_element = document.createElement('table');
+			item_element.classList.add('item');
+			let gameInfoToAdd = `<td><img src=${items.image} class='images'></td>
+					<tr><td  class='gameInfoSearch'>Title:</td><td>${items.name}</td></tr>
+					<h2></h2>`;
+
+			if(items.publisher) gameInfoToAdd +=`<tr><td class='gameInfoSearch'>Publisher:</td><td>${items.publisher}</td></tr>`;
+			if(items.min_age) gameInfoToAdd += `<tr><td class='gameInfoSearch'>Min Age:</td><td>${items.min_age}</td></tr>`;
+			if(items.min_players) gameInfoToAdd += `<tr><td class='gameInfoSearch'>Min Players:</td><td>${items.min_players}</td></tr>`
+			if(items.max_players) gameInfoToAdd += `<tr><td class='gameInfoSearch'>Max Players:</td><td>${items.max_players}</td></tr>`
+			if(items.price) gameInfoToAdd += `<tr><td class='gameInfoSearch'>Price:</td><td>${items.price}$</td></tr>`
+			if(items.url) gameInfoToAdd += `<tr><td class='gameInfoSearch'>Url:</td><td><a href=${items.url} target="_blank" rel="noopener noreferrer">${items.url}</a></td></tr>`
+			gameInfoToAdd += `<tr><td><form action='/games/${items.id}' method = "GET"><input type="submit" required value="Get more details"></form>`
+
+			if (groups){
+				gameInfoToAdd += `<label>Choose a group to add to:</label><form action="/groups/games" id= "form_for_${items.name}" method = "POST"><input type='hidden' name='gameId' value=${items.id}><label><select required name="groupId" form ="form_for_${items.name}"><option selected></option>`
+				const noGroups = Object.values(groups);
+				console.log(noGroups);
+				noGroups.forEach(function(game) {
+					gameInfoToAdd += `<option value=${game.id}>${game.name}</option>`;
+				})
+				gameInfoToAdd += `</select></label><input type="submit" required value="Add To Group"></form></td></tr>`
+			}
+
+			item_element.innerHTML = gameInfoToAdd;
+
+			wrapper.appendChild(item_element);
+		}
+	}
+
+	function setupPagination(items, wrapper, rows_per_page){
+		wrapper.innerHTML = "";
+
+		let page_count = Math.ceil(items.length / rows_per_page)
+
+		for(let i = 1; i < page_count+1; i++){
+			let btn = paginationButton(i, items);
+			wrapper.appendChild(btn);
+		}
+	}
+
+	function paginationButton(page,items){
+		let button = document.createElement('button');
+		button.classList.add('pagination')
+		button.innerHTML = page;
+
+		if(current_page == page) button.classList.add('active');
+
+		button.addEventListener('click', function(){
+			current_page = page;
+			displayList(items,list_element,rows,current_page);
+			let current_btn = document.querySelector('.pagination button.active');
+			current_btn.classList.remove('active');
+			button.classList.add('active');
+			window.scrollTo(0, 0);
+		})
+
+		return button
+	}
+	displayList(gamesArr,list_element,rows,current_page);
+	setupPagination(gamesArr,pagination_element,rows);
+}
