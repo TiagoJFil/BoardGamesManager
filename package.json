@@ -4,7 +4,8 @@
   "description": "",
   "main": "borga-launch.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node borga-launch.js"
   },
   "keywords": [],
   "author": "",
