@@ -1,9 +1,13 @@
 const express = require('express');
-const async = require('hbs/lib/async');
 
 
 module.exports = function (services) {
 	
+	/**
+	 * Gets the username from the request
+	 * @param {Promise} req 
+	 * @returns {String} username or null if there is no user in the request
+	 */
 	function getUsername(req) {
 		return req.user && req.user.username;
 	}
@@ -11,19 +15,9 @@ module.exports = function (services) {
 	/**
 	 * Get bearer token from authorization header
 	 * @param {Promise} req 
-	 * @returns {String}
+	 * @returns {String} token or null if the bearer token was not found
 	 */
 	function getBearerToken(req) {
-		/*
-		const auth = req.header('Authorization');
-		if (auth) {
-			const authData = auth.trim();
-			if (authData.substr(0,6).toLowerCase() === 'bearer') {
-				return authData.replace(/^bearer\s+/i, '');
-			}
-		}
-		return null;
-		*/
 		return req.user && req.user.token
 	};
 	
@@ -392,7 +386,7 @@ module.exports = function (services) {
 					console.log('LOGIN ERROR', err);
 				}
 				res.redirect('/');
-			});
+			});	
 		}catch(err){
 			switch(err.name){
 				case 'BAD_CREDENTIALS':
@@ -430,11 +424,21 @@ module.exports = function (services) {
 			}
 		}
 	};
+	/**
+	 * Logs out the user and redirects to the home page
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function Dologout(req,res){
 		req.logout();
 		res.redirect('/');
 	};
 
+	/**
+	 * Creates a new user and redirects to the home page
+	 * @param {Promise} req 
+	 * @param {Promise} res 
+	 */
 	async function registerUser(req,res){
 		const username = req.body.username;
 		const password = req.body.password;
@@ -485,7 +489,7 @@ module.exports = function (services) {
 
 	const router = express.Router();	
 	
-	router.use(express.urlencoded({ extended: true }));  //allows us to use req.body
+	router.use(express.urlencoded({ extended: true }));  //allows us to use req.body from html forms
 	
 	// Homepage
 	router.get('/', renderHomePage);

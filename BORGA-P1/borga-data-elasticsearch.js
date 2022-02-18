@@ -1,11 +1,8 @@
 'use strict';
 
-const crypto = require('crypto');
-
 const errors = require('./borga-errors');
 
 const fetch = require('node-fetch');
-const res = require('express/lib/response');
 
 module.exports = function(es_spec){
 
@@ -82,7 +79,7 @@ module.exports = function(es_spec){
      * @param {String} user
      * @param {String} name
      * @param {String} description
-     * @param groupId
+     * @param {String} groupId
      * @returns {Object} a new group object with the information provided
      */
     async function createGroup(user,name,description,groupId){

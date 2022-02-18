@@ -1,6 +1,5 @@
 'use strict';
 
-const crypto = require('crypto')
 
 const guest = require('./borga-config').guest
 
