@@ -166,9 +166,9 @@ function prepareGroupEditButton() {
 		const form = document.querySelector(form_id);
 		form.innerHTML = 
 						"<p><label >Name:</label></p>"+ 
-						"<input type='text' id='form_group_name'></input>"+
+						"<input type='text' id='form_group_name'/>"+
 						"<p><label>Description (Max 100 characters):</label></p>"+
-						"<input type='text' id='form_group_desc'size='70'></input>" +
+						"<input type='text' id='form_group_desc'size='70'/>" +
 						"<input id = 'button_change_group_info' type='submit' value='Edit'>";
 						
 
@@ -250,7 +250,7 @@ function pagination(gamesArr,groups){
 		button.classList.add('pagination')
 		button.innerHTML = page;
 
-		if(current_page == page) button.classList.add('active');
+		if(current_page === page) button.classList.add('active');
 
 		button.addEventListener('click', function(){
 			current_page = page;
