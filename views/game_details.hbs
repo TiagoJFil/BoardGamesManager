@@ -4,38 +4,38 @@
 
 <table>
 	<tr>
-		<td  class='gameInfoSearch'>Title:</td>
+		<td  class='item'>Title:</td>
 		<td>{{game.name}}</td>
 	</tr>
 	
     {{#if game.description}}
 	<tr>
-		<td  class='gameInfoSearch'>Description:</td>
+		<td  class='item'>Description:</td>
 		<td>{{{game.description}}}</td>
 	</tr>
     {{/if}}
 
 	{{#if game.mechanics}}
     <tr>
-		<td  class='gameInfoSearch'>Mechanics:</td>
+		<td  class='item'>Mechanics:</td>
 		<td>{{game.mechanics}}</td>
 	</tr>
     {{/if}}
 
     {{#if game.categories}}
 	<tr>
-		<td  class='gameInfoSearch'>Categories:</td>
+		<td  class='item'>Categories:</td>
 		<td>{{game.categories}}</td>
 	</tr>
     {{/if}}
 
 	<tr>
-		<td  class='gameInfoSearch'>Image_url:</td>
+		<td  class='item'>Image_url:</td>
 		<td><a href={{game.image_url}} target="_blank" rel="noopener noreferrer">{{game.image_url}}</td>
 	</tr>
 
 	<tr>
-		<td  class='gameInfoSearch'>Url:</td>
+		<td  class='item'>Url:</td>
 		<td><a href={{game.url}} target="_blank" rel="noopener noreferrer">{{game.url}}</a></td>
 	</tr>
 
