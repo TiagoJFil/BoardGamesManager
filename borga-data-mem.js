@@ -221,7 +221,7 @@ async function removeGameFromGroup(user,groupId,gameId){
 		  password : users[user].password,
 		  token : users[user].token
 	  };
-};
+}
 
 /**
  * Creates a new user
