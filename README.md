@@ -19,13 +19,13 @@ With this project you have the possibility to create your own board game collect
 ##
 
 ## Structure
-![Graph](static-files\Graph.png)  
+![Graph](https://github.com/isel-leic-ipw/borga-ipw_pi-leicipw32d-g04/blob/main/static-files/Graph.png)  
 
 ##
 ### Games data
 This node does all things related to the board games atlas api.  
 It queries the api to get information such as games, details and information like mechanics or categories.  
-Uses fetch to query the api and  our errors node to throw any error that might occur.  
+Uses fetch to query the api and our errors node to throw any error that might occur.  
 You need to set your board games atlas key as ATLAS_CLIENT_ID environment variable in order to access the api.
 All data is stored in separate objects that are later used in services node.  
 
