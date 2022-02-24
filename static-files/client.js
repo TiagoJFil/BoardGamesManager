@@ -13,8 +13,8 @@ function prepareGroupDeleteButtons() {
 		const token = this.id.substr(41); //32 is the size of a token, then we add 1 for the _
 		
 		try {
-			await deleteGroupOnApi(groupId,token);
 			deleteGroupFromView(groupId);
+			await deleteGroupOnApi(groupId,token);
 		} catch (err) {
 			alert(err);
 		}
@@ -64,8 +64,8 @@ function prepareGameDeleteButtons() {
 
 		
 		try {
-			await deleteGameOnApi(groupId,gameId,token);
 			deleteGameFromView(gameId);
+			await deleteGameOnApi(groupId,gameId,token);
 		} catch (err) {
 			alert(err);
 		}
