@@ -19,7 +19,7 @@ With this project you have the possibility to create your own board game collect
 ##
 
 ## Structure
-![Graph](https://github.com/isel-leic-ipw/borga-ipw_pi-leicipw32d-g04/blob/main/static-files/Graph.png)  
+![Graph](static-files/Graph.png)
 
 ##
 ### Games data
